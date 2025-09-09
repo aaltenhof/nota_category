@@ -277,40 +277,61 @@ function getFilteredData() {
         // Process each word trial
         wordTrials.forEach((trial, trialIndex) => {
             console.log(`Processing trial ${trialIndex + 1}:`, trial);
-            const responses = trial.responses || [];
-            console.log(`Responses for trial ${trialIndex + 1}:`, responses);
             
-            if (responses.length === 0) {
-                console.log(`No responses for trial ${trialIndex + 1}, creating empty row`);
-                // If no responses, still create a row with empty response
-                const row = [
-                    trial.participant_id || participant_id,
-                    trial.trial_number || trialIndex + 1,
-                    trial.word || '',
-                    trial.pos || '',
-                    trial.eng_freq || '',
-                    '',
-                    1,
-                    trial.rt || ''
-                ];
-                rows.push(row);
-                console.log(`Added empty row:`, row);
-            } else {
-                // Create a row for each response
-                responses.forEach((response, index) => {
+            // Use the detailed response data if available
+            if (trial.response_data && trial.response_data.length > 0) {
+                console.log(`Using detailed response data for trial ${trialIndex + 1}`);
+                trial.response_data.forEach((responseItem) => {
                     const row = [
                         trial.participant_id || participant_id,
                         trial.trial_number || trialIndex + 1,
                         trial.word || '',
                         trial.pos || '',
                         trial.eng_freq || '',
-                        response || '',
-                        index + 1, // response order starts at 1
-                        trial.rt || ''
+                        responseItem.response_word || '',
+                        responseItem.response_order || 1,
+                        Math.round(responseItem.rt || 0)
                     ];
                     rows.push(row);
-                    console.log(`Added response row ${index + 1}:`, row);
+                    console.log(`Added detailed response row:`, row);
                 });
+            } else {
+                // Fallback to old method if detailed data not available
+                console.log(`Using fallback method for trial ${trialIndex + 1}`);
+                const responses = trial.responses || [];
+                const responseTimes = trial.response_times || [];
+                
+                if (responses.length === 0) {
+                    console.log(`No responses for trial ${trialIndex + 1}, creating empty row`);
+                    const row = [
+                        trial.participant_id || participant_id,
+                        trial.trial_number || trialIndex + 1,
+                        trial.word || '',
+                        trial.pos || '',
+                        trial.eng_freq || '',
+                        '',
+                        1,
+                        Math.round(trial.trial_rt || 0)
+                    ];
+                    rows.push(row);
+                    console.log(`Added empty row:`, row);
+                } else {
+                    // Create a row for each response
+                    responses.forEach((response, index) => {
+                        const row = [
+                            trial.participant_id || participant_id,
+                            trial.trial_number || trialIndex + 1,
+                            trial.word || '',
+                            trial.pos || '',
+                            trial.eng_freq || '',
+                            response || '',
+                            index + 1,
+                            Math.round(responseTimes[index] || trial.trial_rt || 0)
+                        ];
+                        rows.push(row);
+                        console.log(`Added fallback response row ${index + 1}:`, row);
+                    });
+                }
             }
         });
         
