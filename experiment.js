@@ -181,6 +181,14 @@ function createTrials(wordsData) {
                 
                 function finishTrial() {
                     jsPsych.finishTrial({
+                        // Keep all original data fields
+                        trial_type: 'word_completion_multi',
+                        participant_id: participant_id,
+                        trial_number: index + 1,
+                        word: word,
+                        pos: item.pos,
+                        eng_freq: item.eng_freq,
+                        // Add the response data
                         responses: responses,
                         num_responses: responses.length,
                         rt: Date.now() - jsPsych.getCurrentTrial().time_elapsed
