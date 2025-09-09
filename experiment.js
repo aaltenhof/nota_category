@@ -13,6 +13,9 @@ function generateRandomString(length) {
 
 const completion_code = generateRandomString(3) + 'zvz' + generateRandomString(3);
 
+// Create a random filename for data saving
+const filename = `${participant_id}.csv`;
+
 // Initialize jsPsych
 const jsPsych = initJsPsych({
     show_progress_bar: false,
@@ -210,6 +213,96 @@ function createTrials(wordsData) {
     
     return experimentTrials;
 }
+
+// Function to filter and format data for saving
+function getFilteredData() {
+    // Get all data and filter to only word completion trials
+    const allTrials = jsPsych.data.get().values();
+    const wordTrials = allTrials.filter(trial => trial.trial_type === 'word_completion_multi');
+    
+    console.log("Word completion trials found:", wordTrials.length);
+    
+    // If there's no data, return empty CSV
+    if (wordTrials.length === 0) {
+        console.error("No word completion trials found!");
+        return 'subCode,trial_num,target_word,target_pos,target_eng_freq,response_word,response_order,rt\n';
+    }
+    
+    try {
+        // Create header row
+        const header = 'subCode,trial_num,target_word,target_pos,target_eng_freq,response_word,response_order,rt';
+        const rows = [];
+        
+        // Process each word trial
+        wordTrials.forEach(trial => {
+            const responses = trial.responses || [];
+            
+            if (responses.length === 0) {
+                // If no responses, still create a row with empty response
+                rows.push([
+                    trial.participant_id || participant_id,
+                    trial.trial_number || 0,
+                    trial.word || '',
+                    trial.pos || '',
+                    trial.eng_freq || '',
+                    '',
+                    1,
+                    trial.rt || ''
+                ]);
+            } else {
+                // Create a row for each response
+                responses.forEach((response, index) => {
+                    rows.push([
+                        trial.participant_id || participant_id,
+                        trial.trial_number || 0,
+                        trial.word || '',
+                        trial.pos || '',
+                        trial.eng_freq || '',
+                        response || '',
+                        index + 1, // response order starts at 1
+                        trial.rt || ''
+                    ]);
+                });
+            }
+        });
+        
+        // Convert to CSV format
+        const csvRows = rows.map(row => {
+            return row.map(value => {
+                if (typeof value === 'string' && (value.includes(',') || value.includes('"') || value.includes('\n'))) {
+                    return `"${value.replace(/"/g, '""')}"`;
+                }
+                return value;
+            }).join(',');
+        });
+        
+        const finalCSV = header + '\n' + csvRows.join('\n');
+        console.log("Generated CSV data:", finalCSV);
+        
+        return finalCSV;
+    } catch (error) {
+        console.error("Error in getFilteredData:", error);
+        return 'subCode,trial_num,target_word,target_pos,target_eng_freq,response_word,response_order,rt\nerror,0,error,error,0,error,1,0\n';
+    }
+}
+
+// Configure data saving
+const save_data = {
+    type: jsPsychPipe,
+    action: "save",
+    experiment_id: "iEGcC0iYDj4r",
+    filename: filename,
+    data_string: getFilteredData,
+    on_finish: function(data) {
+        if (data.success) {
+            console.log('Data saved successfully to DataPipe!');
+            console.log('Participant ID:', participant_id);
+            console.log('Filename:', filename);
+        } else {
+            console.error('Error saving to DataPipe:', data.message);
+        }
+    }
+};
 
 // Final screen
 const final_screen = {
