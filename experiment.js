@@ -294,13 +294,17 @@ const save_data = {
     filename: filename,
     data_string: getFilteredData,
     on_finish: function(data) {
+        console.log('=== DATA SAVING COMPLETED ===');
+        console.log('Save operation result:', data);
         if (data.success) {
             console.log('Data saved successfully to DataPipe!');
             console.log('Participant ID:', participant_id);
             console.log('Filename:', filename);
         } else {
             console.error('Error saving to DataPipe:', data.message);
+            console.error('Full error data:', data);
         }
+        console.log('=== END DATA SAVING ===');
     }
 };
 
