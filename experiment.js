@@ -23,6 +23,7 @@ const jsPsych = initJsPsych({
 
 let timeline = [];
 
+// Define the consent form (from example)
 const consent = {
     type: jsPsychHtmlButtonResponse,  
     stimulus: `
@@ -147,7 +148,7 @@ function createTrials(wordsData) {
                         // Show the response in the list
                         const responseDiv = document.createElement('div');
                         responseDiv.style.cssText = 'margin: 5px 0; padding: 5px; background-color: #e7f3ff; border-radius: 3px;';
-                        responseDiv.innerHTML = `"A <strong>${word}</strong> is not a <strong>${response}</strong>"`;
+                        responseDiv.innerHTML = `<strong>${response}</strong>`;
                         responsesList.appendChild(responseDiv);
                         
                         // Show the responses display and done button
@@ -195,6 +196,7 @@ function createTrials(wordsData) {
     return experimentTrials;
 }
 
+// Final screen
 const final_screen = {
     type: jsPsychHtmlButtonResponse,
     stimulus: `
@@ -235,16 +237,7 @@ async function loadWords() {
         return shuffledData;
     } catch (error) {
         console.error('Error loading words:', error);
-        // Fallback data for testing
-        const fallbackData = [
-            {word: 'haddock', pos: 'noun', eng_freq: 1.2},
-            {word: 'carrot', pos: 'noun', eng_freq: 5.8},
-            {word: 'lemon', pos: 'noun', eng_freq: 3.4},
-            {word: 'asparagus', pos: 'noun', eng_freq: 2.1},
-            {word: 'broccoli', pos: 'noun', eng_freq: 4.2}
-        ];
-        console.log('Using fallback data');
-        return jsPsych.randomization.shuffle(fallbackData);
+        return [];
     }
 }
 
