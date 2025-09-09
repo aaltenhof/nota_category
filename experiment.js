@@ -70,6 +70,7 @@ const instructions = {
             </p>
             <p>Your task is to complete the sentence by filling in the blank with a word or phrase that makes sense.</p>
             <p>Try to think of something that the given word is definitely NOT.</p>
+            <p>You can provide multiple responses for each word - they will be shown to you as you type them.</p>
             <p>There are no right or wrong answers - we're interested in what comes to mind for you.</p>
             <p><strong>Press any key when you're ready to begin.</strong></p>
         </div>
@@ -78,6 +79,20 @@ const instructions = {
         trial_type: 'instructions'
     }
 };
+
+// Function to determine the correct article and sentence frame
+function getSentenceFrame(word, pos) {
+    if (pos && pos.toLowerCase() === 'noun') {
+        // For nouns, use "a" or "an" based on first letter
+        const firstLetter = word.charAt(0).toLowerCase();
+        const vowels = ['a', 'e', 'i', 'o', 'u'];
+        const article = vowels.includes(firstLetter) ? 'An' : 'A';
+        return `${article} <span class="word-highlight">${word}</span> is not a ______`;
+    } else {
+        // For other parts of speech, drop both articles
+        return `<span class="word-highlight">${word}</span> is not ______`;
+    }
+}
 
 // Function to create trials from the CSV data
 function createTrials(wordsData) {
@@ -98,7 +113,7 @@ function createTrials(wordsData) {
                 return `
                     <div style="text-align: center; max-width: 800px; margin: 0 auto;">
                         <div class="trial-stimulus">
-                            A <span class="word-highlight">${word}</span> is not a ______
+                            ${getSentenceFrame(word, item.pos)}
                         </div>
                         
                         <div style="margin: 20px 0;">
