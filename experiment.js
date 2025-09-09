@@ -224,15 +224,26 @@ function createTrials(wordsData) {
 
 // Function to filter and format data for saving
 function getFilteredData() {
+    console.log('=== STARTING DATA FILTERING ===');
+    
     // Get all data and filter to only word completion trials
     const allTrials = jsPsych.data.get().values();
-    const wordTrials = allTrials.filter(trial => trial.trial_type === 'word_completion_multi');
+    console.log(`Total trials in jsPsych: ${allTrials.length}`);
+    console.log('All trial types found:', allTrials.map(t => t.trial_type));
+    console.log('All trials:', allTrials);
     
-    console.log("Word completion trials found:", wordTrials.length);
+    const wordTrials = allTrials.filter(trial => trial.trial_type === 'word_completion_multi');
+    console.log(`Word completion trials found: ${wordTrials.length}`);
+    
+    if (wordTrials.length > 0) {
+        console.log('Sample word trial data:', wordTrials[0]);
+        console.log('All word trials:', wordTrials);
+    }
     
     // If there's no data, return empty CSV
     if (wordTrials.length === 0) {
         console.error("No word completion trials found!");
+        console.log('Available trial types:', [...new Set(allTrials.map(t => t.trial_type))]);
         return 'subCode,trial_num,target_word,target_pos,target_eng_freq,response_word,response_order,rt\n';
     }
     
@@ -242,37 +253,46 @@ function getFilteredData() {
         const rows = [];
         
         // Process each word trial
-        wordTrials.forEach(trial => {
+        wordTrials.forEach((trial, trialIndex) => {
+            console.log(`Processing trial ${trialIndex + 1}:`, trial);
             const responses = trial.responses || [];
+            console.log(`Responses for trial ${trialIndex + 1}:`, responses);
             
             if (responses.length === 0) {
+                console.log(`No responses for trial ${trialIndex + 1}, creating empty row`);
                 // If no responses, still create a row with empty response
-                rows.push([
+                const row = [
                     trial.participant_id || participant_id,
-                    trial.trial_number || 0,
+                    trial.trial_number || trialIndex + 1,
                     trial.word || '',
                     trial.pos || '',
                     trial.eng_freq || '',
                     '',
                     1,
                     trial.rt || ''
-                ]);
+                ];
+                rows.push(row);
+                console.log(`Added empty row:`, row);
             } else {
                 // Create a row for each response
                 responses.forEach((response, index) => {
-                    rows.push([
+                    const row = [
                         trial.participant_id || participant_id,
-                        trial.trial_number || 0,
+                        trial.trial_number || trialIndex + 1,
                         trial.word || '',
                         trial.pos || '',
                         trial.eng_freq || '',
                         response || '',
                         index + 1, // response order starts at 1
                         trial.rt || ''
-                    ]);
+                    ];
+                    rows.push(row);
+                    console.log(`Added response row ${index + 1}:`, row);
                 });
             }
         });
+        
+        console.log(`Total rows created: ${rows.length}`);
         
         // Convert to CSV format
         const csvRows = rows.map(row => {
@@ -286,10 +306,12 @@ function getFilteredData() {
         
         const finalCSV = header + '\n' + csvRows.join('\n');
         console.log("Generated CSV data:", finalCSV);
+        console.log('=== END DATA FILTERING ===');
         
         return finalCSV;
     } catch (error) {
         console.error("Error in getFilteredData:", error);
+        console.error("Error stack:", error.stack);
         return 'subCode,trial_num,target_word,target_pos,target_eng_freq,response_word,response_order,rt\nerror,0,error,error,0,error,1,0\n';
     }
 }
