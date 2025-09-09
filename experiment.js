@@ -1,0 +1,298 @@
+// Generate participant ID at the start
+let participant_id = `participant${Math.floor(Math.random() * 999) + 1}`;
+
+// Function to generate a random string of specified length
+function generateRandomString(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+}
+
+const completion_code = generateRandomString(3) + 'zvz' + generateRandomString(3);
+
+// Initialize jsPsych
+const jsPsych = initJsPsych({
+    show_progress_bar: false,
+    on_finish: function() {
+        jsPsych.data.displayData();
+    }
+});
+
+let timeline = [];
+
+const consent = {
+    type: jsPsychHtmlButtonResponse,  
+    stimulus: `
+        <div class="consent-text">
+            <h3>Consent to Participate in Research</h3>
+            
+            <p>The task you are about to do is sponsored by University of Wisconsin-Madison. It is part of a protocol titled "What are we learning from language?"</p>
+
+            <p>The task you are asked to do involves making simple responses to words and sentences. For example, you may be asked to rate a pair of words on their similarity or to indicate how true you think a given sentence is. More detailed instructions for this specific task will be provided on the next screen.</p>
+
+            <p>This task has no direct benefits. We do not anticipate any psychosocial risks. There is a risk of a confidentiality breach. Participants may become fatigued or frustrated due to the length of the study.</p>
+
+            <p>The responses you submit as part of this task will be stored on a secure server and accessible only to researchers who have been approved by UW-Madison. Processed data with all identifiers removed could be used for future research studies or distributed to another investigator for future research studies without additional informed consent from the subject or the legally authorized representative.</p>
+
+            <p>You are free to decline to participate, to end participation at any time for any reason, or to refuse to answer any individual question without penalty or loss of earned compensation. We will not retain data from partial responses. If you would like to withdraw your data after participating, you may send an email lupyan@wisc.edu or complete this form which will allow you to make a request anonymously.</p>
+
+            <p>If you have any questions or concerns about this task please contact the principal investigator: Prof. Gary Lupyan at lupyan@wisc.edu.</p>
+
+            <p>If you are not satisfied with response of the research team, have more questions, or want to talk with someone about your rights as a research participant, you should contact University of Wisconsin's Education Research and Social & Behavioral Science IRB Office at 608-263-2320.</p>
+
+            <p><strong>By clicking the box below, I consent to participate in this task and affirm that I am at least 18 years old.</strong></p>
+        </div>
+    `,
+    choices: ['I Agree', 'I Do Not Agree'],
+    data: {
+        trial_type: 'consent'
+    },
+    on_finish: function(data) {
+        if(data.response == 1) {
+            jsPsych.endExperiment('Thank you for your time. The experiment has been ended.');
+        }
+    }
+};
+
+// Instructions block
+const instructions = {
+    type: jsPsychHtmlKeyboardResponse,  
+    stimulus: `
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <h2>Instructions</h2>
+            <p>In this experiment, you will see sentences like:</p>
+            <p style="font-size: 20px; margin: 20px 0; padding: 15px; background-color: #f0f0f0; border-radius: 5px;">
+                "A <span style="font-weight: bold; color: #2563eb;">banana</span> is not a ______"
+            </p>
+            <p>Your task is to complete the sentence by filling in the blank with a word or phrase that makes sense.</p>
+            <p>Try to think of something that the given word is definitely NOT.</p>
+            <p>There are no right or wrong answers - we're interested in what comes to mind for you.</p>
+            <p><strong>Press any key when you're ready to begin.</strong></p>
+        </div>
+    `,
+    data: {
+        trial_type: 'instructions'
+    }
+};
+
+// Function to create trials from the CSV data
+function createTrials(wordsData) {
+    const experimentTrials = [];
+    
+    wordsData.forEach((item, index) => {
+        const word = item.word;
+        
+        if (!word) {
+            console.warn('Trial missing word:', item);
+            return;
+        }
+        
+        // Create a custom trial that allows multiple responses
+        const multiResponseTrial = {
+            type: jsPsychHtmlButtonResponse,
+            stimulus: function() {
+                return `
+                    <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+                        <div class="trial-stimulus">
+                            A <span class="word-highlight">${word}</span> is not a ______
+                        </div>
+                        
+                        <div style="margin: 20px 0;">
+                            <input type="text" id="response-input" placeholder="Type your answer here..." 
+                                   style="padding: 10px; font-size: 16px; width: 300px; border: 2px solid #ddd; border-radius: 5px;">
+                            <button id="add-btn" style="padding: 10px 20px; margin-left: 10px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                                Add Response
+                            </button>
+                        </div>
+                        
+                        <div id="responses-display" style="margin: 20px 0; padding: 15px; background-color: #f0f8ff; border-radius: 5px; min-height: 50px; display: none;">
+                            <h4>Your responses:</h4>
+                            <div id="responses-list" style="text-align: left; display: inline-block;"></div>
+                        </div>
+                        
+                        <div style="margin: 20px 0;">
+                            <button id="done-btn" style="padding: 10px 20px; font-size: 16px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; display: none;">
+                                Done with this word
+                            </button>
+                        </div>
+                    </div>
+                `;
+            },
+            choices: [],
+            trial_duration: null,
+            data: {
+                trial_type: 'word_completion_multi',
+                participant_id: participant_id,
+                trial_number: index + 1,
+                word: word,
+                pos: item.pos,
+                eng_freq: item.eng_freq
+            },
+            on_load: function() {
+                const responses = [];
+                const input = document.getElementById('response-input');
+                const addBtn = document.getElementById('add-btn');
+                const doneBtn = document.getElementById('done-btn');
+                const responsesDisplay = document.getElementById('responses-display');
+                const responsesList = document.getElementById('responses-list');
+                
+                function addResponse() {
+                    const response = input.value.trim();
+                    if (response) {
+                        responses.push(response);
+                        
+                        // Show the response in the list
+                        const responseDiv = document.createElement('div');
+                        responseDiv.style.cssText = 'margin: 5px 0; padding: 5px; background-color: #e7f3ff; border-radius: 3px;';
+                        responseDiv.innerHTML = `"A <strong>${word}</strong> is not a <strong>${response}</strong>"`;
+                        responsesList.appendChild(responseDiv);
+                        
+                        // Show the responses display and done button
+                        responsesDisplay.style.display = 'block';
+                        doneBtn.style.display = 'inline-block';
+                        
+                        // Clear input and focus
+                        input.value = '';
+                        input.focus();
+                    }
+                }
+                
+                function finishTrial() {
+                    jsPsych.finishTrial({
+                        responses: responses,
+                        num_responses: responses.length,
+                        rt: Date.now() - jsPsych.getCurrentTrial().time_elapsed
+                    });
+                }
+                
+                // Event listeners
+                addBtn.addEventListener('click', addResponse);
+                doneBtn.addEventListener('click', finishTrial);
+                
+                // Enter key submits response
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        addResponse();
+                    }
+                });
+                
+                // Focus on input
+                input.focus();
+            },
+            on_finish: function(data) {
+                data.rt = Math.round(data.rt);
+                
+                console.log(`Word "${word}" completed with ${data.responses.length} responses:`, data.responses);
+            }
+        };
+
+        experimentTrials.push(multiResponseTrial);
+    });
+    
+    return experimentTrials;
+}
+
+const final_screen = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: `
+        <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+            <h2>Thank you!</h2>
+            <p>You have completed the experiment.</p>
+            <p>Your completion code is: <strong style="font-size: 18px; color: #2563eb;">${completion_code}</strong></p>
+            <p>Please save this code if it was requested by the researcher.</p>
+        </div>
+    `,
+    choices: ['Finish'],
+    data: {
+        trial_type: 'final',
+        completion_code: completion_code
+    }
+};
+
+// Function to load trials from CSV
+async function loadWords() {
+    try {
+        // Load from your actual CSV file
+        const response = await fetch('word_list.csv');
+        const csvText = await response.text();
+        
+        // Parse the CSV data
+        const results = Papa.parse(csvText, {
+            header: true,
+            skipEmptyLines: true,
+            dynamicTyping: true
+        });
+
+        console.log('Loaded words:', results.data.length);
+        console.log('Sample word data:', results.data[0]);
+
+        // Shuffle the words
+        let shuffledData = jsPsych.randomization.shuffle([...results.data]);
+        
+        return shuffledData;
+    } catch (error) {
+        console.error('Error loading words:', error);
+        // Fallback data for testing
+        const fallbackData = [
+            {word: 'haddock', pos: 'noun', eng_freq: 1.2},
+            {word: 'carrot', pos: 'noun', eng_freq: 5.8},
+            {word: 'lemon', pos: 'noun', eng_freq: 3.4},
+            {word: 'asparagus', pos: 'noun', eng_freq: 2.1},
+            {word: 'broccoli', pos: 'noun', eng_freq: 4.2}
+        ];
+        console.log('Using fallback data');
+        return jsPsych.randomization.shuffle(fallbackData);
+    }
+}
+
+// Main function to run the experiment
+async function runExperiment() {
+    try {
+        console.log('Starting experiment...');
+        console.log('Participant ID:', participant_id);
+        console.log('Completion code:', completion_code);
+        
+        // Load words from CSV
+        const wordsData = await loadWords();
+        console.log('Loaded words:', wordsData.length);
+        
+        if (wordsData.length === 0) {
+            throw new Error('No words loaded from CSV file');
+        }
+        
+        // Create experiment trials
+        const experimentTrials = createTrials(wordsData);
+        console.log('Created experiment trials:', experimentTrials.length);
+            
+        // Build timeline
+        timeline = [
+            consent,
+            instructions,
+            ...experimentTrials,
+            final_screen
+        ];
+
+        console.log('Timeline initialized with', timeline.length, 'items');
+        console.log('Starting jsPsych...');
+
+        // Run the experiment
+        jsPsych.run(timeline);
+    } catch (error) {
+        console.error('Error running experiment:', error);
+        // Display error message on the page
+        document.body.innerHTML = `
+            <div style="max-width: 800px; margin: 50px auto; padding: 20px; background: #f8f8f8; border-radius: 5px; text-align: center;">
+                <h2>Error Starting Experiment</h2>
+                <p>There was a problem starting the experiment. Please try refreshing the page.</p>
+                <p>If the problem persists, please contact the researcher.</p>
+                <p>Technical details: ${error.message}</p>
+            </div>
+        `;
+    }
+}
+
+// Start the experiment when the page loads
+document.addEventListener('DOMContentLoaded', runExperiment);
