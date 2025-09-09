@@ -1,14 +1,11 @@
-word,pos,eng_freq,
-all,adjective,5161.86,
-and,conjunction,13387.84,
-animal,noun,45.49,
-ashes,noun,9.86,
-at,preposition,3217.10,
-back,preposition,2009.16,
-bad,adjective,545.18,
-bark,noun,5.49,
-because,conjunction,1071.02,
-belly,noun,15.57,
-big,adjective,682.82,
-bird ,noun,45.45,
-,,,
+word,pos,eng_freq
+all,adjective,5161.86
+animal,noun,45.49
+ashes,noun,9.86
+at,preposition,3217.1
+back,preposition,2009.16
+bad,adjective,545.18
+bark,noun,5.49
+belly,noun,15.57
+big,adjective,682.82
+bird ,noun,45.45
