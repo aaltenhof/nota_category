@@ -143,7 +143,7 @@ function createTrials(wordsData) {
             choices: [],
             trial_duration: null,
             data: {
-                trial_type: 'word_completion_multi',
+                custom_trial_type: 'word_completion_multi',
                 participant_id: participant_id,
                 trial_number: index + 1,
                 word: word,
@@ -180,15 +180,14 @@ function createTrials(wordsData) {
                 }
                 
                 function finishTrial() {
+                    // Add response data to jsPsych's data store for this trial
+                    jsPsych.data.addProperties({
+                        responses: responses,
+                        num_responses: responses.length
+                    });
+                    
+                    // Finish the trial normally, preserving all original data
                     jsPsych.finishTrial({
-                        // Keep all original data fields
-                        trial_type: 'word_completion_multi',
-                        participant_id: participant_id,
-                        trial_number: index + 1,
-                        word: word,
-                        pos: item.pos,
-                        eng_freq: item.eng_freq,
-                        // Add the response data
                         responses: responses,
                         num_responses: responses.length,
                         rt: Date.now() - jsPsych.getCurrentTrial().time_elapsed
@@ -212,7 +211,28 @@ function createTrials(wordsData) {
             on_finish: function(data) {
                 data.rt = Math.round(data.rt);
                 
-                console.log(`Word "${word}" completed with ${data.responses.length} responses:`, data.responses);
+                // Enhanced logging to debug data saving
+                console.log('=== TRIAL COMPLETED ===');
+                console.log(`Word: "${word}"`);
+                console.log(`Number of responses: ${data.responses ? data.responses.length : 0}`);
+                console.log(`Responses: `, data.responses);
+                console.log(`Full trial data: `, data);
+                console.log(`Custom trial type: ${data.custom_trial_type}`);
+                console.log(`Participant ID: ${data.participant_id}`);
+                console.log(`Trial number: ${data.trial_number}`);
+                console.log(`Word: ${data.word}`);
+                console.log(`POS: ${data.pos}`);
+                console.log(`Frequency: ${data.eng_freq}`);
+                console.log('=== END TRIAL DATA ===');
+                
+                // Also log all jsPsych data so far
+                const allData = jsPsych.data.get().values();
+                console.log(`Total trials in jsPsych data: ${allData.length}`);
+                const wordTrials = allData.filter(trial => trial.custom_trial_type === 'word_completion_multi');
+                console.log(`Word completion trials found so far: ${wordTrials.length}`);
+                if (wordTrials.length > 0) {
+                    console.log('Sample word trial:', wordTrials[wordTrials.length - 1]);
+                }
             }
         };
 
@@ -230,9 +250,10 @@ function getFilteredData() {
     const allTrials = jsPsych.data.get().values();
     console.log(`Total trials in jsPsych: ${allTrials.length}`);
     console.log('All trial types found:', allTrials.map(t => t.trial_type));
+    console.log('All custom trial types found:', allTrials.map(t => t.custom_trial_type));
     console.log('All trials:', allTrials);
     
-    const wordTrials = allTrials.filter(trial => trial.trial_type === 'word_completion_multi');
+    const wordTrials = allTrials.filter(trial => trial.custom_trial_type === 'word_completion_multi');
     console.log(`Word completion trials found: ${wordTrials.length}`);
     
     if (wordTrials.length > 0) {
@@ -244,6 +265,7 @@ function getFilteredData() {
     if (wordTrials.length === 0) {
         console.error("No word completion trials found!");
         console.log('Available trial types:', [...new Set(allTrials.map(t => t.trial_type))]);
+        console.log('Available custom trial types:', [...new Set(allTrials.map(t => t.custom_trial_type))]);
         return 'subCode,trial_num,target_word,target_pos,target_eng_freq,response_word,response_order,rt\n';
     }
     
