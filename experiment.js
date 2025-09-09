@@ -280,6 +280,7 @@ async function runExperiment() {
             consent,
             instructions,
             ...experimentTrials,
+            save_data,
             final_screen
         ];
 
