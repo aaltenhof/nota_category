@@ -216,6 +216,8 @@ function createTrials(wordsData) {
                 console.log(`Word: "${word}"`);
                 console.log(`Number of responses: ${data.responses ? data.responses.length : 0}`);
                 console.log(`Responses: `, data.responses);
+                console.log(`Response times: `, data.response_times);
+                console.log(`Response data: `, data.response_data);
                 console.log(`Full trial data: `, data);
                 console.log(`Custom trial type: ${data.custom_trial_type}`);
                 console.log(`Participant ID: ${data.participant_id}`);
@@ -231,7 +233,7 @@ function createTrials(wordsData) {
                 const wordTrials = allData.filter(trial => trial.custom_trial_type === 'word_completion_multi');
                 console.log(`Word completion trials found so far: ${wordTrials.length}`);
                 if (wordTrials.length > 0) {
-                    console.log('Sample word trial:', wordTrials[wordTrials.length - 1]);
+                    console.log('Last completed word trial:', wordTrials[wordTrials.length - 1]);
                 }
             }
         };
