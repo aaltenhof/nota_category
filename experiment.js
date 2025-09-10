@@ -368,9 +368,9 @@ async function loadWords() {
 
 async function runExperiment() {
     try {
-        console.log('Starting experiment...');
-        console.log('Participant ID:', participant_id);
-        console.log('Completion code:', completion_code);
+        //console.log('Starting experiment...');
+        //console.log('Participant ID:', participant_id);
+        //console.log('Completion code:', completion_code);
         
         const wordsData = await loadWords();
         console.log('Loaded words:', wordsData.length);
