@@ -1,7 +1,7 @@
-// Generate participant ID at the start
+// generate random participant 
 let participant_id = `participant${Math.floor(Math.random() * 999) + 1}`;
 
-// Function to generate a random string of specified length
+// function to generate a random string for the completion code 
 function generateRandomString(length) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = '';
@@ -13,7 +13,7 @@ function generateRandomString(length) {
 
 const completion_code = generateRandomString(3) + 'zvz' + generateRandomString(3);
 
-// Create a random filename for data saving
+// create filename for data saving
 const filename = `${participant_id}.csv`;
 
 // Initialize jsPsych
@@ -26,7 +26,6 @@ const jsPsych = initJsPsych({
 
 let timeline = [];
 
-// Define the consent form (from example)
 const consent = {
     type: jsPsychHtmlButtonResponse,  
     stimulus: `
@@ -61,7 +60,6 @@ const consent = {
     }
 };
 
-// Instructions block
 const instructions = {
     type: jsPsychHtmlKeyboardResponse,  
     stimulus: `
@@ -83,21 +81,19 @@ const instructions = {
     }
 };
 
-// Function to determine the correct article and sentence frame
 function getSentenceFrame(word, pos) {
     if (pos && pos.toLowerCase() === 'noun') {
-        // For nouns, use "a" or "an" based on first letter
+        // for nouns, use "a" or "an" based on first letter
         const firstLetter = word.charAt(0).toLowerCase();
         const vowels = ['a', 'e', 'i', 'o', 'u'];
         const article = vowels.includes(firstLetter) ? 'An' : 'A';
         return `${article} <span class="word-highlight">${word}</span> is not a ______`;
     } else {
-        // For other parts of speech, drop both articles
+        // for other parts of speech, drop both articles
         return `<span class="word-highlight">${word}</span> is not ______`;
     }
 }
 
-// Function to create trials from the CSV data
 function createTrials(wordsData) {
     const experimentTrials = [];
     
@@ -109,7 +105,7 @@ function createTrials(wordsData) {
             return;
         }
         
-        // Create a custom trial that allows multiple responses
+        // allows multiple responses
         const multiResponseTrial = {
             type: jsPsychHtmlButtonResponse,
             stimulus: function() {
@@ -152,7 +148,7 @@ function createTrials(wordsData) {
             },
             on_load: function() {
                 const responses = [];
-                const responseTimes = []; // Track RT for each response
+                const responseTimes = []; // get RT for each response
                 const trialStartTime = Date.now();
                 const input = document.getElementById('response-input');
                 const addBtn = document.getElementById('add-btn');
@@ -167,44 +163,36 @@ function createTrials(wordsData) {
                         responses.push(response);
                         responseTimes.push(responseTime);
                         
-                        // Show the response in the list
+                        
                         const responseDiv = document.createElement('div');
                         responseDiv.style.cssText = 'margin: 5px 0; padding: 5px; background-color: #e7f3ff; border-radius: 3px;';
                         responseDiv.innerHTML = `<strong>${response}</strong>`;
                         responsesList.appendChild(responseDiv);
                         
-                        // Show the responses display and done button
+                        
                         responsesDisplay.style.display = 'block';
                         doneBtn.style.display = 'inline-block';
                         
-                        // Log each response as it's added with detailed timing info
-                        console.log(`Response ${responses.length} added: "${response}" at ${responseTime}ms`);
-                        console.log(`Current responses array:`, responses);
-                        console.log(`Current response times array:`, responseTimes);
                         
-                        // Clear input and focus
+                        //console.log(`Response ${responses.length} added: "${response}" at ${responseTime}ms`);
+                        //console.log(`Current responses array:`, responses);
+                        //console.log(`Current response times array:`, responseTimes);
+                        
                         input.value = '';
                         input.focus();
                     }
                 }
                 
                 function finishTrial() {
-                    console.log('=== FINISHING TRIAL ===');
-                    console.log('Current responses:', responses);
-                    console.log('Current response times:', responseTimes);
-                    console.log('Trial start time:', trialStartTime);
-                    console.log('Current time:', Date.now());
                     
-                    // Create detailed response data
                     const responseData = responses.map((response, index) => ({
                         response_word: response,
                         response_order: index + 1,
                         rt: responseTimes[index]
                     }));
                     
-                    console.log('Created response data:', responseData);
+                    //console.log('Created response data:', responseData);
                     
-                    // Create the complete trial data object
                     const trialData = {
                         custom_trial_type: 'word_completion_multi',
                         participant_id: participant_id,
@@ -212,53 +200,31 @@ function createTrials(wordsData) {
                         word: word,
                         pos: item.pos,
                         eng_freq: item.eng_freq,
-                        responses: [...responses], // Create copy to avoid reference issues
-                        response_times: [...responseTimes], // Create copy to avoid reference issues
-                        response_data: responseData.map(r => ({...r})), // Deep copy
+                        responses: [...responses],
+                        response_times: [...responseTimes],
+                        response_data: responseData.map(r => ({...r})), 
                         num_responses: responses.length,
                         trial_rt: Date.now() - trialStartTime
                     };
                     
-                    console.log('Complete trial data being sent:', trialData);
                     
-                    // Finish the trial
                     jsPsych.finishTrial(trialData);
                 }
                 
-                // Event listeners
                 addBtn.addEventListener('click', addResponse);
                 doneBtn.addEventListener('click', finishTrial);
                 
-                // Enter key submits response
                 input.addEventListener('keypress', function(e) {
                     if (e.key === 'Enter') {
                         addResponse();
                     }
                 });
                 
-                // Focus on input
                 input.focus();
             },
             on_finish: function(data) {
                 data.rt = Math.round(data.rt);
                 
-                // Enhanced logging to debug data saving
-                console.log('=== TRIAL COMPLETED ===');
-                console.log(`Word: "${word}"`);
-                console.log(`Number of responses: ${data.responses ? data.responses.length : 0}`);
-                console.log(`Responses: `, data.responses);
-                console.log(`Response times: `, data.response_times);
-                console.log(`Response data: `, data.response_data);
-                console.log(`Full trial data: `, data);
-                console.log(`Custom trial type: ${data.custom_trial_type}`);
-                console.log(`Participant ID: ${data.participant_id}`);
-                console.log(`Trial number: ${data.trial_number}`);
-                console.log(`Word: ${data.word}`);
-                console.log(`POS: ${data.pos}`);
-                console.log(`Frequency: ${data.eng_freq}`);
-                console.log('=== END TRIAL DATA ===');
-                
-                // Also log all jsPsych data so far
                 const allData = jsPsych.data.get().values();
                 console.log(`Total trials in jsPsych data: ${allData.length}`);
                 const wordTrials = allData.filter(trial => trial.custom_trial_type === 'word_completion_multi');
@@ -275,39 +241,28 @@ function createTrials(wordsData) {
     return experimentTrials;
 }
 
-// Function to filter and format data for saving
-function getFilteredData() {
-    console.log('=== STARTING DATA FILTERING ===');
-    
-    // Get all data and filter to only word completion trials
-    const allTrials = jsPsych.data.get().values();
-    console.log(`Total trials in jsPsych: ${allTrials.length}`);
-    console.log('All trial types found:', allTrials.map(t => t.trial_type));
-    console.log('All custom trial types found:', allTrials.map(t => t.custom_trial_type));
-    console.log('All trials:', allTrials);
+function getFilteredData() {   
+    // console.log('All trials:', allTrials);
     
     const wordTrials = allTrials.filter(trial => trial.custom_trial_type === 'word_completion_multi');
     console.log(`Word completion trials found: ${wordTrials.length}`);
     
     if (wordTrials.length > 0) {
-        console.log('Sample word trial data:', wordTrials[0]);
         console.log('All word trials:', wordTrials);
     }
     
-    // If there's no data, return empty CSV
+    // if there's no data, return empty CSV
     if (wordTrials.length === 0) {
         console.error("No word completion trials found!");
-        console.log('Available trial types:', [...new Set(allTrials.map(t => t.trial_type))]);
-        console.log('Available custom trial types:', [...new Set(allTrials.map(t => t.custom_trial_type))]);
+        //console.log('Available trial types:', [...new Set(allTrials.map(t => t.trial_type))]);
+        //console.log('Available custom trial types:', [...new Set(allTrials.map(t => t.custom_trial_type))]);
         return 'subCode,trial_num,target_word,target_pos,target_eng_freq,response_word,response_order,rt\n';
     }
     
     try {
-        // Create header row
         const header = 'subCode,trial_num,target_word,target_pos,target_eng_freq,response_word,response_order,rt';
         const rows = [];
         
-        // Process each word trial
         wordTrials.forEach((trial, trialIndex) => {
             console.log(`Processing trial ${trialIndex + 1}:`, trial);
             
@@ -328,49 +283,10 @@ function getFilteredData() {
                     rows.push(row);
                     console.log(`Added detailed response row:`, row);
                 });
-            } else {
-                // Fallback to old method if detailed data not available
-                console.log(`Using fallback method for trial ${trialIndex + 1}`);
-                const responses = trial.responses || [];
-                const responseTimes = trial.response_times || [];
-                
-                if (responses.length === 0) {
-                    console.log(`No responses for trial ${trialIndex + 1}, creating empty row`);
-                    const row = [
-                        trial.participant_id || participant_id,
-                        trial.trial_number || trialIndex + 1,
-                        trial.word || '',
-                        trial.pos || '',
-                        trial.eng_freq || '',
-                        '',
-                        1,
-                        Math.round(trial.trial_rt || 0)
-                    ];
-                    rows.push(row);
-                    console.log(`Added empty row:`, row);
-                } else {
-                    // Create a row for each response
-                    responses.forEach((response, index) => {
-                        const row = [
-                            trial.participant_id || participant_id,
-                            trial.trial_number || trialIndex + 1,
-                            trial.word || '',
-                            trial.pos || '',
-                            trial.eng_freq || '',
-                            response || '',
-                            index + 1,
-                            Math.round(responseTimes[index] || trial.trial_rt || 0)
-                        ];
-                        rows.push(row);
-                        console.log(`Added fallback response row ${index + 1}:`, row);
-                    });
-                }
             }
         });
         
-        console.log(`Total rows created: ${rows.length}`);
-        
-        // Convert to CSV format
+        // convert to CSV format
         const csvRows = rows.map(row => {
             return row.map(value => {
                 if (typeof value === 'string' && (value.includes(',') || value.includes('"') || value.includes('\n'))) {
@@ -381,18 +297,15 @@ function getFilteredData() {
         });
         
         const finalCSV = header + '\n' + csvRows.join('\n');
-        console.log("Generated CSV data:", finalCSV);
-        console.log('=== END DATA FILTERING ===');
+        //console.log("Generated CSV data:", finalCSV);
         
         return finalCSV;
     } catch (error) {
         console.error("Error in getFilteredData:", error);
-        console.error("Error stack:", error.stack);
         return 'subCode,trial_num,target_word,target_pos,target_eng_freq,response_word,response_order,rt\nerror,0,error,error,0,error,1,0\n';
     }
 }
 
-// Configure data saving
 const save_data = {
     type: jsPsychPipe,
     action: "save",
@@ -400,21 +313,17 @@ const save_data = {
     filename: filename,
     data_string: getFilteredData,
     on_finish: function(data) {
-        console.log('=== DATA SAVING COMPLETED ===');
-        console.log('Save operation result:', data);
         if (data.success) {
             console.log('Data saved successfully to DataPipe!');
-            console.log('Participant ID:', participant_id);
-            console.log('Filename:', filename);
+            //console.log('Participant ID:', participant_id);
+            //console.log('Filename:', filename);
         } else {
             console.error('Error saving to DataPipe:', data.message);
-            console.error('Full error data:', data);
+            //console.error('Full error data:', data);
         }
-        console.log('=== END DATA SAVING ===');
     }
 };
 
-// Final screen
 const final_screen = {
     type: jsPsychHtmlButtonResponse,
     stimulus: `
@@ -429,27 +338,26 @@ const final_screen = {
     data: {
         trial_type: 'final',
         completion_code: completion_code
+    },  
+    on_finish: function() {
+        window.location.href = `https://uwmadison.sona-systems.com/default.aspx?logout=Y`;
     }
 };
 
 // Function to load trials from CSV
 async function loadWords() {
     try {
-        // Load from your actual CSV file
         const response = await fetch('word_list.csv');
         const csvText = await response.text();
         
-        // Parse the CSV data
         const results = Papa.parse(csvText, {
             header: true,
             skipEmptyLines: true,
             dynamicTyping: true
         });
 
-        console.log('Loaded words:', results.data.length);
-        console.log('Sample word data:', results.data[0]);
+        //console.log('Loaded words:', results.data.length);
 
-        // Shuffle the words
         let shuffledData = jsPsych.randomization.shuffle([...results.data]);
         
         return shuffledData;
@@ -459,14 +367,12 @@ async function loadWords() {
     }
 }
 
-// Main function to run the experiment
 async function runExperiment() {
     try {
         console.log('Starting experiment...');
         console.log('Participant ID:', participant_id);
         console.log('Completion code:', completion_code);
         
-        // Load words from CSV
         const wordsData = await loadWords();
         console.log('Loaded words:', wordsData.length);
         
@@ -474,11 +380,9 @@ async function runExperiment() {
             throw new Error('No words loaded from CSV file');
         }
         
-        // Create experiment trials
         const experimentTrials = createTrials(wordsData);
         console.log('Created experiment trials:', experimentTrials.length);
             
-        // Build timeline
         timeline = [
             consent,
             instructions,
@@ -490,11 +394,9 @@ async function runExperiment() {
         console.log('Timeline initialized with', timeline.length, 'items');
         console.log('Starting jsPsych...');
 
-        // Run the experiment
         jsPsych.run(timeline);
     } catch (error) {
         console.error('Error running experiment:', error);
-        // Display error message on the page
         document.body.innerHTML = `
             <div style="max-width: 800px; margin: 50px auto; padding: 20px; background: #f8f8f8; border-radius: 5px; text-align: center;">
                 <h2>Error Starting Experiment</h2>
@@ -506,5 +408,4 @@ async function runExperiment() {
     }
 }
 
-// Start the experiment when the page loads
 document.addEventListener('DOMContentLoaded', runExperiment);
