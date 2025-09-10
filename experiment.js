@@ -331,7 +331,6 @@ const final_screen = {
             <h2>Thank you!</h2>
             <p>You have completed the experiment.</p>
             <p>Your completion code is: <strong style="font-size: 18px; color: #2563eb;">${completion_code}</strong></p>
-            <p>Please save this code if it was requested by the researcher.</p>
         </div>
     `,
     choices: ['Finish'],
