@@ -152,6 +152,8 @@ function createTrials(wordsData) {
             },
             on_load: function() {
                 const responses = [];
+                const responseTimes = []; // Track RT for each response
+                const trialStartTime = Date.now();
                 const input = document.getElementById('response-input');
                 const addBtn = document.getElementById('add-btn');
                 const doneBtn = document.getElementById('done-btn');
@@ -161,7 +163,9 @@ function createTrials(wordsData) {
                 function addResponse() {
                     const response = input.value.trim();
                     if (response) {
+                        const responseTime = Date.now() - trialStartTime;
                         responses.push(response);
+                        responseTimes.push(responseTime);
                         
                         // Show the response in the list
                         const responseDiv = document.createElement('div');
@@ -173,6 +177,11 @@ function createTrials(wordsData) {
                         responsesDisplay.style.display = 'block';
                         doneBtn.style.display = 'inline-block';
                         
+                        // Log each response as it's added with detailed timing info
+                        console.log(`Response ${responses.length} added: "${response}" at ${responseTime}ms`);
+                        console.log(`Current responses array:`, responses);
+                        console.log(`Current response times array:`, responseTimes);
+                        
                         // Clear input and focus
                         input.value = '';
                         input.focus();
@@ -180,18 +189,40 @@ function createTrials(wordsData) {
                 }
                 
                 function finishTrial() {
-                    // Add response data to jsPsych's data store for this trial
-                    jsPsych.data.addProperties({
-                        responses: responses,
-                        num_responses: responses.length
-                    });
+                    console.log('=== FINISHING TRIAL ===');
+                    console.log('Current responses:', responses);
+                    console.log('Current response times:', responseTimes);
+                    console.log('Trial start time:', trialStartTime);
+                    console.log('Current time:', Date.now());
                     
-                    // Finish the trial normally, preserving all original data
-                    jsPsych.finishTrial({
-                        responses: responses,
+                    // Create detailed response data
+                    const responseData = responses.map((response, index) => ({
+                        response_word: response,
+                        response_order: index + 1,
+                        rt: responseTimes[index]
+                    }));
+                    
+                    console.log('Created response data:', responseData);
+                    
+                    // Create the complete trial data object
+                    const trialData = {
+                        custom_trial_type: 'word_completion_multi',
+                        participant_id: participant_id,
+                        trial_number: index + 1,
+                        word: word,
+                        pos: item.pos,
+                        eng_freq: item.eng_freq,
+                        responses: [...responses], // Create copy to avoid reference issues
+                        response_times: [...responseTimes], // Create copy to avoid reference issues
+                        response_data: responseData.map(r => ({...r})), // Deep copy
                         num_responses: responses.length,
-                        rt: Date.now() - jsPsych.getCurrentTrial().time_elapsed
-                    });
+                        trial_rt: Date.now() - trialStartTime
+                    };
+                    
+                    console.log('Complete trial data being sent:', trialData);
+                    
+                    // Finish the trial
+                    jsPsych.finishTrial(trialData);
                 }
                 
                 // Event listeners
