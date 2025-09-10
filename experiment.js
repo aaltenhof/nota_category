@@ -242,6 +242,7 @@ function createTrials(wordsData) {
 }
 
 function getFilteredData() {   
+    const allTrials = jsPsych.data.get().values();
     // console.log('All trials:', allTrials);
     
     const wordTrials = allTrials.filter(trial => trial.custom_trial_type === 'word_completion_multi');
@@ -343,7 +344,6 @@ const final_screen = {
     }
 };
 
-// Function to load trials from CSV
 async function loadWords() {
     try {
         const response = await fetch('word_list.csv');
