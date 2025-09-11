@@ -70,7 +70,6 @@ const instructions = {
                 "A <span style="font-weight: bold; color: #2563eb;">banana</span> is not a ______"
             </p>
             <p>Your task is to complete the sentence by filling in the blank with a word or phrase that makes sense.</p>
-            <p>Try to think of something that the given word is definitely NOT.</p>
             <p>You can provide multiple responses for each word - they will be shown to you as you type them.</p>
             <p>There are no right or wrong answers - we're interested in what comes to mind for you.</p>
             <p><strong>Press any key when you're ready to begin.</strong></p>
