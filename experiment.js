@@ -70,7 +70,7 @@ const instructions = {
                 "A <span style="font-weight: bold; color: #2563eb;">banana</span> is not a ______"
             </p>
             <p>Your task is to complete the sentence by filling in the blank with a word or phrase that makes sense.</p>
-            <p>You can provide multiple responses for each word - they will be shown to you as you type them.</p>
+            <p>After typing your response, press Enter to continue to the next word.</p>
             <p>There are no right or wrong answers - we're interested in what comes to mind for you.</p>
             <p><strong>Press any key when you're ready to begin.</strong></p>
         </div>
@@ -82,13 +82,25 @@ const instructions = {
 
 function getSentenceFrame(word, pos) {
     if (pos && pos.toLowerCase() === 'noun') {
-        // for nouns, use "a" or "an" based on first letter
-        const firstLetter = word.charAt(0).toLowerCase();
-        const vowels = ['a', 'e', 'i', 'o', 'u'];
-        const article = vowels.includes(firstLetter) ? 'An' : 'A';
-        return `${article} <span class="word-highlight">${word}</span> is not a ______`;
+        if (isPlural(word)) {
+            // for plural nouns: NOUNS are not ___
+            return `<span class="word-highlight">${word}</span> are not ______`;
+        } else {
+            // for singular nouns: A(n) NOUN is not a ___
+            const firstLetter = word.charAt(0).toLowerCase();
+            const vowels = ['a', 'e', 'i', 'o', 'u'];
+            const article = vowels.includes(firstLetter) ? 'An' : 'A';
+            return `${article} <span class="word-highlight">${word}</span> is not a ______`;
+        }
+    } else if (pos && pos.toLowerCase() === 'adj') {
+        // for adjectives: To be ADJ is to not be ___
+        return `To be <span class="word-highlight">${word}</span> is to not be ______`;
+    } else if (pos && pos.toLowerCase() === 'verb') {
+        // for verbs: VERBing is not ___
+        const verbIng = word.endsWith('e') ? word.slice(0, -1) + 'ing' : word + 'ing';
+        return `<span class="word-highlight">${verbIng}</span> is not ______`;
     } else {
-        // for other parts of speech, drop both articles
+        // default fallback
         return `<span class="word-highlight">${word}</span> is not ______`;
     }
 }
@@ -104,137 +116,50 @@ function createTrials(wordsData) {
             return;
         }
         
-        // allows multiple responses
-        const multiResponseTrial = {
-            type: jsPsychHtmlButtonResponse,
-            stimulus: function() {
-                return `
-                    <div style="text-align: center; max-width: 800px; margin: 0 auto;">
-                        <div class="trial-stimulus">
-                            ${getSentenceFrame(word, item.pos)}
-                        </div>
-                        
-                        <div style="margin: 20px 0;">
-                            <input type="text" id="response-input" placeholder="Type your answer here..." 
-                                   style="padding: 10px; font-size: 16px; width: 300px; border: 2px solid #ddd; border-radius: 5px;">
-                            <button id="add-btn" style="padding: 10px 20px; margin-left: 10px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                                Add Response
-                            </button>
-                        </div>
-                        
-                        <div id="responses-display" style="margin: 20px 0; padding: 15px; background-color: #f0f8ff; border-radius: 5px; min-height: 50px; display: none;">
-                            <h4>Your responses:</h4>
-                            <div id="responses-list" style="text-align: left; display: inline-block;"></div>
-                        </div>
-                        
-                        <div style="margin: 20px 0;">
-                            <button id="done-btn" style="padding: 10px 20px; font-size: 16px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; display: none;">
-                                Done with this word
-                            </button>
-                        </div>
-                    </div>
-                `;
-            },
-            choices: [],
-            trial_duration: null,
+        const singleResponseTrial = {
+            type: jsPsychSurveyText,
+            questions: [
+                {
+                    prompt: function() {
+                        return `
+                            <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+                                <div class="trial-stimulus" style="font-size: 24px; margin: 30px 0;">
+                                    ${getSentenceFrame(word, item.pos, item.plurality)}
+                                </div>
+                            </div>
+                        `;
+                    },
+                    placeholder: 'Type your answer here...',
+                    required: true,
+                    name: 'response'
+                }
+            ],
+            button_label: 'Continue',
             data: {
-                custom_trial_type: 'word_completion_multi',
+                custom_trial_type: 'word_completion_single',
                 participant_id: participant_id,
                 trial_number: index + 1,
                 word: word,
+                cat: item.cat,
                 pos: item.pos,
-                eng_freq: item.eng_freq
-            },
-            on_load: function() {
-                const responses = [];
-                const responseTimes = []; // get RT for each response
-                const trialStartTime = Date.now();
-                const input = document.getElementById('response-input');
-                const addBtn = document.getElementById('add-btn');
-                const doneBtn = document.getElementById('done-btn');
-                const responsesDisplay = document.getElementById('responses-display');
-                const responsesList = document.getElementById('responses-list');
-                
-                function addResponse() {
-                    const response = input.value.trim();
-                    if (response) {
-                        const responseTime = Date.now() - trialStartTime;
-                        responses.push(response);
-                        responseTimes.push(responseTime);
-                        
-                        
-                        const responseDiv = document.createElement('div');
-                        responseDiv.style.cssText = 'margin: 5px 0; padding: 5px; background-color: #e7f3ff; border-radius: 3px;';
-                        responseDiv.innerHTML = `<strong>${response}</strong>`;
-                        responsesList.appendChild(responseDiv);
-                        
-                        
-                        responsesDisplay.style.display = 'block';
-                        doneBtn.style.display = 'inline-block';
-                        
-                        
-                        //console.log(`Response ${responses.length} added: "${response}" at ${responseTime}ms`);
-                        //console.log(`Current responses array:`, responses);
-                        //console.log(`Current response times array:`, responseTimes);
-                        
-                        input.value = '';
-                        input.focus();
-                    }
-                }
-                
-                function finishTrial() {
-                    
-                    const responseData = responses.map((response, index) => ({
-                        response_word: response,
-                        response_order: index + 1,
-                        rt: responseTimes[index]
-                    }));
-                    
-                    //console.log('Created response data:', responseData);
-                    
-                    const trialData = {
-                        custom_trial_type: 'word_completion_multi',
-                        participant_id: participant_id,
-                        trial_number: index + 1,
-                        word: word,
-                        pos: item.pos,
-                        eng_freq: item.eng_freq,
-                        responses: [...responses],
-                        response_times: [...responseTimes],
-                        response_data: responseData.map(r => ({...r})), 
-                        num_responses: responses.length,
-                        trial_rt: Date.now() - trialStartTime
-                    };
-                    
-                    
-                    jsPsych.finishTrial(trialData);
-                }
-                
-                addBtn.addEventListener('click', addResponse);
-                doneBtn.addEventListener('click', finishTrial);
-                
-                input.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        addResponse();
-                    }
-                });
-                
-                input.focus();
+                plurality: item.plurality,
+                eng_freq: item.eng_freq,
+                list_type: item.list_type,
+                randomization: item.randomization
             },
             on_finish: function(data) {
+                data.response_word = data.response.response;
                 data.rt = Math.round(data.rt);
                 
-                const allData = jsPsych.data.get().values();
-                console.log(`Total trials in jsPsych data: ${allData.length}`);
-                const wordTrials = allData.filter(trial => trial.custom_trial_type === 'word_completion_multi');
-                console.log(`Word completion trials found so far: ${wordTrials.length}`);
-                if (wordTrials.length > 0) {
-                    console.log('Last completed word trial:', wordTrials[wordTrials.length - 1]);
-                }
+                console.log(`Trial ${index + 1} completed:`, {
+                    word: word,
+                    response: data.response_word,
+                    rt: data.rt
+                });
             }
         };
 
-        experimentTrials.push(multiResponseTrial);
+        experimentTrials.push(singleResponseTrial);
     });
     
     return experimentTrials;
@@ -242,51 +167,40 @@ function createTrials(wordsData) {
 
 function getFilteredData() {   
     const allTrials = jsPsych.data.get().values();
-    // console.log('All trials:', allTrials);
+    console.log('All trials:', allTrials.length);
     
-    const wordTrials = allTrials.filter(trial => trial.custom_trial_type === 'word_completion_multi');
+    const wordTrials = allTrials.filter(trial => trial.custom_trial_type === 'word_completion_single');
     console.log(`Word completion trials found: ${wordTrials.length}`);
     
-    if (wordTrials.length > 0) {
-        console.log('All word trials:', wordTrials);
-    }
-    
-    // if there's no data, return empty CSV
     if (wordTrials.length === 0) {
         console.error("No word completion trials found!");
-        //console.log('Available trial types:', [...new Set(allTrials.map(t => t.trial_type))]);
-        //console.log('Available custom trial types:', [...new Set(allTrials.map(t => t.custom_trial_type))]);
-        return 'subCode,trial_num,target_word,target_pos,target_eng_freq,response_word,response_order,rt\n';
+        return 'subCode,trial_num,target_word,target_cat,target_pos,target_plurality,target_eng_freq,target_list_type,target_randomization,response_word,rt\n';
     }
     
     try {
-        const header = 'subCode,trial_num,target_word,target_pos,target_eng_freq,response_word,response_order,rt';
+        const header = 'subCode,trial_num,target_word,target_cat,target_pos,target_plurality,target_eng_freq,target_list_type,target_randomization,response_word,rt';
         const rows = [];
         
         wordTrials.forEach((trial, trialIndex) => {
             console.log(`Processing trial ${trialIndex + 1}:`, trial);
             
-            // Use the detailed response data if available
-            if (trial.response_data && trial.response_data.length > 0) {
-                console.log(`Using detailed response data for trial ${trialIndex + 1}`);
-                trial.response_data.forEach((responseItem) => {
-                    const row = [
-                        trial.participant_id || participant_id,
-                        trial.trial_number || trialIndex + 1,
-                        trial.word || '',
-                        trial.pos || '',
-                        trial.eng_freq || '',
-                        responseItem.response_word || '',
-                        responseItem.response_order || 1,
-                        Math.round(responseItem.rt || 0)
-                    ];
-                    rows.push(row);
-                    console.log(`Added detailed response row:`, row);
-                });
-            }
+            const row = [
+                trial.participant_id || participant_id,
+                trial.trial_number || trialIndex + 1,
+                trial.word || '',
+                trial.cat || '',
+                trial.pos || '',
+                trial.plurality || '',
+                trial.eng_freq || '',
+                trial.list_type || '',
+                trial.randomization || '',
+                trial.response_word || '',
+                Math.round(trial.rt || 0)
+            ];
+            rows.push(row);
+            console.log(`Added response row:`, row);
         });
         
-        // convert to CSV format
         const csvRows = rows.map(row => {
             return row.map(value => {
                 if (typeof value === 'string' && (value.includes(',') || value.includes('"') || value.includes('\n'))) {
@@ -297,12 +211,12 @@ function getFilteredData() {
         });
         
         const finalCSV = header + '\n' + csvRows.join('\n');
-        //console.log("Generated CSV data:", finalCSV);
+        console.log("Generated CSV data:", finalCSV);
         
         return finalCSV;
     } catch (error) {
         console.error("Error in getFilteredData:", error);
-        return 'subCode,trial_num,target_word,target_pos,target_eng_freq,response_word,response_order,rt\nerror,0,error,error,0,error,1,0\n';
+        return 'subCode,trial_num,target_word,target_cat,target_pos,target_plurality,target_eng_freq,target_list_type,target_randomization,response_word,rt\nerror,0,error,error,error,error,0,error,error,error,0\n';
     }
 }
 
@@ -315,11 +229,8 @@ const save_data = {
     on_finish: function(data) {
         if (data.success) {
             console.log('Data saved successfully to DataPipe!');
-            //console.log('Participant ID:', participant_id);
-            //console.log('Filename:', filename);
         } else {
             console.error('Error saving to DataPipe:', data.message);
-            //console.error('Full error data:', data);
         }
     }
 };
@@ -345,7 +256,7 @@ const final_screen = {
 
 async function loadWords() {
     try {
-        const response = await fetch('word_list.csv');
+        const response = await fetch('demo_word_list.csv');
         const csvText = await response.text();
         
         const results = Papa.parse(csvText, {
@@ -354,7 +265,7 @@ async function loadWords() {
             dynamicTyping: true
         });
 
-        //console.log('Loaded words:', results.data.length);
+        console.log('Loaded words:', results.data.length);
 
         let shuffledData = jsPsych.randomization.shuffle([...results.data]);
         
@@ -367,9 +278,9 @@ async function loadWords() {
 
 async function runExperiment() {
     try {
-        //console.log('Starting experiment...');
-        //console.log('Participant ID:', participant_id);
-        //console.log('Completion code:', completion_code);
+        console.log('Starting experiment...');
+        console.log('Participant ID:', participant_id);
+        console.log('Completion code:', completion_code);
         
         const wordsData = await loadWords();
         console.log('Loaded words:', wordsData.length);
