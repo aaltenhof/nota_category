@@ -177,11 +177,11 @@ function getFilteredData() {
     // if there's no data, return empty CSV
     if (wordTrials.length === 0) {
         console.error("No word completion trials found!");
-        return 'subCode,trial_num,target_word,target_cat,target_pos,target_plurality,target_eng_freq, avg_aoa, target_list_type,target_randomization,response_word,rt\n';
+        return 'subCode,trial_num,target_word,target_cat,target_pos,target_plurality,target_eng_freq, avg_aoa, list_type,randomization,response_word,rt\n';
     }
     
     try {
-        const header = 'subCode,trial_num,target_word,target_cat,target_pos,target_plurality,target_eng_freq, avg_aoa, target_list_type,target_randomization,response_word,rt';
+        const header = 'subCode,trial_num,target_word,target_cat,target_pos,target_plurality,target_eng_freq, avg_aoa, list_type,randomization,response_word,rt';
         const rows = [];
         
         wordTrials.forEach((trial, trialIndex) => {
