@@ -80,67 +80,26 @@ const instructions = {
     }
 };
 
-function isPlural(word) {
-    // Convert to lowercase for checking
-    const lowerWord = word.toLowerCase();
-    
-    // Words that end in 's' but are typically singular
-    const singularSWords = ['bus', 'class', 'glass', 'grass', 'mass', 'pass', 'bass', 'loss', 'boss', 'cross', 'dress', 'stress', 'chess', 'mess', 'less', 'kiss', 'miss', 'this', 'yes', 'us', 'plus', 'gas', 'focus', 'virus', 'status', 'basis', 'crisis', 'analysis', 'thesis', 'emphasis', 'oasis', 'diagnosis'];
-    
-    // Check for irregular plurals
-    const irregularPlurals = ['children', 'people', 'men', 'women', 'feet', 'teeth', 'mice', 'geese', 'sheep', 'deer', 'fish', 'species', 'series', 'aircraft', 'spacecraft'];
-    
-    // If it's a known irregular plural
-    if (irregularPlurals.includes(lowerWord)) {
-        return true;
-    }
-    
-    // If it's a known singular word ending in 's'
-    if (singularSWords.includes(lowerWord)) {
-        return false;
-    }
-    
-    // Check common plural patterns
-    if (lowerWord.endsWith('ies') || 
-        lowerWord.endsWith('ves') || 
-        lowerWord.endsWith('ses') || 
-        lowerWord.endsWith('xes') || 
-        lowerWord.endsWith('zes') || 
-        lowerWord.endsWith('ches') || 
-        lowerWord.endsWith('shes')) {
-        return true;
-    }
-    
-    // If ends in 's' but not 'ss', likely plural
-    if (lowerWord.endsWith('s') && !lowerWord.endsWith('ss')) {
-        return true;
-    }
-    
-    return false;
-}
-
 function getSentenceFrame(word, pos) {
     if (pos && pos.toLowerCase() === 'noun') {
-        // Check if noun is plural
-        if (isPlural(word)) {
+        if (plurality.toLowerCase() === 'plural') {
             // for plural nouns: NOUNS are not ___
             return `<span class="word-highlight">${word}</span> are not ______`;
-        } else {
+        } else if (plurality.toLowerCase() === 'singular') {
             // for singular nouns: A(n) NOUN is not a ___
             const firstLetter = word.charAt(0).toLowerCase();
             const vowels = ['a', 'e', 'i', 'o', 'u'];
             const article = vowels.includes(firstLetter) ? 'An' : 'A';
             return `${article} <span class="word-highlight">${word}</span> is not a ______`;
+        } else {
+            // for mass and abtract nouns
+            return `<span class="word-highlight">${word}</span> is not ______`;
         }
     } else if (pos && pos.toLowerCase() === 'adj') {
         // for adjectives: To be ADJ is to not be ___
         return `To be <span class="word-highlight">${word}</span> is to not be ______`;
-    } else if (pos && pos.toLowerCase() === 'verb') {
+    } else (pos && pos.toLowerCase() === 'verb') {
         // for verbs: VERBing is not ___
-        const verbIng = word.endsWith('e') ? word.slice(0, -1) + 'ing' : word + 'ing';
-        return `<span class="word-highlight">${verbIng}</span> is not ______`;
-    } else {
-        // default fallback
         return `<span class="word-highlight">${word}</span> is not ______`;
     }
 }
@@ -185,6 +144,7 @@ function createTrials(wordsData) {
                 pos: item.pos,
                 plurality: item.plurality,
                 eng_freq: item.eng_freq,
+                avg_aoa = item.avg_aoa,
                 list_type: item.list_type,
                 randomization: item.randomization
             },
@@ -217,11 +177,11 @@ function getFilteredData() {
     // if there's no data, return empty CSV
     if (wordTrials.length === 0) {
         console.error("No word completion trials found!");
-        return 'subCode,trial_num,target_word,target_cat,target_pos,target_plurality,target_eng_freq,target_list_type,target_randomization,response_word,rt\n';
+        return 'subCode,trial_num,target_word,target_cat,target_pos,target_plurality,target_eng_freq, avg_aoa, target_list_type,target_randomization,response_word,rt\n';
     }
     
     try {
-        const header = 'subCode,trial_num,target_word,target_cat,target_pos,target_plurality,target_eng_freq,target_list_type,target_randomization,response_word,rt';
+        const header = 'subCode,trial_num,target_word,target_cat,target_pos,target_plurality,target_eng_freq, avg_aoa, target_list_type,target_randomization,response_word,rt';
         const rows = [];
         
         wordTrials.forEach((trial, trialIndex) => {
@@ -235,6 +195,7 @@ function getFilteredData() {
                 trial.pos || '',
                 trial.plurality || '',
                 trial.eng_freq || '',
+                trial.avg_aoa || '',
                 trial.list_type || '',
                 trial.randomization || '',
                 trial.response_word || '',
@@ -260,7 +221,7 @@ function getFilteredData() {
         return finalCSV;
     } catch (error) {
         console.error("Error in getFilteredData:", error);
-        return 'subCode,trial_num,target_word,target_cat,target_pos,target_plurality,target_eng_freq,target_list_type,target_randomization,response_word,rt\nerror,0,error,error,error,error,0,error,error,error,0\n';
+        return 'subCode,trial_num,target_word,target_cat,target_pos,target_plurality,target_eng_freq, avg_aoa, target_list_type,target_randomization,response_word,rt\nerror,0,error,error,error,error,0,error,error,error,0\n';
     }
 }
 
