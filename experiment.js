@@ -80,8 +80,48 @@ const instructions = {
     }
 };
 
+function isPlural(word) {
+    // Convert to lowercase for checking
+    const lowerWord = word.toLowerCase();
+    
+    // Words that end in 's' but are typically singular
+    const singularSWords = ['bus', 'class', 'glass', 'grass', 'mass', 'pass', 'bass', 'loss', 'boss', 'cross', 'dress', 'stress', 'chess', 'mess', 'less', 'kiss', 'miss', 'this', 'yes', 'us', 'plus', 'gas', 'focus', 'virus', 'status', 'basis', 'crisis', 'analysis', 'thesis', 'emphasis', 'oasis', 'diagnosis'];
+    
+    // Check for irregular plurals
+    const irregularPlurals = ['children', 'people', 'men', 'women', 'feet', 'teeth', 'mice', 'geese', 'sheep', 'deer', 'fish', 'species', 'series', 'aircraft', 'spacecraft'];
+    
+    // If it's a known irregular plural
+    if (irregularPlurals.includes(lowerWord)) {
+        return true;
+    }
+    
+    // If it's a known singular word ending in 's'
+    if (singularSWords.includes(lowerWord)) {
+        return false;
+    }
+    
+    // Check common plural patterns
+    if (lowerWord.endsWith('ies') || 
+        lowerWord.endsWith('ves') || 
+        lowerWord.endsWith('ses') || 
+        lowerWord.endsWith('xes') || 
+        lowerWord.endsWith('zes') || 
+        lowerWord.endsWith('ches') || 
+        lowerWord.endsWith('shes')) {
+        return true;
+    }
+    
+    // If ends in 's' but not 'ss', likely plural
+    if (lowerWord.endsWith('s') && !lowerWord.endsWith('ss')) {
+        return true;
+    }
+    
+    return false;
+}
+
 function getSentenceFrame(word, pos) {
     if (pos && pos.toLowerCase() === 'noun') {
+        // Check if noun is plural
         if (isPlural(word)) {
             // for plural nouns: NOUNS are not ___
             return `<span class="word-highlight">${word}</span> are not ______`;
@@ -116,6 +156,7 @@ function createTrials(wordsData) {
             return;
         }
         
+        // single response trial
         const singleResponseTrial = {
             type: jsPsychSurveyText,
             questions: [
@@ -148,6 +189,7 @@ function createTrials(wordsData) {
                 randomization: item.randomization
             },
             on_finish: function(data) {
+                // add the response to the data object
                 data.response_word = data.response.response;
                 data.rt = Math.round(data.rt);
                 
@@ -172,6 +214,7 @@ function getFilteredData() {
     const wordTrials = allTrials.filter(trial => trial.custom_trial_type === 'word_completion_single');
     console.log(`Word completion trials found: ${wordTrials.length}`);
     
+    // if there's no data, return empty CSV
     if (wordTrials.length === 0) {
         console.error("No word completion trials found!");
         return 'subCode,trial_num,target_word,target_cat,target_pos,target_plurality,target_eng_freq,target_list_type,target_randomization,response_word,rt\n';
@@ -201,6 +244,7 @@ function getFilteredData() {
             console.log(`Added response row:`, row);
         });
         
+        // convert to CSV format
         const csvRows = rows.map(row => {
             return row.map(value => {
                 if (typeof value === 'string' && (value.includes(',') || value.includes('"') || value.includes('\n'))) {
