@@ -144,7 +144,7 @@ function createTrials(wordsData) {
                 pos: item.pos,
                 plurality: item.plurality,
                 eng_freq: item.eng_freq,
-                avg_aoa = item.avg_aoa,
+                avg_aoa: item.avg_aoa,
                 list_type: item.list_type,
                 randomization: item.randomization
             },
