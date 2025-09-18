@@ -1,6 +1,6 @@
 word,cat,pos,plurality,eng_freq,list_type,randomization
-glasses,household,noun,plural,33.12,XXX,XXX
-alligator,animals,noun,singular,3.49,XXX,XXX
-blowing,action_words,verb,na,97.57,XXX,XXX
-awake,descriptive_words,adjective,na,26.71,XXX,XXX
-yesterday,time_words,noun,na,96.76,XXX,XXX
+Glasses,household,noun,plural,33.12,XXX,XXX
+Alligator,animals,noun,singular,3.49,XXX,XXX
+Blowing,action_words,verb,na,97.57,XXX,XXX
+Awake,descriptive_words,adjective,na,26.71,XXX,XXX
+Yesterday,time_words,noun,na,96.76,XXX,XXX
