@@ -95,10 +95,13 @@ function getSentenceFrame(word, pos) {
             // for mass and abtract nouns
             return `<span class="word-highlight">${word}</span> is not ______`;
         }
-    } else if (pos && pos.toLowerCase() === 'adj') {
+    }
+
+    if (pos && pos.toLowerCase() === 'adjective') {
         // for adjectives: To be ADJ is to not be ___
         return `To be <span class="word-highlight">${word}</span> is to not be ______`;
-    } else (pos && pos.toLowerCase() === 'verb') {
+    }
+    if (pos && pos.toLowerCase() === 'verb') {
         // for verbs: VERBing is not ___
         return `<span class="word-highlight">${word}</span> is not ______`;
     }
