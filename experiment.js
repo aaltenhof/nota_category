@@ -80,7 +80,7 @@ const instructions = {
     }
 };
 
-function getSentenceFrame(word, pos) {
+function getSentenceFrame(word, pos, plurality) {
     if (pos && pos.toLowerCase() === 'noun') {
         if (plurality.toLowerCase() === 'plural') {
             // for plural nouns: NOUNS are not ___
