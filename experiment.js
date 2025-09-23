@@ -100,12 +100,12 @@ function createTrials(wordsData) {
                         // Build sentence frame using CSV columns
                         const before = item.sentence_frame_before || '';
                         const after = item.sentence_frame_after || '';
-                        const clarification = item.clarification ? `<br><span style="font-size: 16px; color: #666;">${item.clarification}</span>` : '';
+                        const clarification = item.clarification ? `<span style="font-size: 16px; color: #666;"> ${item.clarification}</span>` : '';
                         
                         return `
                             <div style="text-align: center; max-width: 800px; margin: 0 auto;">
                                 <div class="trial-stimulus" style="font-size: 24px; margin: 30px 0;">
-                                    ${before}<span class="word-highlight">${word}${clarification}</span>${after}$
+                                    ${before}<span class="word-highlight">${word}</span>${clarification}${after}
                                 </div>
                             </div>
                         `;
@@ -206,7 +206,7 @@ const save_data = {
     type: jsPsychPipe,
     action: "save",
     experiment_id: "iEGcC0iYDj4r",
-    filename: filename,
+    filename: `${participant_id}.csv`,
     data_string: getFilteredData,
     on_finish: function(data) {
         if (data.success) {
