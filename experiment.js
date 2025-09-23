@@ -100,7 +100,7 @@ function createTrials(wordsData) {
                         // Build sentence frame using CSV columns
                         const before = item.sentence_frame_before || '';
                         const after = item.sentence_frame_after || '';
-                        const clarification = item.clarification ? `<span style="font-size: 16px; color: #666;"> ${item.clarification}</span>` : '';
+                        const clarification = item.clarification ? ` ${item.clarification}` : '';
                         
                         return `
                             <div style="text-align: center; max-width: 800px; margin: 0 auto;">
