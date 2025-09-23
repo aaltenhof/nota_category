@@ -1,6 +1,6 @@
-word,cat,pos,plurality,eng_freq,list_type,randomization,avg_aoa
-Glasses,household,noun,plural,33.12,XXX,XXX,XXX
-alligator,animals,noun,singular,3.49,XXX,XXX,XXX
-Running,action_words,verb,na,XXX,XXX,XXX,XXX
-awake,descriptive_words,adjective,na,26.71,XXX,XXX,XXX
-Yesterday,time_words,noun,other,96.76,XXX,XXX,XXX
+word,cat,pos,sentence_frame_before,sentence_frame_after,clarification,eng_freq,list_type,randomization,avg_aoa
+Glasses,household,noun,,are not ,(for your eyes),33.12,XXX,XXX,XXX
+alligator,animals,noun,An ,is not ,,3.49,XXX,XXX,XXX
+Running,action_words,verb,,is not ,,XXX,XXX,XXX,XXX
+awake,descriptive_words,adjective,To be ,is not to be ,,26.71,XXX,XXX,XXX
+Yesterday,time_words,noun,,is not ,,96.76,XXX,XXX,XXX

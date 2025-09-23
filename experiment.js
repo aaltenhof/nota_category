@@ -80,30 +80,6 @@ const instructions = {
     }
 };
 
-function getSentenceFrame(word, pos, plurality) {
-    if (pos && pos.toLowerCase() === 'noun') {
-        if (plurality.toLowerCase() === 'plural') {
-            // for plural nouns: NOUNS are not ___
-            return `<span class="word-highlight">${word}</span> are not ______`;
-        } else if (plurality.toLowerCase() === 'singular') {
-            // for singular nouns: A(n) NOUN is not a ___
-            const firstLetter = word.charAt(0).toLowerCase();
-            const vowels = ['a', 'e', 'i', 'o', 'u'];
-            const article = vowels.includes(firstLetter) ? 'An' : 'A';
-            return `${article} <span class="word-highlight">${word}</span> is not a ______`;
-        } else {
-            // for mass and abtract nouns
-            return `<span class="word-highlight">${word}</span> is not ______`;
-        }
-    } if (pos && pos.toLowerCase() === 'adjective') {
-        // for adjectives: To be ADJ is to not be ___
-        return `To be <span class="word-highlight">${word}</span> is to not be ______`;
-    } if (pos && pos.toLowerCase() === 'verb') {
-        // for verbs: VERBing is not ___
-        return `<span class="word-highlight">${word}</span> is not ______`;
-    }
-}
-
 function createTrials(wordsData) {
     const experimentTrials = [];
     
@@ -121,10 +97,15 @@ function createTrials(wordsData) {
             questions: [
                 {
                     prompt: function() {
+                        // Build sentence frame using CSV columns
+                        const before = item.sentence_frame_before || '';
+                        const after = item.sentence_frame_after || '';
+                        const clarification = item.clarification ? `<br><span style="font-size: 16px; color: #666;">${item.clarification}</span>` : '';
+                        
                         return `
                             <div style="text-align: center; max-width: 800px; margin: 0 auto;">
                                 <div class="trial-stimulus" style="font-size: 24px; margin: 30px 0;">
-                                    ${getSentenceFrame(word, item.pos, item.plurality)}
+                                    ${before}<span class="word-highlight">${word}</span>${after}${clarification}
                                 </div>
                             </div>
                         `;
@@ -142,7 +123,6 @@ function createTrials(wordsData) {
                 word: word,
                 cat: item.cat,
                 pos: item.pos,
-                plurality: item.plurality,
                 eng_freq: item.eng_freq,
                 avg_aoa: item.avg_aoa,
                 list_type: item.list_type,
@@ -177,11 +157,11 @@ function getFilteredData() {
     // if there's no data, return empty CSV
     if (wordTrials.length === 0) {
         console.error("No word completion trials found!");
-        return 'subCode,trial_num,target_word,target_cat,target_pos,target_plurality,target_eng_freq, avg_aoa, list_type,randomization,response_word,rt\n';
+        return 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,avg_aoa,list_type,randomization,response_word,rt\n';
     }
     
     try {
-        const header = 'subCode,trial_num,target_word,target_cat,target_pos,target_plurality,target_eng_freq, avg_aoa, list_type,randomization,response_word,rt';
+        const header = 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,avg_aoa,list_type,randomization,response_word,rt';
         const rows = [];
         
         wordTrials.forEach((trial, trialIndex) => {
@@ -193,7 +173,6 @@ function getFilteredData() {
                 trial.word || '',
                 trial.cat || '',
                 trial.pos || '',
-                trial.plurality || '',
                 trial.eng_freq || '',
                 trial.avg_aoa || '',
                 trial.list_type || '',
@@ -221,7 +200,7 @@ function getFilteredData() {
         return finalCSV;
     } catch (error) {
         console.error("Error in getFilteredData:", error);
-        return 'subCode,trial_num,target_word,target_cat,target_pos,target_plurality,target_eng_freq, avg_aoa, target_list_type,target_randomization,response_word,rt\nerror,0,error,error,error,error,0,error,error,error,0\n';
+        return 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,avg_aoa,list_type,randomization,response_word,rt\nerror,0,error,error,error,error,0,0,error,error,error,0\n';
     }
 }
 
