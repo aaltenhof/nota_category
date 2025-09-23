@@ -124,9 +124,8 @@ function createTrials(wordsData) {
                 cat: item.cat,
                 pos: item.pos,
                 eng_freq: item.eng_freq,
-                avg_aoa: item.avg_aoa,
-                list_type: item.list_type,
-                randomization: item.randomization
+                aoa_producing: item.aoa_producing,
+                list_num: item.list_num
             },
             on_finish: function(data) {
                 // add the response to the data object
@@ -157,11 +156,11 @@ function getFilteredData() {
     // if there's no data, return empty CSV
     if (wordTrials.length === 0) {
         console.error("No word completion trials found!");
-        return 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,avg_aoa,list_type,randomization,response_word,rt\n';
+        return 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_num,response_word,rt\n';
     }
     
     try {
-        const header = 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,avg_aoa,list_type,randomization,response_word,rt';
+        const header = 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_num,response_word,rt';
         const rows = [];
         
         wordTrials.forEach((trial, trialIndex) => {
@@ -174,9 +173,8 @@ function getFilteredData() {
                 trial.cat || '',
                 trial.pos || '',
                 trial.eng_freq || '',
-                trial.avg_aoa || '',
-                trial.list_type || '',
-                trial.randomization || '',
+                trial.aoa_producing || '',
+                trial.list_num || '',
                 trial.response_word || '',
                 Math.round(trial.rt || 0)
             ];
@@ -200,7 +198,7 @@ function getFilteredData() {
         return finalCSV;
     } catch (error) {
         console.error("Error in getFilteredData:", error);
-        return 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,avg_aoa,list_type,randomization,response_word,rt\nerror,0,error,error,error,error,0,0,error,error,error,0\n';
+        return 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_num,response_word,rt\nerror,0,error,error,error,error,0,0,error,error,error,0\n';
     }
 }
 
