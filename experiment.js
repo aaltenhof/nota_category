@@ -105,7 +105,7 @@ function createTrials(wordsData) {
                         return `
                             <div style="text-align: center; max-width: 800px; margin: 0 auto;">
                                 <div class="trial-stimulus" style="font-size: 24px; margin: 30px 0;">
-                                    ${before}<span class="word-highlight">${word}</span>${after}${clarification}
+                                    ${before}<span class="word-highlight">${word}${clarification}</span>${after}$
                                 </div>
                             </div>
                         `;
