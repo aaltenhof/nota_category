@@ -21,6 +21,8 @@ const jsPsych = initJsPsych({
 
 let completedLists = 0;
 let timeline = [];
+let shouldContinueToList2 = false;
+let shouldContinueToList3 = false;
 let globalTrialNumber = 0;
 
 let list1Trials = [];
@@ -271,8 +273,8 @@ const checkContinueList1 = {
         list_just_completed: 1
     },
     on_finish: function(data) {
-        if (data.response === 0){
-            let shouldContinueToList2 = true;
+        if (data.response == 0){
+            shouldContinueToList2 = true;
             console.log('after list1:', shouldContinueToList2);
         }
     }
@@ -392,7 +394,7 @@ async function runExperiment() {
         //console.log(`Created ${list3Trials.length} trials for list 3`);
         
         // Build the complete timeline
-        timeline = [
+        timeline1 = [
             consent,
             instructions
         ];
@@ -400,16 +402,23 @@ async function runExperiment() {
         
         timeline = timeline.concat(list1Trials);
         timeline.push(checkContinueList1);
+
+        JsPsych.run(timeline1);
+
+        timeline2 = [];
         
+        console.log('Should show list 2 trials?', shouldContinueToList2);
         if (shouldContinueToList2 == false){
-            timeline.push(save_data);
-            timeline.push(final_screen);
+            timeline2.push(save_data);
+            timeline2.push(final_screen);
         } else {
-            timeline = timeline.concat(list2Trials);
-            timeline.push(checkContinueList2);
+            timeline2 = timeline2.concat(list2Trials);
+            timeline2.push(checkContinueList2);
+            timeline2.push(save_data);
+            timeline2.push(final_screen)
         }
-        //            timeline.push(save_data);
-        //timeline.push(final_screen);
+
+        JsPsych.run(timeline2);
 
         const list3TimelineNode = {
             timeline: list3Trials,
