@@ -11,7 +11,7 @@ Popcorn,food_drink,noun,, is not ,,,,1
 yogurt,food_drink,noun,A , is not a ,,,,1
 bug,animals,noun,A , is not a ,,,,1
 windy,descriptive_words,adjective,To be , is not to be ,,,,1
-banana,food_drink,noun,A , is not ,,,,1
+banana,food_drink,noun,A , is not a ,,,,1
 Tearing,action_words,verb,, is not ,,,,1
 high,descriptive_words,adjective,To be , is not to be ,,,,1
 boot,clothing,noun,A , is not a ,,,,1
@@ -45,12 +45,12 @@ Rain,outside,noun,, is not ,,,,1
 Toast,food_drink,noun,, is not ,,,,1
 Tasting,action_words,verb,, is not ,,,,1
 doctor,people,noun,A , is not a ,,,,1
-toy ,toys,noun,A , is not ,,,,1
+toy ,toys,noun,A , is not a ,,,,1
 telephone,household,noun,A , is not a ,,,,1
 Buying,action_words,verb,, is not ,,,,1
 Bread,food_drink,noun,, is not ,,,,1
 Time,time_words,noun,, is not ,,,,1
-donut,food_drink,noun,A, is not a ,,,,1
+donut,food_drink,noun,A , is not a ,,,,1
 Stopping,action_words,verb,, is not ,,,,1
 yucky,descriptive_words,adjective,To be , is not to be ,,,,1
 picture,household,noun,A , is not a ,,,,1
@@ -63,13 +63,13 @@ People,people,noun,, are not ,,,,1
 vacuum,household,noun,A , is not a ,,,,1
 babysitter,people,noun,A , is not a ,,,,1
 Finishing,action_words,verb,, is not ,,,,1
-puzzle,toys,noun,A , is not ,,,,1
+puzzle,toys,noun,A , is not a ,,,,1
 Knocking,action_words,verb,, is not ,,,,1
 Jeans,clothing,noun,, are not ,,,,1
 Chicken,food_drink,noun,, is not ,(food) ,,,1
 crayon,toys,noun,A , is not ,,,,1
 Clapping,action_words,verb,, is not ,,,,1
-cracker,food_drink,noun,A, is not a ,,,,1
+cracker,food_drink,noun,A , is not a ,,,,1
 crib,furniture_rooms,noun,A , is not a ,,,,1
 head,body_parts,noun,A , is not a ,,,,1
 penguin,animals,noun,A , is not a ,,,,1
