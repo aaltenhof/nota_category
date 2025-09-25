@@ -13,10 +13,8 @@ function generateRandomString(length) {
 
 const completion_code = generateRandomString(3) + 'zvz' + generateRandomString(3);
 
-// create filename for data saving
 const filename = `${participant_id}.csv`;
 
-// Initialize jsPsych
 const jsPsych = initJsPsych({
     show_progress_bar: false,
 });
@@ -25,8 +23,8 @@ let completedLists = 0;
 let timeline = [];
 let shouldContinueToList2 = false;
 let shouldContinueToList3 = false;
+let globalTrialNumber = 0;
 
-// Store all list trials globally
 let list1Trials = [];
 let list2Trials = [];
 let list3Trials = [];
@@ -95,6 +93,8 @@ function createTrials(wordsData, listNumber) {
             console.warn('Trial missing word:', item);
             return;
         }
+
+        globalTrialNumber++; 
         
         const singleResponseTrial = {
             type: jsPsychSurveyText,
@@ -122,7 +122,7 @@ function createTrials(wordsData, listNumber) {
             data: {
                 custom_trial_type: 'word_completion_single',
                 participant_id: participant_id,
-                trial_number: index + 1,
+                trial_number: globalTrialNumber,
                 word: word,
                 cat: item.cat,
                 pos: item.pos,
@@ -151,10 +151,10 @@ function createTrials(wordsData, listNumber) {
 
 function getFilteredData() {   
     const allTrials = jsPsych.data.get().values();
-    console.log('All trials:', allTrials.length);
+    //console.log('All trials:', allTrials.length);
     
     const wordTrials = allTrials.filter(trial => trial.custom_trial_type === 'word_completion_single');
-    console.log(`Word completion trials found: ${wordTrials.length}`);
+    //console.log(`Word completion trials found: ${wordTrials.length}`);
     
     // if there's no data, return empty CSV
     if (wordTrials.length === 0) {
@@ -183,7 +183,6 @@ function getFilteredData() {
             rows.push(row);
         });
         
-        // convert to CSV format
         const csvRows = rows.map(row => {
             return row.map(value => {
                 if (typeof value === 'string' && (value.includes(',') || value.includes('"') || value.includes('\n'))) {
@@ -194,7 +193,7 @@ function getFilteredData() {
         });
         
         const finalCSV = header + '\n' + csvRows.join('\n');
-        console.log("Generated CSV data (first 500 chars):", finalCSV.substring(0, 500));
+        //console.log("Generated CSV data (first 500 chars):", finalCSV.substring(0, 500));
         
         return finalCSV;
     } catch (error) {
@@ -211,8 +210,8 @@ const save_data = {
     data_string: getFilteredData,
     on_finish: function(data) {
         if (data.success) {
-            console.log('Data saved successfully to DataPipe!');
-            console.log('Total lists completed:', completedLists);
+            console.log('Data saved successfully!');
+            //console.log('Total lists completed:', completedLists);
         } else {
             console.error('Error saving to DataPipe:', data.message);
         }
@@ -232,7 +231,7 @@ async function loadWordsForCondition(condition) {
         ];
         
         const csvFile = csvFiles[condition] || 'wordlist1.csv';
-        console.log(`Loading CSV file: ${csvFile} for condition ${condition}`);
+        //console.log(`Loading CSV file: ${csvFile} for condition ${condition}`);
         
         const response = await fetch(csvFile);
         const csvText = await response.text();
@@ -243,7 +242,7 @@ async function loadWordsForCondition(condition) {
             dynamicTyping: true
         });
 
-        console.log(`Loaded words for condition ${condition}:`, results.data.length);
+        //console.log(`Loaded words for condition ${condition}:`, results.data.length);
         let shuffledData = jsPsych.randomization.shuffle([...results.data]);
         
         return shuffledData;
@@ -253,11 +252,11 @@ async function loadWordsForCondition(condition) {
     }
 }
 
-// Check continue after list 1
+// check after list 1 if they want to proceed
 const checkContinueList1 = {
     type: jsPsychHtmlButtonResponse,
     stimulus: function() {
-        completedLists = 1; // Mark list 1 as completed
+        completedLists = 1; // mark list 1 completed
         const listsRemaining = 3 - completedLists;
         return `
             <div style="text-align: center; max-width: 600px; margin: 0 auto;">
@@ -275,15 +274,15 @@ const checkContinueList1 = {
     },
     on_finish: function(data) {
         shouldContinueToList2 = (data.response === 0);
-        console.log('After list 1, continue to list 2?', shouldContinueToList2);
+        //console.log('After list 1, continue to list 2?', shouldContinueToList2);
     }
 };
 
-// Check continue after list 2
+// check continue after list 2
 const checkContinueList2 = {
     type: jsPsychHtmlButtonResponse,
     stimulus: function() {
-        completedLists = 2; // Mark list 2 as completed
+        completedLists = 2; 
         const listsRemaining = 3 - completedLists;
         return `
             <div style="text-align: center; max-width: 600px; margin: 0 auto;">
@@ -305,12 +304,11 @@ const checkContinueList2 = {
     on_finish: function(data) {
         if (data.response !== undefined) {
             shouldContinueToList3 = (data.response === 0);
-            console.log('After list 2, continue to list 3?', shouldContinueToList3);
+            //console.log('After list 2, continue to list 3?', shouldContinueToList3);
         }
     }
 };
 
-// Final message after list 3
 const list3CompleteMessage = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `
@@ -355,8 +353,6 @@ const final_screen = {
         total_lists_completed: function() { return completedLists; }
     },  
     on_finish: function() {
-        console.log('Experiment complete. Total lists:', completedLists);
-        console.log('Redirecting to SONA...');
         setTimeout(function() {
             window.location.href = `https://uwmadison.sona-systems.com/default.aspx?logout=Y`;
         }, 100);
@@ -365,13 +361,12 @@ const final_screen = {
 
 async function runExperiment() {
     try {
-        console.log('Starting experiment...');
-        console.log('Participant ID:', participant_id);
+        //console.log('Participant ID:', participant_id);
         
         // Pre-load all conditions and create all trials at the start
         console.log('Pre-loading all list data...');
         
-        // Get condition for list 1
+        
         const condition1 = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
         console.log('List 1: Assigned condition:', condition1);
         const wordsData1 = await loadWordsForCondition(condition1);
@@ -381,7 +376,7 @@ async function runExperiment() {
         list1Trials = createTrials(wordsData1, 1);
         console.log(`Created ${list1Trials.length} trials for list 1`);
         
-        // Get condition for list 2
+        
         const condition2 = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
         console.log('List 2: Assigned condition:', condition2);
         const wordsData2 = await loadWordsForCondition(condition2);
@@ -391,7 +386,7 @@ async function runExperiment() {
         list2Trials = createTrials(wordsData2, 2);
         console.log(`Created ${list2Trials.length} trials for list 2`);
         
-        // Get condition for list 3
+        
         const condition3 = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
         console.log('List 3: Assigned condition:', condition3);
         const wordsData3 = await loadWordsForCondition(condition3);
@@ -407,46 +402,38 @@ async function runExperiment() {
             instructions
         ];
         
-        // Add list 1 trials directly
-        timeline = timeline.concat(list1Trials);
         
-        // Add continue check after list 1
+        timeline = timeline.concat(list1Trials);
         timeline.push(checkContinueList1);
         
-        // Create conditional timeline node for list 2
         const list2TimelineNode = {
             timeline: list2Trials,
             conditional_function: function() {
                 const shouldShow = shouldContinueToList2;
-                console.log('Should show list 2 trials?', shouldShow);
+                //console.log('Should show list 2 trials?', shouldShow);
                 return shouldShow;
             }
         };
+
         timeline.push(list2TimelineNode);
-        
-        // Add continue check after list 2
         timeline.push(checkContinueList2);
         
-        // Create conditional timeline node for list 3
         const list3TimelineNode = {
             timeline: list3Trials,
             conditional_function: function() {
                 const shouldShow = shouldContinueToList3;
-                console.log('Should show list 3 trials?', shouldShow);
+                //console.log('Should show list 3 trials?', shouldShow);
                 return shouldShow;
             }
         };
         timeline.push(list3TimelineNode);
-        
-        // Add list 3 complete message
         timeline.push(list3CompleteMessage);
         
-        // Always add save and final screen at the end
         timeline.push(save_data);
         timeline.push(final_screen);
         
-        console.log('Complete timeline created with', timeline.length, 'components');
-        console.log('Starting jsPsych...');
+        //console.log('Complete timeline created with', timeline.length, 'components');
+        //console.log('Starting jsPsych...');
         
         jsPsych.run(timeline);
         
