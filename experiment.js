@@ -273,7 +273,7 @@ const checkContinueList1 = {
         list_just_completed: 1
     },
     on_finish: function(data) {
-        if (data.response === 0){
+        if (data.response == 0){
             shouldContinueToList2 = true;
             console.log('after list1:', shouldContinueToList2);
         }
