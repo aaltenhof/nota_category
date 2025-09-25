@@ -272,23 +272,14 @@ var checkContinueList1 = {
         trial_type: 'continue_choice',
         list_just_completed: 1
     },
-};
-
-var list2_if_node = {
-    timeline: [list2Trials],
-    conditional_function: function(){
-        // If the last value recorded within our data matches the index of choice A ...
-        if (jsPsych.data.get().last(1).values()[0].response == 0) {
-            // ... do not run this node within the timeline
-            return true;
-        } 
-        // Otherwise ...
-        else {
-            // ... do run this node in the timeline
-            return false;
+    on_finish: function(data) {
+        if (data.response === 0) {
+            timeline.push(list2Trials);
         }
     }
-  };
+};
+
+
 
 // check continue after list 2
 const checkContinueList2 = {
@@ -429,7 +420,7 @@ async function runExperiment() {
         //console.log('Complete timeline created with', timeline.length, 'components');
         //console.log('Starting jsPsych...');
         
-        final_timeline = [].concat(timeline, list2_if_node, save_data, final_screen)
+        final_timeline = [].concat(timeline, save_data, final_screen)
         jsPsych.run(final_timeline);
 
         
