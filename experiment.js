@@ -220,9 +220,10 @@ const checkContinue = {
         const listsRemaining = 3 - listsCompleted;
         return `
             <div style="text-align: center; max-width: 600px; margin: 0 auto;">
-                <h2>You're done with this section!</h2>
-                <p>Would you like to do more words? </p>
-                <p><em>The next section will take about the same amount of time as the one you just completed.</em></p>
+                <h2>List ${listsCompleted} Complete!</h2>
+                <p>You have completed ${listsCompleted} out of 3 possible word lists.</p>
+                <p>Would you like to do another list? You can do up to ${listsRemaining} more.</p>
+                <p><em>Each list takes about the same amount of time as the one you just completed.</em></p>
             </div>
         `;
     },
@@ -230,45 +231,44 @@ const checkContinue = {
     data: {
         trial_type: 'continue_choice'
     },
-    on_finish: async function(data) {
+    on_finish: function(data) {
         completedLists++;
         
-        if (data.response === 0 && completedLists < 3) {
-            // if a particant wants to continue
-            console.log(`Starting list ${completedLists + 1}`);
-            
-            try {
-                // get the next avaible condition from DataPipe
-                const nextCondition = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
-                console.log(`List ${completedLists + 1}: Assigned condition ${nextCondition}`);
-                
-    
-                const wordsData = await loadWordsForCondition(nextCondition);
-                const nextListTrials = createTrials(wordsData);
-                
-                
-                jsPsych.addNodeToEndOfTimeline({
-                    timeline: nextListTrials
-                });
-                
-                // max participants out at three total lists
-                if (completedLists + 1 < 3) {
-                    jsPsych.addNodeToEndOfTimeline(checkContinue);
-                } else {
-                    jsPsych.addNodeToEndOfTimeline({
-                        timeline: [save_data, final_screen]
-                    });
-                }
-                
-            } catch (error) {
-                console.error('Error setting up next list:', error);
-            }
-        } else {
-            // if a participant has said no
+        if (data.response === 1 || completedLists >= 3) {
+            // They said no or completed 3 lists - end experiment
             jsPsych.addNodeToEndOfTimeline({
                 timeline: [save_data, final_screen]
             });
         }
+    }
+};
+
+const conditional_node = {
+    timeline: [{
+        type: jsPsychCallFunction,
+        async: true,
+        func: async function(done) {
+            if (completedLists < 3) {
+                try {
+                    const nextCondition = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
+                    const wordsData = await loadWordsForCondition(nextCondition);
+                    const nextListTrials = createTrials(wordsData);
+                    
+                    jsPsych.addNodeToEndOfTimeline({
+                        timeline: [...nextListTrials, checkContinue, conditional_node]
+                    });
+                } catch (error) {
+                    console.error('Error loading next list:', error);
+                }
+            }
+            done();
+        }
+    }],
+    conditional_function: function() {
+        const lastTrial = jsPsych.data.getLastTrialData().values()[0];
+        return lastTrial.trial_type === 'continue_choice' && 
+               lastTrial.response === 0 && 
+               completedLists < 3;
     }
 };
 
@@ -353,7 +353,8 @@ async function runExperiment() {
             consent,
             instructions,
             ...firstListTrials,
-            checkContinue  // if a participant wants to do more lists
+            checkContinue,
+            conditional_node
         ];
         
         console.log('Timeline created with', timeline.length, 'items');

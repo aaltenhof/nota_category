@@ -5,7 +5,7 @@ Smiling,action_words,verb,, is not ,,,,7
 sad,descriptive_words,adjective,To be , is not to be ,,,,7
 Covering,action_words,verb,, is not ,,,,7
 drink ,food_drink,noun,A , is not a ,,,,7
-police,people,noun,, are not ,,,,7
+Police,people,noun,, are not ,,,,7
 sick,descriptive_words,adjective,To be , is not to be ,,,,7
 sled,vehicles,noun,A , is not a ,,,,7
 call ,games_routines,noun,A , is not a ,(on the phone) ,,,7
@@ -18,7 +18,7 @@ Having,action_words,verb,, is not ,,,,7
 ladder,outside,noun,A , is not a ,,,,7
 arm,body_parts,noun,An , is not a ,,,,7
 girl,people,noun,A , is not a ,,,,7
-night,time_words,noun,A , is not a ,,,,7
+Night,time_words,noun,, is not ,,,,7
 Vanilla,food_drink,noun,, is not ,,,,7
 park,places,noun,A , is not a ,,,,7
 tired,descriptive_words,adjective,To be , is not to be ,,,,7
@@ -50,7 +50,7 @@ pool,outside,noun,A , is not a ,,,,7
 Touching,action_words,verb,, is not ,,,,7
 bowl,household,noun,A , is not a ,,,,7
 Going,action_words,verb,, is not ,,,,7
-Water ,outside,noun,, is not ,(not beverage) ,,,7
+Water ,outside,noun,, is not ,(body of) ,,,7
 Putting,action_words,verb,, is not ,,,,7
 noisy,descriptive_words,adjective,To be , is not to be ,,,,7
 bath,games_routines,noun,A , is not a ,,,,7
@@ -69,7 +69,7 @@ nail,household,noun,A , is not a ,,,,7
 dirty,descriptive_words,adjective,To be , is not to be ,,,,7
 pretzel,food_drink,noun,A , is not a ,,,,7
 elephant,animals,noun,An , is not a ,,,,7
-story,toys,noun,A , is not ,,,,7
+story,toys,noun,A , is not a ,,,,7
 melon,food_drink,noun,A , is not a ,,,,7
 garden,outside,noun,A , is not a ,,,,7
 Swinging,action_words,verb,, is not ,,,,7
