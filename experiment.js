@@ -429,7 +429,7 @@ async function runExperiment() {
         //console.log('Complete timeline created with', timeline.length, 'components');
         //console.log('Starting jsPsych...');
         
-        final_timeline = concat(timeline, list2_if_node, save_data, final_screen)
+        final_timeline = [].concat(timeline, list2_if_node, save_data, final_screen)
         jsPsych.run(final_timeline);
 
         
