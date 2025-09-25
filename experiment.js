@@ -403,7 +403,7 @@ async function runExperiment() {
         timeline = timeline.concat(list1Trials);
         timeline.push(checkContinueList1);
         
-
+        console.log('Should show list 2 trials?', shouldContinueToList2);
         if (shouldContinueToList2 == false){
             timeline.push(save_data);
             timeline.push(final_screen);
