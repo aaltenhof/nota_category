@@ -273,7 +273,9 @@ const checkContinueList1 = {
         list_just_completed: 1
     },
     on_finish: function(data) {
-        shouldContinueToList2 = (data.response === 0);
+        if (data.response === 0){
+            shouldContinueToList2 = true;
+        }
         //console.log('After list 1, continue to list 2?', shouldContinueToList2);
     }
 };
@@ -409,6 +411,7 @@ async function runExperiment() {
                 return shouldShow;
             }
         };
+        
 
         if (shouldContinueToList2 == false){
             timeline.push(save_data);
