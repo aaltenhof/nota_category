@@ -363,38 +363,33 @@ async function runExperiment() {
     try {
         //console.log('Participant ID:', participant_id);
         
-        // Pre-load all conditions and create all trials at the start
-        console.log('Pre-loading all list data...');
-        
-        
+        // create all trials at the start
+
         const condition1 = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
-        console.log('List 1: Assigned condition:', condition1);
         const wordsData1 = await loadWordsForCondition(condition1);
         if (wordsData1.length === 0) {
             throw new Error(`No words loaded for condition ${condition1}`);
         }
         list1Trials = createTrials(wordsData1, 1);
-        console.log(`Created ${list1Trials.length} trials for list 1`);
+        //console.log(`Created ${list1Trials.length} trials for list 1`);
         
         
         const condition2 = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
-        console.log('List 2: Assigned condition:', condition2);
         const wordsData2 = await loadWordsForCondition(condition2);
         if (wordsData2.length === 0) {
             throw new Error(`No words loaded for condition ${condition2}`);
         }
         list2Trials = createTrials(wordsData2, 2);
-        console.log(`Created ${list2Trials.length} trials for list 2`);
+        //console.log(`Created ${list2Trials.length} trials for list 2`);
         
         
         const condition3 = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
-        console.log('List 3: Assigned condition:', condition3);
         const wordsData3 = await loadWordsForCondition(condition3);
         if (wordsData3.length === 0) {
             throw new Error(`No words loaded for condition ${condition3}`);
         }
         list3Trials = createTrials(wordsData3, 3);
-        console.log(`Created ${list3Trials.length} trials for list 3`);
+        //console.log(`Created ${list3Trials.length} trials for list 3`);
         
         // Build the complete timeline
         timeline = [
@@ -414,9 +409,17 @@ async function runExperiment() {
                 return shouldShow;
             }
         };
-        timeline.push(list2TimelineNode);
-        timeline.push(checkContinueList2);
-        
+
+        if (shouldContinueToList2 == false){
+            timeline.push(save_data);
+            timeline.push(final_screen);
+        } else {
+            timeline.push(list2TimelineNode);
+            timeline.push(checkContinueList2);
+            timeline.push(save_data);
+            timeline.push(final_screen);
+        }
+
         const list3TimelineNode = {
             timeline: list3Trials,
             conditional_function: function() {
@@ -425,11 +428,17 @@ async function runExperiment() {
                 return shouldShow;
             }
         };
-        timeline.push(list3TimelineNode);
-        timeline.push(list3CompleteMessage);
+
+        if (shouldContinueToList3 === false) {
+            timeline.push(save_data);
+            timeline.push(final_screen);
+        } else {
+            timeline.push(list3TimelineNode);
+            timeline.push(list3CompleteMessage);
+            timeline.push(save_data);
+            timeline.push(final_screen);
+        };
         
-        timeline.push(save_data);
-        timeline.push(final_screen);
         
         //console.log('Complete timeline created with', timeline.length, 'components');
         //console.log('Starting jsPsych...');
