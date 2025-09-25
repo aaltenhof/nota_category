@@ -1,0 +1,74 @@
+word,cat,pos,sentence_frame_before,sentence_frame_after,clarification,eng_freq,aoa_producing,list_type
+Scissors,household,noun,, are not ,,,,6
+blue,descriptive_words,adjective,To be , is not to be ,,,,6
+leg,body_parts,noun,A , is not a ,,,,6
+Juice,food_drink,noun,, is not ,,,,6
+playground,places,noun,A , is not a ,,,,6
+spoon,household,noun,A , is not a ,,,,6
+crayon,toys,noun,A , is not ,,,,6
+firetruck,vehicles,noun,A , is not a ,,,,6
+pig,animals,noun,A , is not a ,,,,6
+sidewalk,outside,noun,A , is not a ,,,,6
+Dinner,games_routines,noun,, is not ,,,,6
+light,household,noun,A , is not a ,,,,6
+little,descriptive_words,adjective,To be , is not to be ,,,,6
+monkey,animals,noun,A , is not a ,,,,6
+Shaking,action_words,verb,, is not ,,,,6
+bench,furniture_rooms,noun,A , is not a ,,,,6
+lawn mower,outside,noun,A , is not a ,,,,6
+Knocking,action_words,verb,, is not ,,,,6
+movie,places,noun,A , is not a ,,,,6
+chin,body_parts,noun,A , is not a ,,,,6
+clean,descriptive_words,adjective,To be , is not to be ,,,,6
+diaper,clothing,noun,A , is not a ,,,,6
+doll,toys,noun,A , is not ,,,,6
+boot,clothing,noun,A , is not a ,,,,6
+Tuna,food_drink,noun,, is not ,,,,6
+day,time_words,noun,A , is not a ,,,,6
+bee,animals,noun,A , is not a ,,,,6
+call ,games_routines,noun,A , is not a ,(on the phone) ,,,6
+slow,descriptive_words,adjective,To be , is not to be ,,,,6
+glue,toys,noun,A , is not ,,,,6
+baby,people,noun,A , is not a ,,,,6
+cow,animals,noun,A , is not a ,,,,6
+Underpants,clothing,noun,, are not ,,,,6
+wolf,animals,noun,A , is not a ,,,,6
+Licking,action_words,verb,, is not ,,,,6
+sad,descriptive_words,adjective,To be , is not to be ,,,,6
+Sweeping,action_words,verb,, is not ,,,,6
+tape,household,noun,A , is not a ,,,,6
+Wind,outside,noun,, is not ,,,,6
+full,descriptive_words,adjective,To be , is not to be ,,,,6
+empty,descriptive_words,adjective,To be , is not to be ,,,,6
+Bumping,action_words,verb,, is not ,,,,6
+drawer,furniture_rooms,noun,A , is not a ,,,,6
+penny,household,noun,A , is not a ,,,,6
+radio,household,noun,A , is not a ,,,,6
+Woods,places,noun,, are not  , (forest),,,6
+pretty,descriptive_words,adjective,To be , is not to be ,,,,6
+window,furniture_rooms,noun,A , is not a ,,,,6
+down,locations,adjective,To be , is not to be ,,,,6
+quiet,descriptive_words,adjective,To be , is not to be ,,,,6
+brother,people,noun,A , is not a ,,,,6
+Dancing,action_words,verb,, is not ,,,,6
+slide,outside,noun,A , is not a ,,,,6
+Medicine,household,noun,, is not ,,,,6
+cheek,body_parts,noun,A , is not a ,,,,6
+bicycle,vehicles,noun,A , is not a ,,,,6
+telephone,household,noun,A , is not a ,,,,6
+Singing,action_words,verb,, is not ,,,,6
+comb,household,noun,A , is not a ,,,,6
+friend,people,noun,A , is not a ,,,,6
+hose,outside,noun,A , is not a ,,,,6
+Nuts,food_drink,noun,, are not ,,,,6
+train,vehicles,noun,A , is not a ,,,,6
+Pretending,action_words,verb,, is not ,,,,6
+alligator,animals,noun,An , is not a ,,3.49,27,6
+high,descriptive_words,adjective,To be , is not to be ,,,,6
+Tomorrow,time_words,noun,, is not ,,,,6
+motorcycle,vehicles,noun,A , is not a ,,,,6
+Throwing,action_words,verb,, is not ,,,,6
+Cheese,food_drink,noun,, is not ,,,,6
+napkin,household,noun,A , is not a ,,,,6
+rooster,animals,noun,A , is not a ,,,,6
+black,descriptive_words,adjective,To be , is not to be ,,,,6
