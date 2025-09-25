@@ -19,9 +19,6 @@ const filename = `${participant_id}.csv`;
 // Initialize jsPsych
 const jsPsych = initJsPsych({
     show_progress_bar: false,
-    on_finish: function() {
-        jsPsych.data.displayData();
-    }
 });
 
 let completedLists = 0;
@@ -223,7 +220,7 @@ const checkContinue = {
         const listsRemaining = 3 - listsCompleted;
         return `
             <div style="text-align: center; max-width: 600px; margin: 0 auto;">
-                <h2>Your done with this section!</h2>
+                <h2>You're done with this section!</h2>
                 <p>Would you like to do more words? </p>
                 <p><em>The next section will take about the same amount of time as the one you just completed.</em></p>
             </div>

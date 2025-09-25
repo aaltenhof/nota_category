@@ -6,7 +6,7 @@ drawer,furniture_rooms,noun,A , is not a ,,,,2
 frog,animals,noun,A , is not a ,,,,2
 porch,furniture_rooms,noun,A , is not a ,,,,2
 Sliding,action_words,verb,, is not ,,,,2
-soap,household,noun,A , is not a ,,,,2
+Soap,household,noun,, is not a ,,,,2
 morning,time_words,noun,A , is not a ,,,,2
 sneaker,clothing,noun,A , is not a ,,,,2
 Writing,action_words,verb,, is not ,,,,2
@@ -18,7 +18,7 @@ Hating,action_words,verb,, is not ,,,,2
 tiger,animals,noun,A , is not a ,,,,2
 long,descriptive_words,adjective,To be , is not to be ,,,,2
 boat,vehicles,noun,A , is not a ,,,,2
-Fish,food_drink,noun,A, is not ,(food) ,,,2
+Fish,food_drink,noun,, is not ,(food) ,,,2
 belly button,body_parts,noun,A , is not a ,,,,2
 lamp,household,noun,A , is not a ,,,,2
 Drawing,action_words,verb,, is not ,,,,2
@@ -30,7 +30,7 @@ home,places,noun,A , is not a ,,,,2
 Staying,action_words,verb,, is not ,,,,2
 scarf,clothing,noun,A , is not a ,,,,2
 plant,household,noun,A , is not a ,,,,2
-present,toys,noun,A , is not ,,,,2
+present,toys,noun,A , is not a ,,,,2
 Cleaning,action_words,verb,, is not ,,,,2
 last,descriptive_words,adjective,To be , is not to be ,,,,2
 finger,body_parts,noun,A , is not a ,,,,2
@@ -46,7 +46,7 @@ Singing,action_words,verb,, is not ,,,,2
 hand,body_parts,noun,A , is not a ,,,,2
 Chasing,action_words,verb,, is not ,,,,2
 Riding,action_words,verb,, is not ,,,,2
-glass,household,noun,A , is not a ,,,,2
+glass,household,noun,A , is not a ,(vessel),,,2
 sister,people,noun,A , is not a ,,,,2
 rock,outside,noun,A , is not a ,,,,2
 better,descriptive_words,adjective,To be , is not to be ,,,,2

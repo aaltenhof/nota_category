@@ -12,7 +12,7 @@ bathtub,furniture_rooms,noun,A , is not a ,,,,4
 quiet,descriptive_words,adjective,To be , is not to be ,,,,4
 potato chip,food_drink,noun,A , is not a ,,,,4
 movie,places,noun,A , is not a ,,,,4
-Woods,places,noun,, are not , (forest),,,4
+Woods,places,noun,, are not  , (forest),,,4
 backyard,outside,noun,A , is not a ,,,,4
 yellow,descriptive_words,adjective,To be , is not to be ,,,,4
 Showing,action_words,verb,, is not ,,,,4
@@ -21,7 +21,7 @@ outside,places,adjective,To be , is not to be ,,,,4
 Holding,action_words,verb,, is not ,,,,4
 Talking,action_words,verb,, is not ,,,,4
 Loving,action_words,verb,, is not ,,,,4
-snow,outside,noun,A , is not a ,,,,4
+Snow,outside,noun,, is not a ,,,,4
 star,outside,noun,A , is not a ,,,,4
 rooster,animals,noun,A , is not a ,,,,4
 camera,household,noun,A , is not a ,,,,4
@@ -30,7 +30,7 @@ Getting,action_words,verb,, is not ,,,,4
 table,furniture_rooms,noun,A , is not a ,,,,4
 circus,places,noun,A , is not a ,,,,4
 country,places,noun,A , is not a ,,,,4
-bat,toys,noun,A , is not a , (toy) ,,,4
+bat,toys,noun,A , is not a , (baseball) ,,,4
 orange,food_drink,noun,An , is not a ,(food) ,,,4
 moon,outside,noun,A , is not a ,,,,4
 flag,outside,noun,A , is not a ,,,,4
@@ -45,7 +45,7 @@ hat,clothing,noun,A , is not a ,,,,4
 slow,descriptive_words,adjective,To be , is not to be ,,,,4
 jacket,clothing,noun,A , is not a ,,,,4
 child,people,noun,A , is not a ,,,,4
-downtown,places,noun,A , is not a ,,,,4
+downtown,places,adjective,To be , is not to be ,,,,4
 pumpkin,food_drink,noun,A , is not a ,,,,4
 asleep,descriptive_words,adjective,To be , is not to be ,,,,4
 Grapes,food_drink,noun,, are not ,,,,4
