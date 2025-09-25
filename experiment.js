@@ -233,10 +233,10 @@ async function loadWordsForCondition(condition) {
         ];
         
         const actualCondition = parseInt(condition, 10);
-        if (condition) {
-            const csvFile = csvFiles[actualCondition] 
+        if (condition == 'base') {
+            const csvFile = 'lists/base_words.csv' 
         } else {
-            const csvFile = 'lists/base_words.csv'
+            const csvFile = csvFiles[actualCondition] 
         }
         // console.log(`Loading CSV file: ${csvFile} for condition ${actualCondition}`);
         
@@ -380,7 +380,7 @@ async function runExperiment() {
         console.log('Participant ID:', participant_id);
         
         // 1. Load words for all potential lists at the start
-        const baseWordsData = await loadWordsForCondition()
+        const baseWordsData = await loadWordsForCondition("base")
         baseListTrials = createTrials(baseWordsData , 1);
 
         const condition1 = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
