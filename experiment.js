@@ -28,6 +28,7 @@ let shouldContinueToList2 = false;
 let shouldContinueToList3 = false;
 let globalTrialNumber = 0;
 
+let baseListTrials = [];
 let list1Trials = [];
 let list2Trials = [];
 let list3Trials = [];
@@ -66,6 +67,83 @@ const consent = {
     }
 };
 
+const ratings_instructions = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: `
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <h2>Next, a Short Ratings Task</h2>
+            <p>You have completed the word completion tasks. Now, we have one more short task for you.</p>
+            <p>You will see the **base words** again (the first set of words you completed), along with **your specific response** to each of them.</p>
+            <p>Your task is to rate, on a scale from 0 to 100, **how likely you think another person would be to generate the exact same response as you did.**</p>
+            <p>0 means "Extremely Unlikely" (no one else would say this)</p>
+            <p>100 means "Extremely Likely" (everyone else would say this)</p>
+            <p>Use the slider to select your rating and click 'Continue'.</p>
+            <p><strong>Press any key when you're ready to begin the ratings task.</strong></p>
+        </div>
+    `,
+    data: {
+        trial_type: 'ratings_instructions'
+    },
+};
+
+function createRatingsTrials(baseWordResponses) {
+    const ratingsTrials = [];
+
+    baseWordResponses.forEach((responseItem, index) => {
+        if (!responseItem.word || !responseItem.response_word) {
+            console.warn("Skipping ratings trial due to missing word or response:", responseItem);
+            return;
+        }
+
+        const ratingTrial = {
+            type: jsPsychSurveyHtmlSliderResponse,
+            stimulus: `
+                <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+                    <p style="font-size: 20px; margin: 20px 0;">
+                        The word was: <span style="font-weight: bold; color: #2563eb;">${responseItem.word}</span>
+                    </p>
+                    <p style="font-size: 20px; margin: 10px 0;">
+                        Your response was: <span style="font-weight: bold; color: #e74c3c;">${responseItem.response_word}</span>
+                    </p>
+                    <p style="font-size: 18px; margin-top: 30px;">
+                        How likely do you think another person would be to generate the exact same response?
+                    </p>
+                </div>
+            `,
+            labels: ['0 (Extremely Unlikely)', '50', '100 (Extremely Likely)'],
+            min: 0,
+            max: 100,
+            step: 1,
+            slider_start: 50, 
+            require_movement: true, 
+            button_label: 'Continue',
+            data: {
+                custom_trial_type: 'response_likelihood_rating',
+                participant_id: participant_id,
+                original_word: responseItem.word,
+                original_response: responseItem.response_word,
+                original_list_number: responseItem.list_number,
+                original_trial_number: responseItem.trial_number,
+                cat: responseItem.cat, 
+                pos: responseItem.pos,
+                eng_freq: responseItem.eng_freq,
+                aoa_producing: responseItem.aoa_producing,
+                list_type: responseItem.list_type,
+            },
+            on_finish: function(data) {
+                // The rating is automatically stored in data.response
+                console.log(`Rating for "${data.original_word}" (response "${data.original_response}"): ${data.response}`);
+            }
+        };
+        ratingsTrials.push(ratingTrial);
+    });
+
+    return ratingsTrials;
+}
+
+
+
+
 const instructions = {
     type: jsPsychHtmlKeyboardResponse,  
     stimulus: `
@@ -86,7 +164,7 @@ const instructions = {
     }
 };
 
-function createTrials(wordsData, listNumber) {
+function createTrials(wordsData, listType) {
     const experimentTrials = [];
     
     wordsData.forEach((item) => { 
@@ -131,8 +209,7 @@ function createTrials(wordsData, listNumber) {
                 pos: item.pos,
                 eng_freq: item.eng_freq,
                 aoa_producing: item.aoa_producing,
-                list_type: item.list_type,
-                list_number: listNumber
+                list_type: listType,
             },
             on_finish: function(data) {
                 data.response_word = data.response ? data.response.response : '';
@@ -154,22 +231,40 @@ function createTrials(wordsData, listNumber) {
 
 function getFilteredData() {   
     const allTrials = jsPsych.data.get().values();
-    //console.log('All trials:', allTrials.length);
     
-    const wordTrials = allTrials.filter(trial => trial.custom_trial_type === 'word_completion_single');
-    //console.log(`Word completion trials found: ${wordTrials.length}`);
-    
-    // if there's no data, return empty CSV
-    if (wordTrials.length === 0) {
-        console.warn("No word completion trials found for saving!");
-        return 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_type,response_word,rt,list_number\n';
+    const wordCompletionTrials = allTrials.filter(trial => trial.custom_trial_type === 'word_completion_single');
+    const ratingTrials = allTrials.filter(trial => trial.custom_trial_type === 'response_likelihood_rating');
+
+    // Create a map for quick lookup of ratings
+    // Key: `${original_word}-${original_response}` or just `original_word` if response isn't unique enough
+    // Given 'original_word' is sufficient to link to a base trial
+    const ratingMap = new Map();
+    ratingTrials.forEach(ratingTrial => {
+        // The original trial_number is a more robust unique identifier if there are duplicate words
+        const key = `${ratingTrial.original_word}-${ratingTrial.original_trial_number}`; 
+        ratingMap.set(key, ratingTrial.response); // Stores the slider rating
+    });
+
+    if (wordCompletionTrials.length === 0 && ratingTrials.length === 0) {
+        console.warn("No relevant trials found for saving!");
+        return 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_type,response_word,rt,response_likelihood_rating\n';
     }
     
     try {
-        const header = 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_type,response_word,rt,list_number';
+        const header = 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_type,response_word,rt,response_likelihood_rating';
         const rows = [];
         
-        wordTrials.forEach((trial) => {
+        wordCompletionTrials.forEach((trial) => {
+            // Remove list_number as requested
+            // const listNumber = trial.list_number; // This is no longer needed in the output row
+            
+            // Get the rating for this specific base word trial, if applicable
+            let likelihoodRating = '';
+            if (trial.list_type === 'base') { // Only base words get ratings
+                const key = `${trial.word}-${trial.trial_number}`;
+                likelihoodRating = ratingMap.has(key) ? ratingMap.get(key) : '';
+            }
+
             const row = [
                 trial.participant_id || participant_id,
                 trial.trial_number || 'NA', 
@@ -178,10 +273,10 @@ function getFilteredData() {
                 trial.pos || '',
                 trial.eng_freq || '',
                 trial.aoa_producing || '',
-                trial.list_type || '',
+                trial.list_type || '', // Use list_type instead of list_number
                 trial.response_word || '',
                 Math.round(trial.rt || 0),
-                trial.list_number || 'NA'
+                likelihoodRating // New column for rating
             ];
             rows.push(row);
         });
@@ -196,14 +291,13 @@ function getFilteredData() {
         });
         
         const finalCSV = header + '\n' + csvRows.join('\n');
-        // console.log("Generated CSV data (first 500 chars):", finalCSV.substring(0, 500));
-        
         return finalCSV;
     } catch (error) {
         console.error("Error in getFilteredData:", error);
-        return 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_type,response_word,rt,list_number\nerror,0,error,error,error,error,0,0,error,0,1\n';
+        return 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_type,response_word,rt,response_likelihood_rating\nerror,0,error,error,error,error,0,0,error,0,NA,0\n';
     }
 }
+
 
 var save_data = {
     type: jsPsychPipe,
@@ -233,10 +327,11 @@ async function loadWordsForCondition(condition) {
         ];
         
         const actualCondition = parseInt(condition, 10);
-        if (condition == 'base') {
-            const csvFile = 'lists/base_words.csv' 
+        let csvFile;
+        if (condition === 'base') {
+            csvFile = 'lists/base_words.csv' 
         } else {
-            const csvFile = csvFiles[actualCondition] 
+            csvFile = csvFiles[actualCondition] 
         }
         // console.log(`Loading CSV file: ${csvFile} for condition ${actualCondition}`);
         
@@ -381,7 +476,7 @@ async function runExperiment() {
         
         // 1. Load words for all potential lists at the start
         const baseWordsData = await loadWordsForCondition("base")
-        baseListTrials = createTrials(baseWordsData , 1);
+        baseListTrials = createTrials(baseWordsData , 'base'); 
 
         const condition1 = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
         const wordsData1 = await loadWordsForCondition(condition1);
@@ -432,6 +527,18 @@ async function runExperiment() {
                 conditional_function: function() {
                     return shouldContinueToList2;
                 }
+            },
+            ratings_instructions,
+            {
+                timeline: function() {
+                    // only take word completion trials for the 'base' list
+                    const baseWordResponses = jsPsych.data.get()
+                        .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
+                        .values();
+                    
+                    console.log(`Found ${baseWordResponses.length} base word responses for ratings.`);
+                    return createRatingsTrials(baseWordResponses);
+                },
             },
             save_data,      
             final_screen   
