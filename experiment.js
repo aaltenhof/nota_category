@@ -20,7 +20,6 @@ const jsPsych = initJsPsych({
 });
 
 let completedLists = 0;
-let timeline = [];
 let globalTrialNumber = 0;
 
 const consent = {
@@ -192,46 +191,49 @@ const final_screen = {
     }
 };
 
-async function runExperiment() {
-    try {
-        timeline = [consent, instructions];
-        let keepGoing = true;
+async function addList(listNumber) {
+  const condition = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
+  const wordsData = await loadWordsForCondition(condition);
+  if (wordsData.length === 0) throw new Error(`No words loaded for condition ${condition}`);
 
-        while (completedLists < 3 && keepGoing) {
-            const condition = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
-            const wordsData = await loadWordsForCondition(condition);
-            if (wordsData.length === 0) throw new Error(`No words loaded for condition ${condition}`);
-            const trials = createTrials(wordsData, completedLists + 1);
-            timeline = timeline.concat(trials);
-            completedLists++;
+  const trials = createTrials(wordsData, listNumber);
+  jsPsych.addNodeToEndOfTimeline({ timeline: trials });
 
-            if (completedLists < 3) {
-                const continueNode = {
-                    type: jsPsychHtmlButtonResponse,
-                    stimulus: `
-                        <div style="text-align: center; max-width: 600px;">
-                          <h2>List ${completedLists} Complete!</h2>
-                          <p>You have finished ${completedLists} list${completedLists > 1 ? 's' : ''}.</p>
-                          <p>Would you like to do another?</p>
-                        </div>`,
-                    choices: ['Yes', 'No'],
-                    on_finish: function(data) {
-                        keepGoing = (data.response === 0);
-                    }
-                };
-                timeline.push(continueNode);
-                await new Promise(r => setTimeout(r, 0));
-            }
+  completedLists++;
+
+  if (completedLists < 3) {
+    jsPsych.addNodeToEndOfTimeline({
+      timeline: [{
+        type: jsPsychHtmlButtonResponse,
+        stimulus: `
+          <div style="text-align: center; max-width: 600px;">
+            <h2>List ${completedLists} Complete!</h2>
+            <p>You have finished ${completedLists} list${completedLists > 1 ? 's' : ''}.</p>
+            <p>Would you like to do another?</p>
+          </div>`,
+        choices: ['Yes', 'No'],
+        on_finish: function(data) {
+          if (data.response === 0) {
+            addList(completedLists + 1); // recursively add the next list
+          } else {
+            jsPsych.addNodeToEndOfTimeline({ timeline: [save_data, final_screen] });
+          }
         }
+      }]
+    });
+  } else {
+    jsPsych.addNodeToEndOfTimeline({ timeline: [save_data, final_screen] });
+  }
+}
 
-        // Always end with thank you + code, even if they stopped early
-        timeline.push(save_data, final_screen);
-        jsPsych.run(timeline);
-
-    } catch (error) {
-        console.error('Error running experiment:', error);
-        document.body.innerHTML = `<h2>Error starting experiment</h2><p>${error.message}</p>`;
-    }
+async function runExperiment() {
+  try {
+    jsPsych.run([consent, instructions]);
+    addList(1);  // start with the first list
+  } catch (error) {
+    console.error('Error running experiment:', error);
+    document.body.innerHTML = `<h2>Error starting experiment</h2><p>${error.message}</p>`;
+  }
 }
 
 document.addEventListener('DOMContentLoaded', runExperiment);
