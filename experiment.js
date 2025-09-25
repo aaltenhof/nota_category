@@ -28,7 +28,6 @@ let shouldContinueToList2 = false;
 let shouldContinueToList3 = false;
 let globalTrialNumber = 0;
 
-let baseListResponsesForRatings = [];
 let baseListTrials = [];
 let list1Trials = [];
 let list2Trials = [];
@@ -90,6 +89,7 @@ function createRatingsTrials(baseWordResponses) {
     const ratingsTrials = [];
 
     baseWordResponses.forEach((responseItem, index) => {
+        // Ensure we have the necessary data
         if (!responseItem.word || !responseItem.response_word) {
             console.warn("Skipping ratings trial due to missing word or response:", responseItem);
             return;
@@ -99,12 +99,9 @@ function createRatingsTrials(baseWordResponses) {
             type: jsPsychSurveyHtmlSliderResponse,
             stimulus: `
                 <div style="text-align: center; max-width: 800px; margin: 0 auto;">
-                    <p style="font-size: 20px; margin: 20px 0;">
-                        The word was: <span style="font-weight: bold; color: #2563eb;">${responseItem.word}</span>
-                    </p>
-                    <p style="font-size: 20px; margin: 10px 0;">
-                        Your response was: <span style="font-weight: bold; color: #e74c3c;">${responseItem.response_word}</span>
-                    </p>
+                    <div class="trial-stimulus" style="font-size: 24px; margin: 30px 0;">
+                        "A <span style="font-weight: bold; color: #2563eb;">${responseItem.word}</span> is not a <span style="font-weight: bold; color: #e74c3c;">${responseItem.response_word}</span>"
+                    </div>
                     <p style="font-size: 18px; margin-top: 30px;">
                         How likely do you think another person would be to generate the exact same response?
                     </p>
@@ -122,16 +119,15 @@ function createRatingsTrials(baseWordResponses) {
                 participant_id: participant_id,
                 original_word: responseItem.word,
                 original_response: responseItem.response_word,
-                original_list_number: responseItem.list_number,
+                original_list_type: responseItem.list_type, // Use list_type
                 original_trial_number: responseItem.trial_number,
                 cat: responseItem.cat, 
                 pos: responseItem.pos,
                 eng_freq: responseItem.eng_freq,
                 aoa_producing: responseItem.aoa_producing,
-                list_type: responseItem.list_type,
+                list_type: responseItem.list_type, // Redundant but harmless, keeping for consistency
             },
             on_finish: function(data) {
-                // The rating is automatically stored in data.response
                 console.log(`Rating for "${data.original_word}" (response "${data.original_response}"): ${data.response}`);
             }
         };
@@ -139,7 +135,53 @@ function createRatingsTrials(baseWordResponses) {
     });
 
     return ratingsTrials;
-}
+};
+
+const ratings_trigger_node = {
+    type: jsPsychCallFunction, // A simple trial to execute a function
+    func: async function() { // Make it async since we're using await for conditions
+        // Get all word completion trials for the 'base' list that have been completed
+        const baseWordResponses = jsPsych.data.get()
+            .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
+            .values();
+        
+        console.log(`Triggering ratings task. Found ${baseWordResponses.length} base word responses.`);
+        
+        if (baseWordResponses.length > 0) {
+            const generatedRatingsTrials = createRatingsTrials(baseWordResponses);
+            
+            // Construct the full sequence to add: instructions, ratings trials, save, final screen
+            const sequenceToAdd = [
+                ratings_instructions,
+                ...generatedRatingsTrials,
+                save_data,
+                final_screen
+            ];
+
+            // Use jsPsych.addNode to insert these trials *after* the current point
+            jsPsych.addNode({
+                timeline: sequenceToAdd,
+                // No conditional_function here; we're explicitly adding it
+            });
+
+            // IMPORTANT: Stop the current timeline if jsPsych.addNode is used to insert
+            // the *rest* of the experiment. This prevents jsPsych from trying to
+            // run save_data and final_screen twice (once from original timeline,
+            // once from addNode). The final_screen will handle the redirect.
+            jsPsych.endExperiment(); // This effectively jumps to the added sequence
+        } else {
+            console.warn("No base word responses found. Skipping ratings task and proceeding to final screen.");
+            // If no base responses, just add save_data and final_screen directly
+            jsPsych.addNode({
+                timeline: [save_data, final_screen]
+            });
+            jsPsych.endExperiment(); // Jump to final screen
+        }
+    },
+    data: {
+        trial_type: 'ratings_trigger'
+    }
+};
 
 
 
@@ -536,15 +578,7 @@ async function runExperiment() {
                     return shouldContinueToList2;
                 }
             },
-            ratings_instructions,
-            {
-                timeline: function() {
-                    console.log(`Using ${baseListResponsesForRatings.length} base word responses for ratings.`);
-                    return createRatingsTrials(baseListResponsesForRatings);
-                },
-            },
-            save_data,      
-            final_screen   
+            ratings_trigger_node   
         ];
         
         //console.log('Complete timeline created with', timeline.length, 'main components');
