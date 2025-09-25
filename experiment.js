@@ -28,6 +28,7 @@ let shouldContinueToList2 = false;
 let shouldContinueToList3 = false;
 let globalTrialNumber = 0;
 
+let baseListResponsesForRatings = [];
 let baseListTrials = [];
 let list1Trials = [];
 let list2Trials = [];
@@ -71,14 +72,13 @@ const ratings_instructions = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `
         <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-            <h2>Next, a Short Ratings Task</h2>
-            <p>You have completed the word completion tasks. Now, we have one more short task for you.</p>
-            <p>You will see the **base words** again (the first set of words you completed), along with **your specific response** to each of them.</p>
-            <p>Your task is to rate, on a scale from 0 to 100, **how likely you think another person would be to generate the exact same response as you did.**</p>
+            <p>Now you will be asked to rate some of your responses to the sentences you just filled in.</p>
+            <p>You will see some sentences and the response that you gave for each.</p>
+            <p>Your task is to rate, on a scale from 0 to 100, how likely you think another person would be to generate the exact same response as you did.</p>
             <p>0 means "Extremely Unlikely" (no one else would say this)</p>
             <p>100 means "Extremely Likely" (everyone else would say this)</p>
             <p>Use the slider to select your rating and click 'Continue'.</p>
-            <p><strong>Press any key when you're ready to begin the ratings task.</strong></p>
+            <p><strong>Press any key when you're ready to begin.</strong></p>
         </div>
     `,
     data: {
@@ -215,11 +215,19 @@ function createTrials(wordsData, listType) {
                 data.response_word = data.response ? data.response.response : '';
                 data.rt = Math.round(data.rt);
                 
-                // console.log(`List ${listNumber}, Trial ${data.trial_number} completed:`, {
-                //     word: data.word,
-                //     response: data.response_word,
-                //     rt: data.rt
-                // });
+                if (listType === 'base') {
+                    baseListResponsesForRatings.push({
+                        word: data.word,
+                        response_word: data.response_word,
+                        list_type: data.list_type,
+                        trial_number: data.trial_number,
+                        cat: data.cat,
+                        pos: data.pos,
+                        eng_freq: data.eng_freq,
+                        aoa_producing: data.aoa_producing,
+                        list_type: data.list_type
+                    });
+                }
             }
         };
 
@@ -531,13 +539,8 @@ async function runExperiment() {
             ratings_instructions,
             {
                 timeline: function() {
-                    // only take word completion trials for the 'base' list
-                    const baseWordResponses = jsPsych.data.get()
-                        .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
-                        .values();
-                    
-                    console.log(`Found ${baseWordResponses.length} base word responses for ratings.`);
-                    return createRatingsTrials(baseWordResponses);
+                    console.log(`Using ${baseListResponsesForRatings.length} base word responses for ratings.`);
+                    return createRatingsTrials(baseListResponsesForRatings);
                 },
             },
             save_data,      
