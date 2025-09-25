@@ -228,14 +228,18 @@ async function addList(listNumber) {
 
 async function runExperiment() {
     try {
-      jsPsych.run([consent, instructions, {
-        type: jsPsychCallFunction,
-        async: true,
-        func: async function(done) {
-          await addList(1);
-          done();
+      jsPsych.run([
+        consent,
+        instructions,
+        {
+          type: 'call-function',
+          async: true,
+          func: async function(done) {
+            await addList(1);  
+            done();
+          }
         }
-      }]);
+      ]);
     } catch (error) {
       console.error('Error running experiment:', error);
       document.body.innerHTML = `<h2>Error starting experiment</h2><p>${error.message}</p>`;
