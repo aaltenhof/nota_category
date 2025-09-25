@@ -403,25 +403,16 @@ async function runExperiment() {
         timeline = timeline.concat(list1Trials);
         timeline.push(checkContinueList1);
         
-        const list2TimelineNode = {
-            timeline: list2Trials,
-            conditional_function: function() {
-                const shouldShow = shouldContinueToList2;
-                //console.log('Should show list 2 trials?', shouldShow);
-                return shouldShow;
-            }
-        };
-        
 
         if (shouldContinueToList2 == false){
             timeline.push(save_data);
             timeline.push(final_screen);
         } else {
-            timeline.push(list2TimelineNode);
+            timeline = timeline.concat(list2Trials);
             timeline.push(checkContinueList2);
-            timeline.push(save_data);
-            timeline.push(final_screen);
         }
+        //            timeline.push(save_data);
+        //timeline.push(final_screen);
 
         const list3TimelineNode = {
             timeline: list3Trials,
