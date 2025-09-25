@@ -21,8 +21,6 @@ const jsPsych = initJsPsych({
 
 let completedLists = 0;
 let timeline = [];
-let shouldContinueToList2 = false;
-let shouldContinueToList3 = false;
 let globalTrialNumber = 0;
 
 let list1Trials = [];
@@ -273,8 +271,8 @@ const checkContinueList1 = {
         list_just_completed: 1
     },
     on_finish: function(data) {
-        if (data.response == 0){
-            shouldContinueToList2 = true;
+        if (data.response === 0){
+            let shouldContinueToList2 = true;
             console.log('after list1:', shouldContinueToList2);
         }
     }
@@ -403,7 +401,6 @@ async function runExperiment() {
         timeline = timeline.concat(list1Trials);
         timeline.push(checkContinueList1);
         
-        console.log('Should show list 2 trials?', shouldContinueToList2);
         if (shouldContinueToList2 == false){
             timeline.push(save_data);
             timeline.push(final_screen);
