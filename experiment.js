@@ -202,7 +202,7 @@ function getFilteredData() {
     }
 }
 
-const save_data = {
+var save_data = {
     type: jsPsychPipe,
     action: "save",
     experiment_id: "iEGcC0iYDj4r",
@@ -253,7 +253,7 @@ async function loadWordsForCondition(condition) {
 }
 
 // check after list 1 if they want to proceed
-const checkContinueList1 = {
+var checkContinueList1 = {
     type: jsPsychHtmlButtonResponse,
     stimulus: function() {
         completedLists = 1; // mark list 1 completed
@@ -272,13 +272,23 @@ const checkContinueList1 = {
         trial_type: 'continue_choice',
         list_just_completed: 1
     },
-    on_finish: function(data) {
-        if (data.response == 0){
-            shouldContinueToList2 = true;
-            console.log('after list1:', shouldContinueToList2);
+};
+
+var list2_if_node = {
+    timeline: [list2Trials],
+    conditional_function: function(){
+        // If the last value recorded within our data matches the index of choice A ...
+        if (jsPsych.data.get().last(1).values()[0].response == 0) {
+            // ... do not run this node within the timeline
+            return true;
+        } 
+        // Otherwise ...
+        else {
+            // ... do run this node in the timeline
+            return false;
         }
     }
-};
+  };
 
 // check continue after list 2
 const checkContinueList2 = {
@@ -334,7 +344,7 @@ const list3CompleteMessage = {
     }
 };
 
-const final_screen = {
+var final_screen = {
     type: jsPsychHtmlButtonResponse,
     stimulus: function() {
         const totalLists = completedLists || 1;
@@ -394,7 +404,7 @@ async function runExperiment() {
         //console.log(`Created ${list3Trials.length} trials for list 3`);
         
         // Build the complete timeline
-        timeline1 = [
+        timeline = [
             consent,
             instructions
         ];
@@ -402,48 +412,27 @@ async function runExperiment() {
         
         timeline = timeline.concat(list1Trials);
         timeline.push(checkContinueList1);
-
-        JsPsych.run(timeline1);
-
-        timeline2 = [];
         
-        console.log('Should show list 2 trials?', shouldContinueToList2);
-        if (shouldContinueToList2 == false){
-            timeline2.push(save_data);
-            timeline2.push(final_screen);
-        } else {
-            timeline2 = timeline2.concat(list2Trials);
-            timeline2.push(checkContinueList2);
-            timeline2.push(save_data);
-            timeline2.push(final_screen)
-        }
+        //console.log('Should show list 2 trials?', shouldContinueToList2);
+        //if (shouldContinueToList2 == false){
+            //timeline.push(save_data);
+            //timeline.push(final_screen);
+        //} else {
+            //timeline = timeline.concat(list2Trials);
+            //timeline.push(checkContinueList2);
+        //}
+        //            timeline.push(save_data);
+        //timeline.push(final_screen);
 
-        JsPsych.run(timeline2);
-
-        const list3TimelineNode = {
-            timeline: list3Trials,
-            conditional_function: function() {
-                const shouldShow = shouldContinueToList3;
-                //console.log('Should show list 3 trials?', shouldShow);
-                return shouldShow;
-            }
-        };
-
-        if (shouldContinueToList3 === false) {
-            timeline.push(save_data);
-            timeline.push(final_screen);
-        } else {
-            timeline.push(list3TimelineNode);
-            timeline.push(list3CompleteMessage);
-            timeline.push(save_data);
-            timeline.push(final_screen);
-        };
         
         
         //console.log('Complete timeline created with', timeline.length, 'components');
         //console.log('Starting jsPsych...');
         
-        jsPsych.run(timeline);
+        final_timeline = concat(timeline, list2_if_node, save_data, final_screen)
+        jsPsych.run(final_timeline);
+
+        
         
     } catch (error) {
         console.error('Error running experiment:', error);
