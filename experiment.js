@@ -28,6 +28,7 @@ let shouldContinueToList2 = false;
 let shouldContinueToList3 = false;
 let globalTrialNumber = 0;
 
+let baseListResponsesForRatings = []
 let baseListTrials = [];
 let list1Trials = [];
 let list2Trials = [];
