@@ -24,9 +24,7 @@ const jsPsych = initJsPsych({
     }
 });
 
-// Global variables for list tracking
 let completedLists = 0;
-
 let timeline = [];
 
 const consent = {
@@ -94,13 +92,11 @@ function createTrials(wordsData) {
             return;
         }
         
-        // single response trial
         const singleResponseTrial = {
             type: jsPsychSurveyText,
             questions: [
                 {
                     prompt: function() {
-                        // Build sentence frame using CSV columns
                         const before = item.sentence_frame_before || '';
                         const after = item.sentence_frame_after || '';
                         const clarification = item.clarification ? ` ${item.clarification}` : '';
@@ -131,7 +127,6 @@ function createTrials(wordsData) {
                 list_type: item.list_type
             },
             on_finish: function(data) {
-                // add the response to the data object
                 data.response_word = data.response.response;
                 data.rt = Math.round(data.rt);
                 
@@ -220,18 +215,17 @@ const save_data = {
     }
 };
 
-// Function to check if participant wants to continue and handle the flow
+
 const checkContinue = {
     type: jsPsychHtmlButtonResponse,
     stimulus: function() {
-        const listsCompleted = completedLists + 1; // +1 because we just finished a list
+        const listsCompleted = completedLists + 1;
         const listsRemaining = 3 - listsCompleted;
         return `
             <div style="text-align: center; max-width: 600px; margin: 0 auto;">
-                <h2>List ${listsCompleted} Complete!</h2>
-                <p>You have completed ${listsCompleted} out of 3 possible word lists.</p>
-                <p>Would you like to do another list? You can do up to ${listsRemaining} more.</p>
-                <p><em>Each list takes about the same amount of time as the one you just completed.</em></p>
+                <h2>Your done with this section!</h2>
+                <p>Would you like to do more words? </p>
+                <p><em>The next section will take about the same amount of time as the one you just completed.</em></p>
             </div>
         `;
     },
@@ -243,46 +237,40 @@ const checkContinue = {
         completedLists++;
         
         if (data.response === 0 && completedLists < 3) {
-            // They want to continue and haven't done 3 lists yet
+            // if a particant wants to continue
             console.log(`Starting list ${completedLists + 1}`);
             
             try {
-                // Get next condition from DataPipe
+                // get the next avaible condition from DataPipe
                 const nextCondition = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
                 console.log(`List ${completedLists + 1}: Assigned condition ${nextCondition}`);
                 
-                // Load words for next list
+    
                 const wordsData = await loadWordsForCondition(nextCondition);
                 const nextListTrials = createTrials(wordsData);
                 
-                // Add next list instructions
-                const nextInstructions = {
-                    type: jsPsychHtmlKeyboardResponse,
-                    stimulus: `
-                        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-                            <h2>Ready for List ${completedLists + 1}?</h2>
-                            <p>You'll see sentences just like before. Complete each sentence by filling in the blank.</p>
-                            <p><strong>Press any key when you're ready to continue.</strong></p>
-                        </div>
-                    `,
-                    data: {
-                        trial_type: `instructions_list_${completedLists + 1}`
-                    }
-                };
                 
-                // Add instructions and trials for next list
                 jsPsych.addNodeToEndOfTimeline({
-                    timeline: [nextInstructions, ...nextListTrials]
+                    timeline: nextListTrials
                 });
                 
-                // Add another continue check if they haven't done 3 lists
+                // max participants out at three total lists
                 if (completedLists + 1 < 3) {
                     jsPsych.addNodeToEndOfTimeline(checkContinue);
+                } else {
+                    jsPsych.addNodeToEndOfTimeline({
+                        timeline: [save_data, final_screen]
+                    });
                 }
                 
             } catch (error) {
                 console.error('Error setting up next list:', error);
             }
+        } else {
+            // if a participant has said no
+            jsPsych.addNodeToEndOfTimeline({
+                timeline: [save_data, final_screen]
+            });
         }
     }
 };
@@ -311,7 +299,6 @@ const final_screen = {
     }
 };
 
-// Load different CSV files for each condition
 async function loadWordsForCondition(condition) {
     try {
         const csvFiles = [
@@ -350,13 +337,12 @@ async function runExperiment() {
     try {
         console.log('Starting experiment...');
         console.log('Participant ID:', participant_id);
-        console.log('Completion code:', completion_code);
+        //console.log('Completion code:', completion_code);
         
-        // Get condition from DataPipe for first list
+        // Get condition from DataPipe
         const condition = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
         console.log('List 1: Assigned condition:', condition);
         
-        // Load words for first list
         const wordsData = await loadWordsForCondition(condition);
         console.log('Loaded words for list 1:', wordsData.length);
         
@@ -364,17 +350,13 @@ async function runExperiment() {
             throw new Error(`No words loaded for condition ${condition}`);
         }
         
-        // Create trials for first list
         const firstListTrials = createTrials(wordsData);
         
-        // Build initial timeline
         timeline = [
             consent,
             instructions,
             ...firstListTrials,
-            checkContinue,  // This will handle asking about additional lists
-            save_data,      // Save all data at the very end
-            final_screen
+            checkContinue  // if a participant wants to do more lists
         ];
         
         console.log('Timeline created with', timeline.length, 'items');
