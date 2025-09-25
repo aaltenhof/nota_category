@@ -121,7 +121,8 @@ function createTrials(wordsData) {
                 pos: item.pos,
                 eng_freq: item.eng_freq,
                 aoa_producing: item.aoa_producing,
-                list_type: item.list_type
+                list_type: item.list_type,
+                list_number: completedLists + 1  // Track which list this is from
             },
             on_finish: function(data) {
                 data.response_word = data.response.response;
@@ -151,11 +152,11 @@ function getFilteredData() {
     // if there's no data, return empty CSV
     if (wordTrials.length === 0) {
         console.error("No word completion trials found!");
-        return 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_type,response_word,rt\n';
+        return 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_type,response_word,rt,list_number\n';
     }
     
     try {
-        const header = 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_type,response_word,rt';
+        const header = 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_type,response_word,rt,list_number';
         const rows = [];
         
         wordTrials.forEach((trial, trialIndex) => {
@@ -171,7 +172,8 @@ function getFilteredData() {
                 trial.aoa_producing || '',
                 trial.list_type || '',
                 trial.response_word || '',
-                Math.round(trial.rt || 0)
+                Math.round(trial.rt || 0),
+                trial.list_number || 1
             ];
             rows.push(row);
             console.log(`Added response row:`, row);
@@ -193,7 +195,7 @@ function getFilteredData() {
         return finalCSV;
     } catch (error) {
         console.error("Error in getFilteredData:", error);
-        return 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_type,response_word,rt\nerror,0,error,error,error,error,0,0,error,0\n';
+        return 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_type,response_word,rt,list_number\nerror,0,error,error,error,error,0,0,error,0,1\n';
     }
 }
 
@@ -209,97 +211,6 @@ const save_data = {
         } else {
             console.error('Error saving to DataPipe:', data.message);
         }
-    }
-};
-
-
-const checkContinue = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: function() {
-        const listsCompleted = completedLists + 1;
-        const listsRemaining = 3 - listsCompleted;
-        return `
-            <div style="text-align: center; max-width: 600px; margin: 0 auto;">
-                <h2>List ${listsCompleted} Complete!</h2>
-                <p>You have completed ${listsCompleted} out of 3 possible word lists.</p>
-                <p>Would you like to do another list? You can do up to ${listsRemaining} more.</p>
-                <p><em>Each list takes about the same amount of time as the one you just completed.</em></p>
-            </div>
-        `;
-    },
-    choices: ['Yes, do another list', 'No, I\'m done'],
-    data: {
-        trial_type: 'continue_choice'
-    },
-    on_finish: function(data) {
-        completedLists++;
-        
-        // Store the choice for the next trial to read
-        data.continue_choice = data.response;
-    }
-};
-
-const nextListLoader = {
-    timeline: [{
-        type: jsPsychHtmlKeyboardResponse,
-        stimulus: 'Loading next list...',
-        trial_duration: 100,
-        response_ends_trial: false,
-        on_start: async function(trial) {
-            try {
-                const nextCondition = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
-                const wordsData = await loadWordsForCondition(nextCondition);
-                const nextListTrials = createTrials(wordsData);
-                
-                // Add the next list and potentially another continue screen
-                jsPsych.addNodeToEndOfTimeline({
-                    timeline: nextListTrials
-                });
-                
-                if (completedLists + 1 < 3) {
-                    jsPsych.addNodeToEndOfTimeline(checkContinue);
-                    jsPsych.addNodeToEndOfTimeline(nextListLoader);
-                }
-                
-                // Always add save and final at the end
-                jsPsych.addNodeToEndOfTimeline({
-                    timeline: [save_data, final_screen]
-                });
-                
-            } catch (error) {
-                console.error('Error loading next list:', error);
-            }
-        }
-    }],
-    conditional_function: function() {
-        const lastTrial = jsPsych.data.getLastTrialData().values()[0];
-        return lastTrial.trial_type === 'continue_choice' && 
-               lastTrial.continue_choice === 0 && 
-               completedLists < 3;
-    }
-};
-
-const final_screen = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: function() {
-        const totalLists = completedLists || 1;
-        
-        return `
-            <div style="text-align: center; max-width: 600px; margin: 0 auto;">
-                <h2>Thank you!</h2>
-                <p>You have completed the experiment with ${totalLists} word list${totalLists > 1 ? 's' : ''}.</p>
-                <p>Your completion code is: <strong style="font-size: 18px; color: #2563eb;">${completion_code}</strong></p>
-            </div>
-        `;
-    },
-    choices: ['Finish'],
-    data: {
-        trial_type: 'final',
-        completion_code: completion_code,
-        total_lists_completed: function() { return completedLists || 1; }
-    },  
-    on_finish: function() {
-        window.location.href = `https://uwmadison.sona-systems.com/default.aspx?logout=Y`;
     }
 };
 
@@ -337,13 +248,109 @@ async function loadWordsForCondition(condition) {
     }
 }
 
+// Function to handle continuing to the next list
+async function continueToNextList() {
+    try {
+        completedLists++;
+        console.log(`Starting list ${completedLists + 1}`);
+        
+        // Get the next condition from DataPipe
+        const nextCondition = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
+        console.log(`List ${completedLists + 1}: Assigned condition:`, nextCondition);
+        
+        const wordsData = await loadWordsForCondition(nextCondition);
+        console.log(`Loaded words for list ${completedLists + 1}:`, wordsData.length);
+        
+        if (wordsData.length === 0) {
+            throw new Error(`No words loaded for condition ${nextCondition}`);
+        }
+        
+        const nextListTrials = createTrials(wordsData);
+        
+        // Create the continuation timeline
+        let continuationTimeline = [...nextListTrials];
+        
+        // If we haven't reached the maximum lists, add the option to continue
+        if (completedLists < 3) {
+            const checkContinue = {
+                type: jsPsychHtmlButtonResponse,
+                stimulus: function() {
+                    const listsRemaining = 3 - completedLists;
+                    return `
+                        <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                            <h2>List ${completedLists} Complete!</h2>
+                            <p>You have completed ${completedLists} out of 3 possible word lists.</p>
+                            <p>Would you like to do another list? You can do up to ${listsRemaining} more.</p>
+                            <p><em>Each list takes about the same amount of time as the one you just completed.</em></p>
+                        </div>
+                    `;
+                },
+                choices: ['Yes, do another list', 'No, I\'m done'],
+                data: {
+                    trial_type: 'continue_choice'
+                },
+                on_finish: async function(data) {
+                    if (data.response === 0 && completedLists < 3) {
+                        // They want to continue
+                        await continueToNextList();
+                    } else {
+                        // They're done or reached max - add save and final screen
+                        jsPsych.addNodeToEndOfTimeline(save_data);
+                        jsPsych.addNodeToEndOfTimeline(final_screen);
+                    }
+                }
+            };
+            
+            continuationTimeline.push(checkContinue);
+        } else {
+            // Reached maximum lists - add save and final screen
+            continuationTimeline.push(save_data);
+            continuationTimeline.push(final_screen);
+        }
+        
+        // Add the continuation timeline
+        continuationTimeline.forEach(trial => {
+            jsPsych.addNodeToEndOfTimeline(trial);
+        });
+        
+    } catch (error) {
+        console.error('Error loading next list:', error);
+        // On error, save data and show final screen
+        jsPsych.addNodeToEndOfTimeline(save_data);
+        jsPsych.addNodeToEndOfTimeline(final_screen);
+    }
+}
+
+const final_screen = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: function() {
+        const totalLists = completedLists || 1;
+        
+        return `
+            <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                <h2>Thank you!</h2>
+                <p>You have completed the experiment with ${totalLists} word list${totalLists > 1 ? 's' : ''}.</p>
+                <p>Your completion code is: <strong style="font-size: 18px; color: #2563eb;">${completion_code}</strong></p>
+            </div>
+        `;
+    },
+    choices: ['Finish'],
+    data: {
+        trial_type: 'final',
+        completion_code: completion_code,
+        total_lists_completed: function() { return completedLists || 1; }
+    },  
+    on_finish: function() {
+        window.location.href = `https://uwmadison.sona-systems.com/default.aspx?logout=Y`;
+    }
+};
+
 async function runExperiment() {
     try {
         console.log('Starting experiment...');
         console.log('Participant ID:', participant_id);
-        //console.log('Completion code:', completion_code);
         
-        // Get condition from DataPipe
+        // Get condition from DataPipe for first list
         const condition = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
         console.log('List 1: Assigned condition:', condition);
         
@@ -356,13 +363,45 @@ async function runExperiment() {
         
         const firstListTrials = createTrials(wordsData);
         
+        // Build initial timeline
         timeline = [
             consent,
             instructions,
-            ...firstListTrials,
-            checkContinue,
-            nextListLoader
+            ...firstListTrials
         ];
+        
+        // Add check continue after first list
+        const checkContinueFirst = {
+            type: jsPsychHtmlButtonResponse,
+            stimulus: function() {
+                completedLists = 1; // Update completed count
+                const listsRemaining = 3 - completedLists;
+                return `
+                    <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                        <h2>List 1 Complete!</h2>
+                        <p>You have completed 1 out of 3 possible word lists.</p>
+                        <p>Would you like to do another list? You can do up to ${listsRemaining} more.</p>
+                        <p><em>Each list takes about the same amount of time as the one you just completed.</em></p>
+                    </div>
+                `;
+            },
+            choices: ['Yes, do another list', 'No, I\'m done'],
+            data: {
+                trial_type: 'continue_choice'
+            },
+            on_finish: async function(data) {
+                if (data.response === 0) {
+                    // They want to continue
+                    await continueToNextList();
+                } else {
+                    // They're done - add save and final screen
+                    jsPsych.addNodeToEndOfTimeline(save_data);
+                    jsPsych.addNodeToEndOfTimeline(final_screen);
+                }
+            }
+        };
+        
+        timeline.push(checkContinueFirst);
         
         console.log('Timeline created with', timeline.length, 'items');
         console.log('Starting jsPsych...');
