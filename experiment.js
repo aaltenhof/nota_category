@@ -234,40 +234,47 @@ const checkContinue = {
     on_finish: function(data) {
         completedLists++;
         
-        if (data.response === 1 || completedLists >= 3) {
-            // They said no or completed 3 lists - end experiment
-            jsPsych.addNodeToEndOfTimeline({
-                timeline: [save_data, final_screen]
-            });
-        }
+        // Store the choice for the next trial to read
+        data.continue_choice = data.response;
     }
 };
 
-const conditional_node = {
+const nextListLoader = {
     timeline: [{
-        type: jsPsychCallFunction,
-        async: true,
-        func: async function(done) {
-            if (completedLists < 3) {
-                try {
-                    const nextCondition = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
-                    const wordsData = await loadWordsForCondition(nextCondition);
-                    const nextListTrials = createTrials(wordsData);
-                    
-                    jsPsych.addNodeToEndOfTimeline({
-                        timeline: [...nextListTrials, checkContinue, conditional_node]
-                    });
-                } catch (error) {
-                    console.error('Error loading next list:', error);
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: 'Loading next list...',
+        trial_duration: 100,
+        response_ends_trial: false,
+        on_start: async function(trial) {
+            try {
+                const nextCondition = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
+                const wordsData = await loadWordsForCondition(nextCondition);
+                const nextListTrials = createTrials(wordsData);
+                
+                // Add the next list and potentially another continue screen
+                jsPsych.addNodeToEndOfTimeline({
+                    timeline: nextListTrials
+                });
+                
+                if (completedLists + 1 < 3) {
+                    jsPsych.addNodeToEndOfTimeline(checkContinue);
+                    jsPsych.addNodeToEndOfTimeline(nextListLoader);
                 }
+                
+                // Always add save and final at the end
+                jsPsych.addNodeToEndOfTimeline({
+                    timeline: [save_data, final_screen]
+                });
+                
+            } catch (error) {
+                console.error('Error loading next list:', error);
             }
-            done();
         }
     }],
     conditional_function: function() {
         const lastTrial = jsPsych.data.getLastTrialData().values()[0];
         return lastTrial.trial_type === 'continue_choice' && 
-               lastTrial.response === 0 && 
+               lastTrial.continue_choice === 0 && 
                completedLists < 3;
     }
 };
@@ -354,7 +361,7 @@ async function runExperiment() {
             instructions,
             ...firstListTrials,
             checkContinue,
-            conditional_node
+            nextListLoader
         ];
         
         console.log('Timeline created with', timeline.length, 'items');
