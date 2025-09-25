@@ -13,7 +13,6 @@ function generateRandomString(length) {
 
 const completion_code = generateRandomString(3) + 'zvz' + generateRandomString(3);
 
-// create filename for data saving
 const filename = `${participant_id}.csv`;
 
 // Initialize jsPsych
@@ -24,7 +23,7 @@ const jsPsych = initJsPsych({
     }
 });
 
-let timeline = [];
+let currentCondition = null;
 
 const consent = {
     type: jsPsychHtmlButtonResponse,  
@@ -80,7 +79,7 @@ const instructions = {
     }
 };
 
-function createTrials(wordsData) {
+function createTrials(wordsData, conditionNum) {
     const experimentTrials = [];
     
     wordsData.forEach((item, index) => {
@@ -97,7 +96,7 @@ function createTrials(wordsData) {
             questions: [
                 {
                     prompt: function() {
-                        // Build sentence frame using CSV columns
+                        // build sentence frame using CSV columns
                         const before = item.sentence_frame_before || '';
                         const after = item.sentence_frame_after || '';
                         const clarification = item.clarification ? ` ${item.clarification}` : '';
@@ -119,23 +118,24 @@ function createTrials(wordsData) {
             data: {
                 custom_trial_type: 'word_completion_single',
                 participant_id: participant_id,
+                condition: conditionNum,
                 trial_number: index + 1,
                 word: word,
                 cat: item.cat,
                 pos: item.pos,
                 eng_freq: item.eng_freq,
                 aoa_producing: item.aoa_producing,
-                list_num: item.list_num
+                list_type: item.list_type
             },
             on_finish: function(data) {
-                // add the response to the data object
                 data.response_word = data.response.response;
                 data.rt = Math.round(data.rt);
                 
                 console.log(`Trial ${index + 1} completed:`, {
                     word: word,
                     response: data.response_word,
-                    rt: data.rt
+                    rt: data.rt,
+                    condition: conditionNum
                 });
             }
         };
@@ -156,11 +156,11 @@ function getFilteredData() {
     // if there's no data, return empty CSV
     if (wordTrials.length === 0) {
         console.error("No word completion trials found!");
-        return 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_num,response_word,rt\n';
+        return 'subCode,condition,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_type,response_word,rt\n';
     }
     
     try {
-        const header = 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_num,response_word,rt';
+        const header = 'subCode,condition,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_type,response_word,rt';
         const rows = [];
         
         wordTrials.forEach((trial, trialIndex) => {
@@ -168,13 +168,14 @@ function getFilteredData() {
             
             const row = [
                 trial.participant_id || participant_id,
+                trial.condition || currentCondition,
                 trial.trial_number || trialIndex + 1,
                 trial.word || '',
                 trial.cat || '',
                 trial.pos || '',
                 trial.eng_freq || '',
                 trial.aoa_producing || '',
-                trial.list_num || '',
+                trial.list_type || '',
                 trial.response_word || '',
                 Math.round(trial.rt || 0)
             ];
@@ -198,7 +199,7 @@ function getFilteredData() {
         return finalCSV;
     } catch (error) {
         console.error("Error in getFilteredData:", error);
-        return 'subCode,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_num,response_word,rt\nerror,0,error,error,error,error,0,0,error,error,error,0\n';
+        return 'subCode,condition,trial_num,target_word,target_cat,target_pos,target_eng_freq,aoa_producing,list_type,response_word,rt\nerror,error,0,error,error,error,error,0,0,error,0\n';
     }
 }
 
@@ -236,9 +237,23 @@ const final_screen = {
     }
 };
 
-async function loadWords() {
+// load different files for each condition
+async function loadWordsForCondition(condition) {
     try {
-        const response = await fetch('demo_word_list.csv');
+        const csvFiles = [
+            'wordlist1.csv',  // condition 0
+            'wordlist2.csv',  // condition 1
+            'wordlist3.csv',  // condition 2
+            'wordlist4.csv',  // condition 3
+            'wordlist5.csv',  // condition 4
+            'wordlist6.csv',  // condition 5
+            'wordlist7.csv'   // condition 6
+        ];
+        
+        const csvFile = csvFiles[condition] || 'wordlist1.csv';
+        console.log(`Loading CSV file: ${csvFile} for condition ${condition}`);
+        
+        const response = await fetch(csvFile);
         const csvText = await response.text();
         
         const results = Papa.parse(csvText, {
@@ -247,15 +262,27 @@ async function loadWords() {
             dynamicTyping: true
         });
 
-        console.log('Loaded words:', results.data.length);
-
+        console.log(`Loaded words for condition ${condition}:`, results.data.length);
         let shuffledData = jsPsych.randomization.shuffle([...results.data]);
         
         return shuffledData;
     } catch (error) {
-        console.error('Error loading words:', error);
+        console.error(`Error loading words for condition ${condition}:`, error);
         return [];
     }
+}
+
+// create timeline by condition
+function createConditionTimeline(wordsData, conditionNum) {
+    const experimentTrials = createTrials(wordsData, conditionNum);
+    
+    return [
+        consent,
+        instructions,
+        ...experimentTrials,
+        save_data,
+        final_screen
+    ];
 }
 
 async function runExperiment() {
@@ -264,28 +291,25 @@ async function runExperiment() {
         console.log('Participant ID:', participant_id);
         console.log('Completion code:', completion_code);
         
-        const wordsData = await loadWords();
+        // Get condition from DataPipe
+        const condition = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
+        currentCondition = condition;
+        console.log('Assigned condition:', condition);
+        
+        const wordsData = await loadWordsForCondition(condition);
+        
         console.log('Loaded words:', wordsData.length);
         
         if (wordsData.length === 0) {
-            throw new Error('No words loaded from CSV file');
+            throw new Error(`No words loaded for condition ${condition}`);
         }
         
-        const experimentTrials = createTrials(wordsData);
-        console.log('Created experiment trials:', experimentTrials.length);
-            
-        timeline = [
-            consent,
-            instructions,
-            ...experimentTrials,
-            save_data,
-            final_screen
-        ];
-
-        console.log('Timeline initialized with', timeline.length, 'items');
+        const timeline = createConditionTimeline(wordsData, condition);
+        console.log('Timeline created for condition', condition, 'with', timeline.length, 'items');
+        
         console.log('Starting jsPsych...');
-
         jsPsych.run(timeline);
+        
     } catch (error) {
         console.error('Error running experiment:', error);
         document.body.innerHTML = `

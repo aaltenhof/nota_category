@@ -1,0 +1,76 @@
+word,cat,pos,sentence_frame_before,sentence_frame_after,clarification,eng_freq,aoa_producing,list_type
+tape,household,noun,A , is not a ,,,,3
+Splashing,action_words,verb,, is not ,,,,3
+ball,toys,noun,A , is not a ,,,,3
+Fitting,action_words,verb,, is not ,,,,3
+goose,animals,noun,A , is not a ,,,,3
+dog,animals,noun,A , is not a ,,,,3
+washing machine,furniture_rooms,noun,A , is not a ,,,,3
+glue,toys,noun,A , is not ,,,,3
+yard,places,noun,A , is not a ,,,,3
+dry,descriptive_words,adjective,To be , is not to be ,,,,3
+Food,food_drink,noun,, is not ,,,,3
+big,descriptive_words,adjective,To be , is not to be ,,,,3
+Bringing,action_words,verb,, is not ,,,,3
+giraffe,animals,noun,A , is not a ,,,,3
+garage,furniture_rooms,noun,A , is not a ,,,,3
+hose,outside,noun,A , is not a ,,,,3
+sleepy,descriptive_words,adjective,To be , is not to be ,,,,3
+animal,animals,noun,An , is not a ,,,,3
+Pizza,food_drink,noun,, is not ,,,,3
+bicycle,vehicles,noun,A , is not a ,,,,3
+scared,descriptive_words,adjective,To be , is not to be ,,,,3
+Hurrying,action_words,verb,, is not ,,,,3
+deer,animals,noun,A , is not a ,,,,3
+new,descriptive_words,adjective,To be , is not to be ,,,,3
+Dumping,action_words,verb,, is not ,,,,3
+awake,descriptive_words,adjective,To be , is not to be ,,26.71,XXX,3
+naughty,descriptive_words,adjective,To be , is not to be ,,,,3
+Watching,action_words,verb,, is not ,,,,3
+block,toys,noun,A , is not a ,,,,3
+Nuts,food_drink,noun,, are not ,,,,3
+Mom,people,noun,A , is not a ,,,,3
+lawn mower,outside,noun,A , is not a ,,,,3
+monkey,animals,noun,A , is not a ,,,,3
+Cooking,action_words,verb,, is not ,,,,3
+tongue,body_parts,noun,A , is not a ,,,,3
+horse,animals,noun,A , is not a ,,,,3
+bear,animals,noun,A , is not a ,,,,3
+mouth,body_parts,noun,A , is not a ,,,,3
+hard,descriptive_words,adjective,To be , is not to be ,,,,3
+muffin,food_drink,noun,A, is not a ,,,,3
+sheep,animals,noun,A , is not a ,,,,3
+slipper,clothing,noun,A , is not a ,,,,3
+orange,descriptive_words,adjective,To be , is not to be ,,,,3
+popsicle,food_drink,noun,A , is not a ,,,,3
+Peanut butter,food_drink,noun,, is not ,,,,3
+grass,outside,noun,A , is not a ,,,,3
+Hair,body_parts,noun,, is not ,,,,3
+knife,household,noun,A , is not a ,,,,3
+Garbage,household,noun,, is not ,,,,3
+dress,clothing,noun,A , is not a ,,,,3
+brush,household,noun,A , is not a ,,,,3
+Hearing,action_words,verb,, is not ,,,,3
+Liking,action_words,verb,, is not ,,,,3
+Sitting,action_words,verb,, is not ,,,,3
+red,descriptive_words,adjective,To be , is not to be ,,,,3
+Looking,action_words,verb,, is not ,,,,3
+fast,descriptive_words,adjective,To be , is not to be ,,,,3
+button,clothing,noun,A , is not a ,,,,3
+Giving,action_words,verb,, is not ,,,,3
+pen,toys,noun,A , is not ,,,,3
+soft,descriptive_words,adjective,To be , is not to be ,,,,3
+cheek,body_parts,noun,A , is not a ,,,,3
+basket,household,noun,A , is not a ,,,,3
+careful,descriptive_words,adjective,To be , is not to be ,,,,3
+Jumping,action_words,verb,, is not ,,,,3
+bathroom,furniture_rooms,noun,A , is not a ,,,,3
+broom,household,noun,A , is not a ,,,,3
+Carrots,food_drink,noun,, are not ,,,,3
+Noodles,food_drink,noun,, are not ,,,,3
+brown,descriptive_words,adjective,To be , is not to be ,,,,3
+Gloves,clothing,noun,, are not ,,,,3
+egg,food_drink,noun,An , is not a ,,,,3
+Pants,clothing,noun,, are not ,,,,3
+couch,furniture_rooms,noun,A , is not a ,,,,3
+Reading,action_words,verb,, is not ,,,,3

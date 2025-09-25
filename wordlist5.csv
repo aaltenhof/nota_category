@@ -1,0 +1,76 @@
+word,cat,pos,sentence_frame_before,sentence_frame_after,clarification,eng_freq,aoa_producing,list_type
+Kissing,action_words,verb,, is not ,,,,5
+Spilling,action_words,verb,, is not ,,,,5
+Dropping,action_words,verb,, is not ,,,,5
+party,places,noun,A , is not a ,,,,5
+Wind,outside,noun,, is not ,,,,5
+black,descriptive_words,adjective,To be , is not to be ,,,,5
+Bumping,action_words,verb,, is not ,,,,5
+pancake,food_drink,noun,A , is not a ,,,,5
+leg,body_parts,noun,A , is not a ,,,,5
+clown,people,noun,A , is not a ,,,,5
+Building,action_words,verb,, is not ,,,,5
+Dinner,games_routines,noun,, is not ,,,,5
+wet,descriptive_words,adjective,To be , is not to be ,,,,5
+Hugging,action_words,verb,, is not ,,,,5
+tray,household,noun,A , is not a ,,,,5
+first,descriptive_words,adjective,To be , is not to be ,,,,5
+happy,descriptive_words,adjective,To be , is not to be ,,,,5
+zipper,clothing,noun,A , is not a ,,,,5
+baby,people,noun,A , is not a ,,,,5
+water,food_drink,noun,A , is not a ,(beverage) ,,,5
+can,household,noun,A , is not a ,,,,5
+sink,furniture_rooms,noun,A , is not a ,,,,5
+trash,household,noun,A , is not a ,,,,5
+pickle,food_drink,noun,A , is not ,,,,5
+potato,food_drink,noun,A , is not a ,,,,5
+Seeing,action_words,verb,, is not ,,,,5
+Scissors,household,noun,, are not ,,,,5
+Skating,action_words,verb,, is not ,,,,5
+Breaking,action_words,verb,, is not ,,,,5
+Sauce,food_drink,noun,, is not ,,,,5
+Before,time_words,adverb,, is not ,,,,5
+sprinkler,outside,noun,A , is not a ,,,,5
+Sweeping,action_words,verb,, is not ,,,,5
+Milk,food_drink,noun,, is not ,,,,5
+Throwing,action_words,verb,, is not ,,,,5
+teacher,people,noun,A , is not a ,,,,5
+Tuna,food_drink,noun,, is not ,,,,5
+Fixing,action_words,verb,, is not ,,,,5
+airplane,vehicles,noun,An , is not a ,,,,5
+loud,descriptive_words,adjective,To be , is not to be ,,,,5
+game,toys,noun,A , is not ,,,,5
+slide,outside,noun,A , is not a ,,,,5
+Chocolate,food_drink,noun,, is not ,,,,5
+chair,furniture_rooms,noun,A , is not a ,,,,5
+tooth,body_parts,noun,A , is not a ,,,,5
+Making,action_words,verb,, is not ,,,,5
+snowsuit,clothing,noun,A , is not a ,,,,5
+butterfly,animals,noun,A , is not a ,,,,5
+pony,animals,noun,A , is not a ,,,,5
+lion,animals,noun,A , is not a ,,,,5
+ear,body_parts,noun,An , is not a ,,,,5
+coat,clothing,noun,A , is not a ,,,,5
+Sharing,action_words,verb,, is not ,,,,5
+Crying,action_words,verb,, is not ,,,,5
+plate,household,noun,A , is not a ,,,,5
+French fries,food_drink,noun,, are not ,,,,5
+motorcycle,vehicles,noun,A , is not a ,,,,5
+bedroom,furniture_rooms,noun,A , is not a ,,,,5
+Kicking,action_words,verb,, is not ,,,,5
+Biting,action_words,verb,, is not ,,,,5
+Licking,action_words,verb,, is not ,,,,5
+knee,body_parts,noun,A , is not a ,,,,5
+turtle,animals,noun,A , is not a ,,,,5
+pretty,descriptive_words,adjective,To be , is not to be ,,,,5
+Playing,action_words,verb,, is not ,,,,5
+jar,household,noun,A , is not a ,,,,5
+sky,outside,noun,A , is not a ,,,,5
+Carrying,action_words,verb,, is not ,,,,5
+toliet,furniture_rooms,noun,A , is not a ,,,,5
+Swimming,action_words,verb,, is not ,,,,5
+Yesterday,time_words,noun,, is not ,,96.76,XXX,5
+room,furniture_rooms,noun,A , is not a ,,,,5
+full,descriptive_words,adjective,To be , is not to be ,,,,5
+Ice,food_drink,noun,, is not ,,,,5
+spoon,household,noun,A , is not a ,,,,5
