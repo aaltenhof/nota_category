@@ -70,36 +70,56 @@ const consent = {
 const generate_ratings_section = {
     
     timeline: function() {
+        console.log("===== RATINGS SECTION STARTING =====");
         console.log("generate_ratings_section's timeline function is executing.");
+        console.log("Current timestamp:", new Date().toISOString());
 
-        // 1. Get the participant's responses from the 'base' list that have already been recorded.
-        // This will only run after all base trials have completed.
-        const baseResponses = jsPsych.data.get()
+        // 1. Get the participant's responses from the 'base' list
+        const allData = jsPsych.data.get();
+        console.log(`Total trials in data so far: ${allData.count()}`);
+        
+        const baseResponses = allData
             .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
             .values();
-            console.log(`Found ${baseResponses.length} base responses for rating.`);
+        
+        console.log(`Found ${baseResponses.length} base responses for rating.`);
+        
+        // Debug: Show first few responses if any exist
+        if (baseResponses.length > 0) {
+            console.log("Sample base responses:", baseResponses.slice(0, 3));
+        }
 
         // 2. Check if there are any responses to rate
         if (baseResponses.length === 0) {
             console.warn("No base responses found for rating section. Skipping ratings.");
-            return []; // If not, return an empty array to skip this section
+            console.log("===== RATINGS SECTION SKIPPED (no data) =====");
+            return []; // Return empty array to skip this section
         }
 
         // 3. Create the timeline variables for the rating procedure
-        const ratingTimelineVars = baseResponses.map(response => ({
-            rating_data: {
-                word: response.word,
-                response_word: response.response_word,
-                list_type: response.list_type,
-                trial_number: response.trial_number,
-                cat: response.cat,
-                pos: response.pos,
-                eng_freq: response.eng_freq,
-                aoa_producing: response.aoa_producing
+        const ratingTimelineVars = baseResponses.map((response, index) => {
+            // Validate required fields
+            if (!response.word || !response.response_word) {
+                console.warn(`Response ${index} missing word or response_word:`, response);
             }
-        }));
+            
+            return {
+                rating_data: {
+                    word: response.word || '[missing]',
+                    response_word: response.response_word || '[no response]',
+                    list_type: response.list_type,
+                    trial_number: response.trial_number,
+                    cat: response.cat,
+                    pos: response.pos,
+                    eng_freq: response.eng_freq,
+                    aoa_producing: response.aoa_producing
+                }
+            };
+        });
 
-        // 4. Define the rating instructions (same as you had)
+        console.log(`Created ${ratingTimelineVars.length} rating trials`);
+
+        // 4. Define the rating instructions
         const ratings_instructions = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: `
@@ -115,16 +135,20 @@ const generate_ratings_section = {
             `,
             data: {
                 trial_type: 'ratings_instructions'
+            },
+            on_finish: function() {
+                console.log("Rating instructions completed");
             }
         };
 
-        // 5. Define the rating procedure that uses the timeline variables
+        // 5. Define the rating procedure
         const rating_procedure = {
             timeline: [
                 {
                     type: jsPsychHtmlSliderResponse,
                     stimulus: function() {
                         const data = jsPsych.timelineVariable('rating_data');
+                        console.log("Showing rating for:", data.word, "->", data.response_word);
                         return `
                             <div style="text-align: center; max-width: 800px; margin: 0 auto;">
                                 <div class="trial-stimulus" style="font-size: 24px; margin: 30px 0;">
@@ -157,12 +181,17 @@ const generate_ratings_section = {
                             eng_freq: data.eng_freq,
                             aoa_producing: data.aoa_producing
                         };
+                    },
+                    on_finish: function(data) {
+                        console.log(`Rating completed: ${data.original_word} -> ${data.original_response}, Rating: ${data.response}`);
                     }
                 }
             ],
             timeline_variables: ratingTimelineVars,
-            randomize_order: true // It's good practice to randomize the rating order
+            randomize_order: true
         };
+        
+        console.log("===== RATINGS SECTION CONFIGURED SUCCESSFULLY =====");
         
         // 6. Return the full rating section timeline
         return [ratings_instructions, rating_procedure];
@@ -525,7 +554,6 @@ async function runExperiment() {
         timeline = [
             consent,
             instructions,
-            generate_ratings_section, 
             ...baseListTrials,
             ...list1Trials,
             checkContinueList1,
@@ -547,6 +575,7 @@ async function runExperiment() {
                     return shouldContinueToList2;
                 }
             },
+            generate_ratings_section, 
             save_data,
             final_screen
         ];
