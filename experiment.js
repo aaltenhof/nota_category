@@ -28,7 +28,6 @@ let shouldContinueToList2 = false;
 let shouldContinueToList3 = false;
 let globalTrialNumber = 0;
 
-let baseListResponsesForRatings = []
 let baseListTrials = [];
 let list1Trials = [];
 let list2Trials = [];
@@ -69,16 +68,19 @@ const consent = {
 };
 
 const generate_ratings_section = {
+    // This is now a regular object in the timeline, but its 'timeline' property is a function
+    // This function will be called by jsPsych when this node is actually reached during the experiment run.
     timeline: function() {
-        // 1. Get the participant's responses from the 'base' list
+        // 1. Get the participant's responses from the 'base' list that have already been recorded.
+        // This will only run after all base trials have completed.
         const baseResponses = jsPsych.data.get()
             .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
             .values();
 
         // 2. Check if there are any responses to rate
         if (baseResponses.length === 0) {
-            // If not, return an empty array to skip this section
-            return [];
+            console.warn("No base responses found for rating section. Skipping ratings.");
+            return []; // If not, return an empty array to skip this section
         }
 
         // 3. Create the timeline variables for the rating procedure
@@ -236,19 +238,6 @@ function createTrials(wordsData, listType) {
                 data.response_word = data.response ? data.response.response : '';
                 data.rt = Math.round(data.rt);
                 
-                if (listType === 'base') {
-                    baseListResponsesForRatings.push({
-                        word: data.word,
-                        response_word: data.response_word,
-                        list_type: data.list_type,
-                        trial_number: data.trial_number,
-                        cat: data.cat,
-                        pos: data.pos,
-                        eng_freq: data.eng_freq,
-                        aoa_producing: data.aoa_producing,
-                        list_type: data.list_type
-                    });
-                }
             }
         };
 
@@ -284,8 +273,6 @@ function getFilteredData() {
         const rows = [];
         
         wordCompletionTrials.forEach((trial) => {
-            // Remove list_number as requested
-            // const listNumber = trial.list_number; // This is no longer needed in the output row
             
             // Get the rating for this specific base word trial, if applicable
             let likelihoodRating = '';
@@ -557,7 +544,7 @@ async function runExperiment() {
                     return shouldContinueToList2;
                 }
             },
-            generate_ratings_section,
+            generate_ratings_section, 
             save_data,
             final_screen
         ];
