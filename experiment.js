@@ -68,14 +68,16 @@ const consent = {
 };
 
 const generate_ratings_section = {
-    // This is now a regular object in the timeline, but its 'timeline' property is a function
-    // This function will be called by jsPsych when this node is actually reached during the experiment run.
+    
     timeline: function() {
+        console.log("generate_ratings_section's timeline function is executing.");
+
         // 1. Get the participant's responses from the 'base' list that have already been recorded.
         // This will only run after all base trials have completed.
         const baseResponses = jsPsych.data.get()
             .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
             .values();
+            console.log(`Found ${baseResponses.length} base responses for rating.`);
 
         // 2. Check if there are any responses to rate
         if (baseResponses.length === 0) {
