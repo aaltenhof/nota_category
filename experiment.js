@@ -1,4 +1,4 @@
---- START OF FILE experiment.js ---
+
 
 // generate random participant 
 let participant_id = `participant${Math.floor(Math.random() * 999) + 1}`;
