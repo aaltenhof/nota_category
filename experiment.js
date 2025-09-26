@@ -1,5 +1,3 @@
-
-
 // generate random participant 
 let participant_id = `participant${Math.floor(Math.random() * 999) + 1}`;
 
@@ -36,7 +34,7 @@ let list2Trials = [];
 let list3Trials = [];
 
 const consent = {
-    type: 'html-button-response', // <--- CORRECTED: Using string ID
+    type: jsPsychHtmlButtonResponse,  
     stimulus: `
         <div class="consent-text">
             <h3>Consent to Participate in Research</h3>
@@ -64,21 +62,22 @@ const consent = {
     },
     on_finish: function(data) {
         if(data.response == 1) { // If 'I Do Not Agree'
-            jsPsych.endExperiment('Thank thank you for your time. The experiment has been ended.');
+            jsPsych.endExperiment('Thank you for your time. The experiment has been ended.');
         }
     }
 };
 
 const generate_ratings_section = {
+    
     timeline: function() {
-        console.log("generate_ratings_section's timeline function is executing."); // Added log
+        console.log("generate_ratings_section's timeline function is executing.");
 
         // 1. Get the participant's responses from the 'base' list that have already been recorded.
+        // This will only run after all base trials have completed.
         const baseResponses = jsPsych.data.get()
             .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
             .values();
-
-        console.log(`Found ${baseResponses.length} base responses for rating.`); // Added log
+            console.log(`Found ${baseResponses.length} base responses for rating.`);
 
         // 2. Check if there are any responses to rate
         if (baseResponses.length === 0) {
@@ -102,7 +101,7 @@ const generate_ratings_section = {
 
         // 4. Define the rating instructions (same as you had)
         const ratings_instructions = {
-            type: 'html-keyboard-response', // <--- CORRECTED: Using string ID
+            type: jsPsychHtmlKeyboardResponse,
             stimulus: `
                 <div style="max-width: 800px; margin: 0 auto; text-align: center;">
                     <p>Now you will be asked to rate some of your responses to the sentences you just filled in.</p>
@@ -123,7 +122,7 @@ const generate_ratings_section = {
         const rating_procedure = {
             timeline: [
                 {
-                    type: 'html-slider-response', // <--- CORRECTED: Using string ID
+                    type: jsPsychHtmlSliderResponse,
                     stimulus: function() {
                         const data = jsPsych.timelineVariable('rating_data');
                         return `
@@ -162,7 +161,7 @@ const generate_ratings_section = {
                 }
             ],
             timeline_variables: ratingTimelineVars,
-            randomize_order: true 
+            randomize_order: true // It's good practice to randomize the rating order
         };
         
         // 6. Return the full rating section timeline
@@ -171,7 +170,7 @@ const generate_ratings_section = {
 };
 
 const instructions = {
-    type: 'html-keyboard-response', // <--- CORRECTED: Using string ID
+    type: jsPsychHtmlKeyboardResponse,  
     stimulus: `
         <div style="max-width: 800px; margin: 0 auto; text-align: center;">
             <h2>Instructions</h2>
@@ -204,7 +203,7 @@ function createTrials(wordsData, listType) {
         globalTrialNumber++; 
         
         const singleResponseTrial = {
-            type: 'survey-text', // <--- CORRECTED: Using string ID
+            type: jsPsychSurveyText,
             questions: [
                 {
                     prompt: function() {
@@ -240,6 +239,7 @@ function createTrials(wordsData, listType) {
             on_finish: function(data) {
                 data.response_word = data.response ? data.response.response : '';
                 data.rt = Math.round(data.rt);
+                
             }
         };
 
@@ -256,9 +256,11 @@ function getFilteredData() {
     const ratingTrials = allTrials.filter(trial => trial.custom_trial_type === 'response_likelihood_rating');
 
     // Create a map for quick lookup of ratings
-    // Key: `${original_word}-${original_trial_number}`
+    // Key: `${original_word}-${original_response}` or just `original_word` if response isn't unique enough
+    // Given 'original_word' is sufficient to link to a base trial
     const ratingMap = new Map();
     ratingTrials.forEach(ratingTrial => {
+        // The original trial_number is a more robust unique identifier if there are duplicate words
         const key = `${ratingTrial.original_word}-${ratingTrial.original_trial_number}`; 
         ratingMap.set(key, ratingTrial.response); // Stores the slider rating
     });
@@ -273,6 +275,7 @@ function getFilteredData() {
         const rows = [];
         
         wordCompletionTrials.forEach((trial) => {
+            
             // Get the rating for this specific base word trial, if applicable
             let likelihoodRating = '';
             if (trial.list_type === 'base') { // Only base words get ratings
@@ -288,10 +291,10 @@ function getFilteredData() {
                 trial.pos || '',
                 trial.eng_freq || '',
                 trial.aoa_producing || '',
-                trial.list_type || '', 
+                trial.list_type || '', // Use list_type instead of list_number
                 trial.response_word || '',
                 Math.round(trial.rt || 0),
-                likelihoodRating 
+                likelihoodRating // New column for rating
             ];
             rows.push(row);
         });
@@ -315,7 +318,7 @@ function getFilteredData() {
 
 
 var save_data = {
-    type: 'pipe', // <--- CORRECTED: Using string ID
+    type: jsPsychPipe,
     action: "save",
     experiment_id: "iEGcC0iYDj4r", 
     filename: `${participant_id}.csv`,
@@ -348,7 +351,7 @@ async function loadWordsForCondition(condition) {
         } else {
             csvFile = csvFiles[actualCondition] 
         }
-        console.log(`Loading CSV file: ${csvFile} for condition ${actualCondition || 'base'}`); // Added log
+        // console.log(`Loading CSV file: ${csvFile} for condition ${actualCondition}`);
         
         const response = await fetch(csvFile);
         if (!response.ok) {
@@ -362,7 +365,7 @@ async function loadWordsForCondition(condition) {
             dynamicTyping: true
         });
 
-        console.log(`Loaded words for condition ${actualCondition || 'base'}:`, results.data.length); // Added log
+        // console.log(`Loaded words for condition ${actualCondition}:`, results.data.length);
         let shuffledData = jsPsych.randomization.shuffle([...results.data]);
         
         return shuffledData;
@@ -373,7 +376,7 @@ async function loadWordsForCondition(condition) {
 }
 
 const checkContinueList1 = {
-    type: 'html-button-response', // <--- CORRECTED: Using string ID
+    type: jsPsychHtmlButtonResponse,
     stimulus: function() {
         completedLists = 1; 
         const listsRemaining = 3 - completedLists;
@@ -395,7 +398,7 @@ const checkContinueList1 = {
     }
 };
 
-// conditional node for List 2 trials - no change needed here
+// conditional node for List 2 trials
 const list2_conditional_node = {
     timeline: [], 
     conditional_function: function(){
@@ -404,7 +407,7 @@ const list2_conditional_node = {
 };
 
 const checkContinueList2 = {
-    type: 'html-button-response', // <--- CORRECTED: Using string ID
+    type: jsPsychHtmlButtonResponse,
     stimulus: function() {
         completedLists = 2; 
         const listsRemaining = 3 - completedLists;
@@ -421,6 +424,9 @@ const checkContinueList2 = {
         trial_type: 'continue_choice',
         list_just_completed: 2
     },
+    conditional_function: function() {
+        return shouldContinueToList2;
+    },
     on_finish: function(data) {
         shouldContinueToList3 = (data.response === 0);
     }
@@ -434,7 +440,7 @@ const list3_conditional_node = {
 };
 
 const list3CompleteMessage = {
-    type: 'html-keyboard-response', // <--- CORRECTED: Using string ID
+    type: jsPsychHtmlKeyboardResponse,
     stimulus: `
         <div style="text-align: center; max-width: 600px; margin: 0 auto;">
             <h2>You're all done! </h2>
@@ -445,6 +451,9 @@ const list3CompleteMessage = {
     data: {
         trial_type: 'list3_complete'
     },
+    conditional_function: function() {
+        return shouldContinueToList3;
+    },
     on_finish: function() {
         if (shouldContinueToList3) {
             completedLists = 3;
@@ -453,7 +462,7 @@ const list3CompleteMessage = {
 };
 
 var final_screen = {
-    type: 'html-button-response', // <--- CORRECTED: Using string ID
+    type: jsPsychHtmlButtonResponse,
     stimulus: function() {
         const totalLists = completedLists; 
         
@@ -484,11 +493,8 @@ async function runExperiment() {
         console.log('Participant ID:', participant_id);
         
         // 1. Load words for all potential lists at the start
-        const baseWordsData = await loadWordsForCondition("base");
-        console.log("Base words loaded:", baseWordsData.length, "items."); 
-        
+        const baseWordsData = await loadWordsForCondition("base")
         baseListTrials = createTrials(baseWordsData , 'base'); 
-        console.log("Base trials created:", baseListTrials.length, "trials."); 
 
         const condition1 = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
         const wordsData1 = await loadWordsForCondition(condition1);
@@ -515,10 +521,12 @@ async function runExperiment() {
         console.log(`Created ${list3Trials.length} trials for list 3`);
         
         // 2. Build the initial timeline structure
+        // In runExperiment(), update the timeline construction:
         timeline = [
             consent,
             instructions,
-            ...baseListTrials, 
+            generate_ratings_section, 
+            ...baseListTrials,
             ...list1Trials,
             checkContinueList1,
             {
@@ -539,26 +547,23 @@ async function runExperiment() {
                     return shouldContinueToList2;
                 }
             },
-            generate_ratings_section, 
             save_data,
             final_screen
         ];
         
-        console.log("Final timeline structure (high-level overview):"); // Added log for final structure check
+        console.log("Final timeline structure:");
         timeline.forEach((item, index) => {
             let desc = `[${index}] `;
-            if (typeof item.type === 'string') {
+            if (item.type) {
                 desc += `Type: ${item.type}`;
-            } else if (item.timeline && typeof item.timeline === 'function') {
-                desc += `Dynamic Timeline Block (function). Has conditional_function: ${!!item.conditional_function}`;
-            } else if (item.timeline && Array.isArray(item.timeline)) {
-                 desc += `Static Timeline Block. Has conditional_function: ${!!item.conditional_function}`;
+            } else if (item.timeline) {
+                desc += `Conditional Block or Timeline Function. Has conditional_function: ${!!item.conditional_function}`;
             } else {
-                desc += `Unknown/Spread Array Element. Value type: ${typeof item}`;
+                desc += `Unknown/Array Spread Element`;
             }
             console.log(desc);
         });
-
+        
         jsPsych.run(timeline);
         
     } catch (error) {
