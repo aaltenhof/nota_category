@@ -97,7 +97,7 @@ function createRatingsTrials(baseWordResponses) {
         }
 
         const ratingTrial = {
-            type: jsPsychSurveyHtmlSliderResponse,
+            type: jsPsychHtmlSliderResponse,
             stimulus: `
                 <div style="text-align: center; max-width: 800px; margin: 0 auto;">
                     <div class="trial-stimulus" style="font-size: 24px; margin: 30px 0;">
