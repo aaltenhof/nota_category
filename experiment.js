@@ -525,6 +525,7 @@ async function runExperiment() {
         timeline = [
             consent,
             instructions,
+            generate_ratings_section, 
             ...baseListTrials,
             ...list1Trials,
             checkContinueList1,
@@ -546,13 +547,22 @@ async function runExperiment() {
                     return shouldContinueToList2;
                 }
             },
-            generate_ratings_section, 
             save_data,
             final_screen
         ];
         
-        //console.log('Complete timeline created with', timeline.length, 'main components');
-        //console.log('Starting jsPsych...');
+        console.log("Final timeline structure:");
+        timeline.forEach((item, index) => {
+            let desc = `[${index}] `;
+            if (item.type) {
+                desc += `Type: ${item.type}`;
+            } else if (item.timeline) {
+                desc += `Conditional Block or Timeline Function. Has conditional_function: ${!!item.conditional_function}`;
+            } else {
+                desc += `Unknown/Array Spread Element`;
+            }
+            console.log(desc);
+        });
         
         jsPsych.run(timeline);
         
