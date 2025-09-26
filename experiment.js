@@ -138,52 +138,54 @@ function createRatingsTrials(baseWordResponses) {
     return ratingsTrials;
 };
 
-const ratings_trigger_node = {
-    type: jsPsychCallFunction, // A simple trial to execute a function
-    func: async function() { // Make it async since we're using await for conditions
-        // Get all word completion trials for the 'base' list that have been completed
-        const baseWordResponses = jsPsych.data.get()
-            .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
-            .values();
-        
-        console.log(`Triggering ratings task. Found ${baseWordResponses.length} base word responses.`);
-        
-        if (baseWordResponses.length > 0) {
-            const generatedRatingsTrials = createRatingsTrials(baseWordResponses);
-            
-            // Construct the full sequence to add: instructions, ratings trials, save, final screen
-            const sequenceToAdd = [
-                ratings_instructions,
-                ...generatedRatingsTrials,
-                save_data,
-                final_screen
-            ];
-
-            // Use jsPsych.addNode to insert these trials *after* the current point
-            jsPsych.addNode({
-                timeline: sequenceToAdd,
-                // No conditional_function here; we're explicitly adding it
-            });
-
-            // IMPORTANT: Stop the current timeline if jsPsych.addNode is used to insert
-            // the *rest* of the experiment. This prevents jsPsych from trying to
-            // run save_data and final_screen twice (once from original timeline,
-            // once from addNode). The final_screen will handle the redirect.
-            jsPsych.endExperiment(); // This effectively jumps to the added sequence
-        } else {
-            console.warn("No base word responses found. Skipping ratings task and proceeding to final screen.");
-            // If no base responses, just add save_data and final_screen directly
-            jsPsych.addNode({
-                timeline: [save_data, final_screen]
-            });
-            jsPsych.endExperiment(); // Jump to final screen
+// Remove the old ratings_trigger_node and replace with this:
+const ratings_section = {
+    timeline: [
+        {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: `
+                <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                    <p>Now you will be asked to rate some of your responses to the sentences you just filled in.</p>
+                    <p>You will see some sentences and the response that you gave for each.</p>
+                    <p>Your task is to rate, on a scale from 0 to 100, how likely you think another person would be to generate the exact same response as you did.</p>
+                    <p>0 means "Extremely Unlikely" (no one else would say this)</p>
+                    <p>100 means "Extremely Likely" (everyone else would say this)</p>
+                    <p>Use the slider to select your rating and click 'Continue'.</p>
+                    <p><strong>Press any key when you're ready to begin.</strong></p>
+                </div>
+            `,
+            data: {
+                trial_type: 'ratings_instructions'
+            },
+        },
+        {
+            type: jsPsychCallFunction,
+            func: function() {
+                // Get all word completion trials for the 'base' list
+                const baseWordResponses = jsPsych.data.get()
+                    .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
+                    .values();
+                
+                console.log(`Found ${baseWordResponses.length} base word responses for ratings.`);
+                
+                // Create rating trials dynamically and add them to the timeline
+                const ratingTrials = createRatingsTrials(baseWordResponses);
+                
+                // Insert rating trials into the timeline at runtime
+                ratingTrials.forEach(trial => {
+                    jsPsych.getCurrentTrial().timeline.push(trial);
+                });
+            }
         }
-    },
-    data: {
-        trial_type: 'ratings_trigger'
+    ],
+    conditional_function: function() {
+        // Only run ratings if there are base word responses
+        const hasBaseResponses = jsPsych.data.get()
+            .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
+            .values().length > 0;
+        return hasBaseResponses;
     }
 };
-
 
 
 
@@ -554,13 +556,13 @@ async function runExperiment() {
         console.log(`Created ${list3Trials.length} trials for list 3`);
         
         // 2. Build the initial timeline structure
+        // In runExperiment(), update the timeline construction:
         timeline = [
             consent,
             instructions,
             ...baseListTrials,
             ...list1Trials,
             checkContinueList1,
-            // conditional nodes for List 2 and List 3 which will be pre=populated 
             {
                 timeline: [
                     ...list2Trials,
@@ -579,7 +581,9 @@ async function runExperiment() {
                     return shouldContinueToList2;
                 }
             },
-            ratings_trigger_node   
+            ratings_section,  // Use the new ratings_section instead of ratings_trigger_node
+            save_data,
+            final_screen
         ];
         
         //console.log('Complete timeline created with', timeline.length, 'main components');
