@@ -68,23 +68,6 @@ const consent = {
     }
 };
 
-const ratings_instructions = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: `
-        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-            <p>Now you will be asked to rate some of your responses to the sentences you just filled in.</p>
-            <p>You will see some sentences and the response that you gave for each.</p>
-            <p>Your task is to rate, on a scale from 0 to 100, how likely you think another person would be to generate the exact same response as you did.</p>
-            <p>0 means "Extremely Unlikely" (no one else would say this)</p>
-            <p>100 means "Extremely Likely" (everyone else would say this)</p>
-            <p>Use the slider to select your rating and click 'Continue'.</p>
-            <p><strong>Press any key when you're ready to begin.</strong></p>
-        </div>
-    `,
-    data: {
-        trial_type: 'ratings_instructions'
-    },
-};
 
 function createRatingsTrials(baseWordResponses) {
     const ratingsTrials = [];
@@ -138,54 +121,110 @@ function createRatingsTrials(baseWordResponses) {
     return ratingsTrials;
 };
 
-// Remove the old ratings_trigger_node and replace with this:
-const ratings_section = {
+// Replace your ratings_instructions and ratings_trigger_node with this:
+
+const ratings_instructions = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: `
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <p>Now you will be asked to rate some of your responses to the sentences you just filled in.</p>
+            <p>You will see some sentences and the response that you gave for each.</p>
+            <p>Your task is to rate, on a scale from 0 to 100, how likely you think another person would be to generate the exact same response as you did.</p>
+            <p>0 means "Extremely Unlikely" (no one else would say this)</p>
+            <p>100 means "Extremely Likely" (everyone else would say this)</p>
+            <p>Use the slider to select your rating and click 'Continue'.</p>
+            <p><strong>Press any key when you're ready to begin.</strong></p>
+        </div>
+    `,
+    data: {
+        trial_type: 'ratings_instructions'
+    },
+    conditional_function: function() {
+        // Only show instructions if there are base responses to rate
+        const baseResponses = jsPsych.data.get()
+            .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
+            .values();
+        return baseResponses.length > 0;
+    }
+};
+
+// Create rating trials using timeline variables
+const rating_procedure = {
     timeline: [
         {
-            type: jsPsychHtmlKeyboardResponse,
-            stimulus: `
-                <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-                    <p>Now you will be asked to rate some of your responses to the sentences you just filled in.</p>
-                    <p>You will see some sentences and the response that you gave for each.</p>
-                    <p>Your task is to rate, on a scale from 0 to 100, how likely you think another person would be to generate the exact same response as you did.</p>
-                    <p>0 means "Extremely Unlikely" (no one else would say this)</p>
-                    <p>100 means "Extremely Likely" (everyone else would say this)</p>
-                    <p>Use the slider to select your rating and click 'Continue'.</p>
-                    <p><strong>Press any key when you're ready to begin.</strong></p>
-                </div>
-            `,
-            data: {
-                trial_type: 'ratings_instructions'
+            type: jsPsychHtmlSliderResponse,
+            stimulus: function() {
+                const data = jsPsych.timelineVariable('rating_data');
+                return `
+                    <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+                        <div class="trial-stimulus" style="font-size: 24px; margin: 30px 0;">
+                            "A <span style="font-weight: bold; color: #2563eb;">${data.word}</span> is not a <span style="font-weight: bold; color: #e74c3c;">${data.response_word}</span>"
+                        </div>
+                        <p style="font-size: 18px; margin-top: 30px;">
+                            How likely do you think another person would be to generate the exact same response?
+                        </p>
+                    </div>
+                `;
             },
-        },
-        {
-            type: jsPsychCallFunction,
-            func: function() {
-                // Get all word completion trials for the 'base' list
-                const baseWordResponses = jsPsych.data.get()
-                    .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
-                    .values();
-                
-                console.log(`Found ${baseWordResponses.length} base word responses for ratings.`);
-                
-                // Create rating trials dynamically and add them to the timeline
-                const ratingTrials = createRatingsTrials(baseWordResponses);
-                
-                // Insert rating trials into the timeline at runtime
-                ratingTrials.forEach(trial => {
-                    jsPsych.getCurrentTrial().timeline.push(trial);
-                });
+            labels: ['0 (Extremely Unlikely)', '50', '100 (Extremely Likely)'],
+            min: 0,
+            max: 100,
+            step: 1,
+            slider_start: 50,
+            require_movement: true,
+            button_label: 'Continue',
+            data: function() {
+                const data = jsPsych.timelineVariable('rating_data');
+                return {
+                    custom_trial_type: 'response_likelihood_rating',
+                    participant_id: participant_id,
+                    original_word: data.word,
+                    original_response: data.response_word,
+                    original_list_type: data.list_type,
+                    original_trial_number: data.trial_number,
+                    cat: data.cat,
+                    pos: data.pos,
+                    eng_freq: data.eng_freq,
+                    aoa_producing: data.aoa_producing
+                };
+            },
+            on_finish: function(data) {
+                console.log(`Rating for "${data.original_word}" (response "${data.original_response}"): ${data.response}`);
             }
         }
     ],
-    conditional_function: function() {
-        // Only run ratings if there are base word responses
-        const hasBaseResponses = jsPsych.data.get()
+    timeline_variables: function() {
+        // Dynamically generate timeline variables from base responses
+        const baseResponses = jsPsych.data.get()
             .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
-            .values().length > 0;
-        return hasBaseResponses;
+            .values();
+        
+        console.log(`Creating rating trials for ${baseResponses.length} base responses`);
+        
+        // Convert responses to timeline variable format
+        return baseResponses.map(response => ({
+            rating_data: {
+                word: response.word,
+                response_word: response.response_word,
+                list_type: response.list_type,
+                trial_number: response.trial_number,
+                cat: response.cat,
+                pos: response.pos,
+                eng_freq: response.eng_freq,
+                aoa_producing: response.aoa_producing
+            }
+        }));
+    },
+    conditional_function: function() {
+        // Only run if there are base responses
+        const baseResponses = jsPsych.data.get()
+            .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
+            .values();
+        return baseResponses.length > 0;
     }
 };
+
+
 
 
 
@@ -581,7 +620,8 @@ async function runExperiment() {
                     return shouldContinueToList2;
                 }
             },
-            ratings_section,  // Use the new ratings_section instead of ratings_trigger_node
+            ratings_instructions,  // Add instructions
+            rating_procedure,      // Add the rating procedure with timeline variables
             save_data,
             final_screen
         ];
