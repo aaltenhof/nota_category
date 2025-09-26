@@ -67,12 +67,12 @@ const consent = {
     }
 };
 
-const add_rating_trials = {
-    type: jsPsychCallFunction,
-    func: function() {
-        console.log("===== ADDING RATING TRIALS =====");
+const rating_section = {
+    timeline: [],
+    on_timeline_start: function() {
+        console.log("===== BUILDING RATING TRIALS =====");
         
-        // NOW we can access the completed base trials
+        
         const baseResponses = jsPsych.data.get()
             .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
             .values();
@@ -81,24 +81,9 @@ const add_rating_trials = {
         
         if (baseResponses.length === 0) {
             console.warn("No base responses found for rating section.");
-            return; // Nothing to add
+            return;
         }
         
-        // Create timeline variables for ratings
-        const ratingTimelineVars = baseResponses.map(response => ({
-            rating_data: {
-                word: response.word || '[missing]',
-                response_word: response.response_word || '[no response]',
-                list_type: response.list_type,
-                trial_number: response.trial_number,
-                cat: response.cat,
-                pos: response.pos,
-                eng_freq: response.eng_freq,
-                aoa_producing: response.aoa_producing
-            }
-        }));
-        
-        // Create the rating instructions trial
         const ratings_instructions = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: `
@@ -117,7 +102,21 @@ const add_rating_trials = {
             }
         };
         
-        // Create the rating procedure
+    
+        const ratingTimelineVars = baseResponses.map(response => ({
+            rating_data: {
+                word: response.word || '[missing]',
+                response_word: response.response_word || '[no response]',
+                list_type: response.list_type,
+                trial_number: response.trial_number,
+                cat: response.cat,
+                pos: response.pos,
+                eng_freq: response.eng_freq,
+                aoa_producing: response.aoa_producing
+            }
+        }));
+        
+       
         const rating_procedure = {
             timeline: [
                 {
@@ -156,6 +155,9 @@ const add_rating_trials = {
                             eng_freq: data.eng_freq,
                             aoa_producing: data.aoa_producing
                         };
+                    },
+                    on_finish: function(data) {
+                        console.log(`Rating completed: ${data.original_word} -> ${data.original_response}, Rating: ${data.response}`);
                     }
                 }
             ],
@@ -163,11 +165,10 @@ const add_rating_trials = {
             randomize_order: true
         };
         
-        // Now ADD these trials to the timeline at the current position
-        jsPsych.addNodeToEndOfTimeline(ratings_instructions);
-        jsPsych.addNodeToEndOfTimeline(rating_procedure);
+        this.timeline.push(ratings_instructions);
+        this.timeline.push(rating_procedure);
         
-        console.log("===== RATING TRIALS ADDED SUCCESSFULLY =====");
+        console.log(`===== RATING SECTION READY WITH ${ratingTimelineVars.length} TRIALS =====`);
     }
 };
 
@@ -526,8 +527,7 @@ async function runExperiment() {
         timeline = [
             consent,
             instructions,
-            ...baseListTrials,
-            add_rating_trials, 
+            ...baseListTrials, 
             ...list1Trials,
             checkContinueList1,
             {
@@ -548,6 +548,7 @@ async function runExperiment() {
                     return shouldContinueToList2;
                 }
             },
+            rating_section,
             save_data,
             final_screen
         ];
