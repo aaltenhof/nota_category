@@ -75,7 +75,7 @@ let baseResponsesForRating = [];
 
 const setup_rating = {
     type: jsPsychCallFunction,
-    func: function(done) {
+    func: function() {
         console.log("===== SETTING UP RATING TRIALS =====");
         
         const baseResponses = jsPsych.data.get()
@@ -83,13 +83,12 @@ const setup_rating = {
             .values();
         
         console.log(`Found ${baseResponses.length} base responses for rating.`);
-        
+
         baseResponsesForRating = jsPsych.randomization.shuffle([...baseResponses]);
         currentRatingIndex = 0;
-        
-        done();
     }
 };
+
 
 const rating_instructions = {
     type: jsPsychHtmlKeyboardResponse,
