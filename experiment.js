@@ -70,88 +70,98 @@ const consent = {
 let ratingInstructions = null;
 let ratingTrials = [];
 
-const rating_section = {
+let currentRatingIndex = 0;
+let baseResponsesForRating = [];
+
+const setup_rating = {
     type: jsPsychCallFunction,
-    async: true,
     func: function(done) {
-      console.log("===== BUILDING RATING TRIALS =====");
-  
-      const baseResponses = jsPsych.data.get()
-        .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
-        .values();
-  
-      console.log(`Found ${baseResponses.length} base responses for rating.`);
-  
-      if (baseResponses.length === 0) {
-        console.warn("No base responses found for rating section.");
+        console.log("===== SETTING UP RATING TRIALS =====");
+        
+        const baseResponses = jsPsych.data.get()
+            .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
+            .values();
+        
+        console.log(`Found ${baseResponses.length} base responses for rating.`);
+        
+        baseResponsesForRating = jsPsych.randomization.shuffle([...baseResponses]);
+        currentRatingIndex = 0;
+        
         done();
-        return;
-      }
-  
-      const ratingInstructions = {
-        type: jsPsychHtmlKeyboardResponse,
-        stimulus: `
-          <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+    }
+};
+
+const rating_instructions = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: `
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
             <p>Now you will be asked to rate some of your responses to the sentences you just filled in.</p>
             <p>You will see some sentences and the response that you gave for each.</p>
             <p>Your task is to rate, on a scale from 0 to 100, how likely you think another person would be to generate the exact same response as you did.</p>
             <p>0 = Extremely Unlikely<br>100 = Extremely Likely</p>
             <p><strong>Press any key when you're ready to begin.</strong></p>
-          </div>
-        `,
-        data: { trial_type: 'ratings_instructions' }
-      };
-  
-      const shuffledResponses = jsPsych.randomization.shuffle([...baseResponses]);
-  
-      const ratingTrials = shuffledResponses.map(response => ({
-        type: jsPsychHtmlSliderResponse,
-        stimulus: `
-          <div style="text-align: center; max-width: 800px; margin: 0 auto;">
-            <div class="trial-stimulus" style="font-size: 24px; margin: 30px 0;">
-              "A <span style="font-weight: bold; color: #2563eb;">${response.word}</span> is not a
-              <span style="font-weight: bold; color: #e74c3c;">${response.response_word}</span>"
-            </div>
-            <p>How likely do you think another person would be to generate the exact same response?</p>
-          </div>
-        `,
-        labels: ['0 (Extremely Unlikely)', '50', '100 (Extremely Likely)'],
-        min: 0,
-        max: 100,
-        step: 1,
-        slider_start: 50,
-        require_movement: true,
-        button_label: 'Continue',
-        data: {
-          custom_trial_type: 'response_likelihood_rating',
-          participant_id: participant_id,
-          original_word: response.word,
-          original_response: response.response_word,
-          original_list_type: response.list_type,
-          original_trial_number: response.trial_number
-        }
-      }));
-  
-      console.log(`===== CREATED ${ratingTrials.length} RATING TRIALS =====`);
-  
-   
-      const ratingTimeline = { timeline: [ratingInstructions, ...ratingTrials] };
-  
-      
-      jsPsych.pauseExperiment();
-      console.log("Paused main timeline. Launching rating trials...");
-  
-      jsPsych.run(ratingTimeline);
-  
-      jsPsych.onFinishCallback = function() {
-        console.log("Ratings finished, resuming main experiment.");
-        jsPsych.onFinishCallback = null; 
-        jsPsych.resumeExperiment();
-      };
-  
-      done();
+        </div>
+    `,
+    data: { trial_type: 'ratings_instructions' },
+    conditional_function: function() {
+        return baseResponsesForRating.length > 0;
     }
-  };
+};
+
+const single_rating_trial = {
+    type: jsPsychHtmlSliderResponse,
+    stimulus: function() {
+        const response = baseResponsesForRating[currentRatingIndex];
+        return `
+            <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+                <div class="trial-stimulus" style="font-size: 24px; margin: 30px 0;">
+                    "A <span style="font-weight: bold; color: #2563eb;">${response.word}</span> is not a
+                    <span style="font-weight: bold; color: #e74c3c;">${response.response_word}</span>"
+                </div>
+                <p>How likely do you think another person would be to generate the exact same response?</p>
+            </div>
+        `;
+    },
+    labels: ['0 (Extremely Unlikely)', '50', '100 (Extremely Likely)'],
+    min: 0,
+    max: 100,
+    step: 1,
+    slider_start: 50,
+    require_movement: true,
+    button_label: 'Continue',
+    data: function() {
+        const response = baseResponsesForRating[currentRatingIndex];
+        return {
+            custom_trial_type: 'response_likelihood_rating',
+            participant_id: participant_id,
+            original_word: response.word,
+            original_response: response.response_word,
+            original_list_type: response.list_type,
+            original_trial_number: response.trial_number
+        };
+    },
+    on_finish: function() {
+        currentRatingIndex++;
+    }
+};
+
+const rating_loop = {
+    timeline: [single_rating_trial],
+    loop_function: function() {
+        return currentRatingIndex < baseResponsesForRating.length;
+    },
+    conditional_function: function() {
+        return baseResponsesForRating.length > 0;
+    }
+};
+
+const rating_section = {
+    timeline: [
+        setup_rating,
+        rating_instructions,
+        rating_loop
+    ]
+};
   
   
   
