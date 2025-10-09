@@ -133,13 +133,16 @@ const rating_section = {
       }));
   
       console.log(`===== CREATED ${ratingTrials.length} RATING TRIALS =====`);
-  
-      // Now append the ratings as a mini timeline to be *run immediately*
+
       jsPsych.addNodeToEndOfTimeline({
         timeline: [ratingInstructions, ...ratingTrials]
-      }, done);
+      }, function() {
+        console.log("Rating trials added to timeline — starting ratings now.");
+        jsPsych.resumeExperiment();
+        done();
+      });  
     }
-  };
+}
   
 
 
