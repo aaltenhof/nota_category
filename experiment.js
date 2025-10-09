@@ -70,133 +70,77 @@ const consent = {
 let ratingInstructions = null;
 let ratingTrials = [];
 
-// Use a call-function to build the rating trials dynamically
-const build_rating_trials = {
-    type: jsPsychCallFunction,
-    func: function() {
-        console.log("===== BUILDING RATING TRIALS =====");
-        
-        const baseResponses = jsPsych.data.get()
-            .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
-            .values();
-            
-        console.log(`Found ${baseResponses.length} base responses for rating.`);
-        
-        if (baseResponses.length === 0) {
-            console.warn("No base responses found for rating section.");
-            return;
-        }
-        
-        // Create instructions
-        ratingInstructions = {
-            type: jsPsychHtmlKeyboardResponse,
-            stimulus: `
-                <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-                    <p>Now you will be asked to rate some of your responses to the sentences you just filled in.</p>
-                    <p>You will see some sentences and the response that you gave for each.</p>
-                    <p>Your task is to rate, on a scale from 0 to 100, how likely you think another person would be to generate the exact same response as you did.</p>
-                    <p>0 means "Extremely Unlikely" (no one else would say this)</p>
-                    <p>100 means "Extremely Likely" (everyone else would say this)</p>
-                    <p>Use the slider to select your rating and click 'Continue'.</p>
-                    <p><strong>Press any key when you're ready to begin.</strong></p>
-                </div>
-            `,
-            data: {
-                trial_type: 'ratings_instructions'
-            }
-        };
-        
-        // Shuffle base responses for randomization
-        const shuffledResponses = jsPsych.randomization.shuffle([...baseResponses]);
-        
-        // Create individual rating trials
-        ratingTrials = shuffledResponses.map(response => ({
-            type: jsPsychHtmlSliderResponse,
-            stimulus: `
-                <div style="text-align: center; max-width: 800px; margin: 0 auto;">
-                    <div class="trial-stimulus" style="font-size: 24px; margin: 30px 0;">
-                        "A <span style="font-weight: bold; color: #2563eb;">${response.word || '[missing]'}</span> is not a <span style="font-weight: bold; color: #e74c3c;">${response.response_word || '[no response]'}</span>"
-                    </div>
-                    <p style="font-size: 18px; margin-top: 30px;">
-                        How likely do you think another person would be to generate the exact same response?
-                    </p>
-                </div>
-            `,
-            labels: ['0 (Extremely Unlikely)', '50', '100 (Extremely Likely)'],
-            min: 0,
-            max: 100,
-            step: 1,
-            slider_start: 50,
-            require_movement: true,
-            button_label: 'Continue',
-            data: {
-                custom_trial_type: 'response_likelihood_rating',
-                participant_id: participant_id,
-                original_word: response.word || '',
-                original_response: response.response_word || '',
-                original_list_type: response.list_type || '',
-                original_trial_number: response.trial_number || '',
-                cat: response.cat || '',
-                pos: response.pos || '',
-                eng_freq: response.eng_freq || '',
-                aoa_producing: response.aoa_producing || ''
-            },
-            on_finish: function(data) {
-                console.log(`Rating completed: ${data.original_word} -> ${data.original_response}, Rating: ${data.response}`);
-            }
-        }));
-        
-        console.log(`===== CREATED ${ratingTrials.length} RATING TRIALS =====`);
-    },
-    data: {
-        trial_type: 'build_rating_trials'
-    }
-};
-
-// Conditional node to show instructions
-const rating_instructions_node = {
-    timeline: function() {
-        if (ratingInstructions !== null && ratingInstructions !== undefined) {
-            console.log("Adding rating instructions to timeline");
-            return [ratingInstructions];
-        }
-        console.log("No rating instructions to add");
-        return []; 
-    }
-};
-
-
-// Conditional node to show rating trials
-const rating_trials_node = {
-    timeline: function() {
-        // Return the dynamically built trials, ensuring we return an array
-        if (ratingTrials && ratingTrials.length > 0) {
-            console.log(`Adding ${ratingTrials.length} rating trials to timeline`);
-            return ratingTrials;
-        }
-        console.log("No rating trials to add");
-        return []; 
-    }
-};
-
 const rating_section = {
-    timeline: [
-      build_rating_trials,
-      {
-        type: jsPsychCallFunction,
-        func: () => {
-          if (ratingInstructions) jsPsych.addNodeToEndOfTimeline(ratingInstructions);
-          if (ratingTrials.length > 0) {
-            console.log(`Appending ${ratingTrials.length} rating trials`);
-            ratingTrials.forEach(trial => jsPsych.addNodeToEndOfTimeline(trial));
-          } else {
-            console.warn('No rating trials to append.');
-          }
-        }
+    type: jsPsychCallFunction,
+    async: true,
+    func: async function(done) {
+      console.log("===== BUILDING RATING TRIALS =====");
+  
+      const baseResponses = jsPsych.data.get()
+        .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
+        .values();
+  
+      console.log(`Found ${baseResponses.length} base responses for rating.`);
+  
+      if (baseResponses.length === 0) {
+        console.warn("No base responses found for rating section.");
+        done(); // continue to next timeline node (skip ratings)
+        return;
       }
-    ]
-}
-
+  
+      const ratingInstructions = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: `
+          <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <p>Now you will be asked to rate some of your responses to the sentences you just filled in.</p>
+            <p>You will see some sentences and the response that you gave for each.</p>
+            <p>Your task is to rate, on a scale from 0 to 100, how likely you think another person would be to generate the exact same response as you did.</p>
+            <p>0 = Extremely Unlikely<br>100 = Extremely Likely</p>
+            <p><strong>Press any key when you're ready to begin.</strong></p>
+          </div>
+        `,
+        data: { trial_type: 'ratings_instructions' }
+      };
+  
+      const shuffledResponses = jsPsych.randomization.shuffle([...baseResponses]);
+  
+      const ratingTrials = shuffledResponses.map(response => ({
+        type: jsPsychHtmlSliderResponse,
+        stimulus: `
+          <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+            <div class="trial-stimulus" style="font-size: 24px; margin: 30px 0;">
+              "A <span style="font-weight: bold; color: #2563eb;">${response.word}</span> is not a
+              <span style="font-weight: bold; color: #e74c3c;">${response.response_word}</span>"
+            </div>
+            <p>How likely do you think another person would be to generate the exact same response?</p>
+          </div>
+        `,
+        labels: ['0 (Extremely Unlikely)', '50', '100 (Extremely Likely)'],
+        min: 0,
+        max: 100,
+        step: 1,
+        slider_start: 50,
+        require_movement: true,
+        button_label: 'Continue',
+        data: {
+          custom_trial_type: 'response_likelihood_rating',
+          participant_id: participant_id,
+          original_word: response.word,
+          original_response: response.response_word,
+          original_list_type: response.list_type,
+          original_trial_number: response.trial_number
+        }
+      }));
+  
+      console.log(`===== CREATED ${ratingTrials.length} RATING TRIALS =====`);
+  
+      // Now append the ratings as a mini timeline to be *run immediately*
+      jsPsych.addNodeToEndOfTimeline({
+        timeline: [ratingInstructions, ...ratingTrials]
+      }, done);
+    }
+  };
+  
 
 
 
