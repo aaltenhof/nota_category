@@ -67,8 +67,13 @@ const consent = {
     }
 };
 
-const rating_section = {
-    timeline: function() {
+let ratingInstructions = null;
+let ratingTrials = [];
+
+// Use a call-function to build the rating trials dynamically
+const build_rating_trials = {
+    type: jsPsychCallFunction,
+    func: function() {
         console.log("===== BUILDING RATING TRIALS =====");
         
         const baseResponses = jsPsych.data.get()
@@ -79,12 +84,11 @@ const rating_section = {
         
         if (baseResponses.length === 0) {
             console.warn("No base responses found for rating section.");
-            return []; 
+            return;
         }
         
-        const ratingTimeline = [];
-        
-        const ratings_instructions = {
+        // Create instructions
+        ratingInstructions = {
             type: jsPsychHtmlKeyboardResponse,
             stimulus: `
                 <div style="max-width: 800px; margin: 0 auto; text-align: center;">
@@ -102,184 +106,83 @@ const rating_section = {
             }
         };
         
-        ratingTimeline.push(ratings_instructions);
+        // Shuffle base responses for randomization
+        const shuffledResponses = jsPsych.randomization.shuffle([...baseResponses]);
         
-        // create timeline variables for rating trials
-        const ratingTimelineVars = baseResponses.map(response => ({
-            rating_data: {
-                word: response.word || '[missing]',
-                response_word: response.response_word || '[no response]',
-                list_type: response.list_type,
-                trial_number: response.trial_number,
-                cat: response.cat,
-                pos: response.pos,
-                eng_freq: response.eng_freq,
-                aoa_producing: response.aoa_producing
+        // Create individual rating trials
+        ratingTrials = shuffledResponses.map(response => ({
+            type: jsPsychHtmlSliderResponse,
+            stimulus: `
+                <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+                    <div class="trial-stimulus" style="font-size: 24px; margin: 30px 0;">
+                        "A <span style="font-weight: bold; color: #2563eb;">${response.word || '[missing]'}</span> is not a <span style="font-weight: bold; color: #e74c3c;">${response.response_word || '[no response]'}</span>"
+                    </div>
+                    <p style="font-size: 18px; margin-top: 30px;">
+                        How likely do you think another person would be to generate the exact same response?
+                    </p>
+                </div>
+            `,
+            labels: ['0 (Extremely Unlikely)', '50', '100 (Extremely Likely)'],
+            min: 0,
+            max: 100,
+            step: 1,
+            slider_start: 50,
+            require_movement: true,
+            button_label: 'Continue',
+            data: {
+                custom_trial_type: 'response_likelihood_rating',
+                participant_id: participant_id,
+                original_word: response.word || '',
+                original_response: response.response_word || '',
+                original_list_type: response.list_type || '',
+                original_trial_number: response.trial_number || '',
+                cat: response.cat || '',
+                pos: response.pos || '',
+                eng_freq: response.eng_freq || '',
+                aoa_producing: response.aoa_producing || ''
+            },
+            on_finish: function(data) {
+                console.log(`Rating completed: ${data.original_word} -> ${data.original_response}, Rating: ${data.response}`);
             }
         }));
         
-        // create rating procedure
-        const rating_procedure = {
-            timeline: [
-                {
-                    type: jsPsychHtmlSliderResponse,
-                    stimulus: function() {
-                        const data = jsPsych.timelineVariable('rating_data');
-                        return `
-                            <div style="text-align: center; max-width: 800px; margin: 0 auto;">
-                                <div class="trial-stimulus" style="font-size: 24px; margin: 30px 0;">
-                                    "A <span style="font-weight: bold; color: #2563eb;">${data.word}</span> is not a <span style="font-weight: bold; color: #e74c3c;">${data.response_word}</span>"
-                                </div>
-                                <p style="font-size: 18px; margin-top: 30px;">
-                                    How likely do you think another person would be to generate the exact same response?
-                                </p>
-                            </div>
-                        `;
-                    },
-                    labels: ['0 (Extremely Unlikely)', '50', '100 (Extremely Likely)'],
-                    min: 0,
-                    max: 100,
-                    step: 1,
-                    slider_start: 50,
-                    require_movement: true,
-                    button_label: 'Continue',
-                    data: function() {
-                        const data = jsPsych.timelineVariable('rating_data');
-                        return {
-                            custom_trial_type: 'response_likelihood_rating',
-                            participant_id: participant_id,
-                            original_word: data.word,
-                            original_response: data.response_word,
-                            original_list_type: data.list_type,
-                            original_trial_number: data.trial_number,
-                            cat: data.cat,
-                            pos: data.pos,
-                            eng_freq: data.eng_freq,
-                            aoa_producing: data.aoa_producing
-                        };
-                    },
-                    on_finish: function(data) {
-                        console.log(`Rating completed: ${data.original_word} -> ${data.original_response}, Rating: ${data.response}`);
-                    }
-                }
-            ],
-            timeline_variables: ratingTimelineVars,
-            randomize_order: true
-        };
-        
-        ratingTimeline.push(rating_procedure);
-        
-        console.log(`===== RATING SECTION READY WITH ${ratingTimelineVars.length} TRIALS =====`);
-        
-        return ratingTimeline;
+        console.log(`===== CREATED ${ratingTrials.length} RATING TRIALS =====`);
+    },
+    data: {
+        trial_type: 'build_rating_trials'
     }
 };
 
-const rating_section_alternative = {
+// Conditional node to show instructions
+const rating_instructions_node = {
+    timeline: [ratingInstructions],
+    conditional_function: function() {
+        return ratingInstructions !== null;
+    }
+};
+
+// Conditional node to show rating trials
+const rating_trials_node = {
+    timeline: function() {
+        return ratingTrials; // Return the dynamically built trials
+    },
+    conditional_function: function() {
+        return ratingTrials.length > 0;
+    }
+};
+
+// The rating section is now composed of these parts
+const rating_section = {
     timeline: [
-        {
-            type: jsPsychHtmlKeyboardResponse,
-            stimulus: `
-                <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-                    <p>Now you will be asked to rate some of your responses to the sentences you just filled in.</p>
-                    <p>You will see some sentences and the response that you gave for each.</p>
-                    <p>Your task is to rate, on a scale from 0 to 100, how likely you think another person would be to generate the exact same response as you did.</p>
-                    <p>0 means "Extremely Unlikely" (no one else would say this)</p>
-                    <p>100 means "Extremely Likely" (everyone else would say this)</p>
-                    <p>Use the slider to select your rating and click 'Continue'.</p>
-                    <p><strong>Press any key when you're ready to begin.</strong></p>
-                </div>
-            `,
-            data: {
-                trial_type: 'ratings_instructions'
-            }
-        },
-        {
-            timeline: [
-                {
-                    type: jsPsychHtmlSliderResponse,
-                    stimulus: function() {
-                        // Get the current base response being rated
-                        const baseResponses = jsPsych.data.get()
-                            .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
-                            .values();
-                        
-                        const idx = jsPsych.timelineVariable('idx');
-                        const response = baseResponses[idx];
-                        
-                        if (!response) {
-                            return '<p>Error: No response found</p>';
-                        }
-                        
-                        return `
-                            <div style="text-align: center; max-width: 800px; margin: 0 auto;">
-                                <div class="trial-stimulus" style="font-size: 24px; margin: 30px 0;">
-                                    "A <span style="font-weight: bold; color: #2563eb;">${response.word}</span> is not a <span style="font-weight: bold; color: #e74c3c;">${response.response_word}</span>"
-                                </div>
-                                <p style="font-size: 18px; margin-top: 30px;">
-                                    How likely do you think another person would be to generate the exact same response?
-                                </p>
-                            </div>
-                        `;
-                    },
-                    labels: ['0 (Extremely Unlikely)', '50', '100 (Extremely Likely)'],
-                    min: 0,
-                    max: 100,
-                    step: 1,
-                    slider_start: 50,
-                    require_movement: true,
-                    button_label: 'Continue',
-                    data: function() {
-                        const baseResponses = jsPsych.data.get()
-                            .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
-                            .values();
-                        
-                        const idx = jsPsych.timelineVariable('idx');
-                        const response = baseResponses[idx];
-                        
-                        return {
-                            custom_trial_type: 'response_likelihood_rating',
-                            participant_id: participant_id,
-                            original_word: response.word || '',
-                            original_response: response.response_word || '',
-                            original_list_type: response.list_type || '',
-                            original_trial_number: response.trial_number || '',
-                            cat: response.cat || '',
-                            pos: response.pos || '',
-                            eng_freq: response.eng_freq || '',
-                            aoa_producing: response.aoa_producing || ''
-                        };
-                    },
-                    on_finish: function(data) {
-                        console.log(`Rating completed: ${data.original_word} -> ${data.original_response}, Rating: ${data.response}`);
-                    }
-                }
-            ],
-            timeline_variables: function() {
-                // Generate timeline variables based on number of base responses
-                const baseResponses = jsPsych.data.get()
-                    .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
-                    .values();
-                
-                // Create an array of indices
-                const vars = [];
-                for (let i = 0; i < baseResponses.length; i++) {
-                    vars.push({ idx: i });
-                }
-                
-                // Randomize the order
-                return jsPsych.randomization.shuffle(vars);
-            },
-            conditional_function: function() {
-                // Only run if there are base responses to rate
-                const baseResponses = jsPsych.data.get()
-                    .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
-                    .values();
-                return baseResponses.length > 0;
-            }
-        }
+        build_rating_trials,
+        rating_instructions_node,
+        rating_trials_node
     ]
 };
+
+
+
+
 
 
 const instructions = {
@@ -657,7 +560,7 @@ async function runExperiment() {
                     return shouldContinueToList2;
                 }
             },
-            rating_section_alternative,
+            rating_section,
             save_data,
             final_screen
         ];
