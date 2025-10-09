@@ -134,15 +134,25 @@ const rating_section = {
   
       console.log(`===== CREATED ${ratingTrials.length} RATING TRIALS =====`);
   
-      // build new timeline node and append
+   
       const ratingTimeline = { timeline: [ratingInstructions, ...ratingTrials] };
-      jsPsych.addNodeToEndOfTimeline(ratingTimeline);
-      console.log("✅ Rating trials appended to timeline (jsPsych 7.3).");
   
-      // end this node 
+      
+      jsPsych.pauseExperiment();
+      console.log("Paused main timeline. Launching rating trials...");
+  
+      jsPsych.run(ratingTimeline);
+  
+      jsPsych.onFinishCallback = function() {
+        console.log("Ratings finished, resuming main experiment.");
+        jsPsych.onFinishCallback = null; 
+        jsPsych.resumeExperiment();
+      };
+  
       done();
     }
   };
+  
   
   
   
