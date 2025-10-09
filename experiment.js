@@ -155,19 +155,27 @@ const build_rating_trials = {
 
 // Conditional node to show instructions
 const rating_instructions_node = {
-    timeline: [ratingInstructions],
-    conditional_function: function() {
-        return ratingInstructions !== null;
+    timeline: function() {
+        if (ratingInstructions !== null && ratingInstructions !== undefined) {
+            console.log("Adding rating instructions to timeline");
+            return [ratingInstructions];
+        }
+        console.log("No rating instructions to add");
+        return []; 
     }
 };
+
 
 // Conditional node to show rating trials
 const rating_trials_node = {
     timeline: function() {
-        return ratingTrials; // Return the dynamically built trials
-    },
-    conditional_function: function() {
-        return ratingTrials.length > 0;
+        // Return the dynamically built trials, ensuring we return an array
+        if (ratingTrials && ratingTrials.length > 0) {
+            console.log(`Adding ${ratingTrials.length} rating trials to timeline`);
+            return ratingTrials;
+        }
+        console.log("No rating trials to add");
+        return []; 
     }
 };
 
