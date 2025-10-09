@@ -179,15 +179,23 @@ const rating_trials_node = {
     }
 };
 
-// The rating section is now composed of these parts
 const rating_section = {
     timeline: [
-        build_rating_trials,
-        rating_instructions_node,
-        rating_trials_node
+      build_rating_trials,
+      {
+        type: jsPsychCallFunction,
+        func: () => {
+          if (ratingInstructions) jsPsych.addNodeToEndOfTimeline(ratingInstructions);
+          if (ratingTrials.length > 0) {
+            console.log(`Appending ${ratingTrials.length} rating trials`);
+            ratingTrials.forEach(trial => jsPsych.addNodeToEndOfTimeline(trial));
+          } else {
+            console.warn('No rating trials to append.');
+          }
+        }
+      }
     ]
-};
-
+}
 
 
 
