@@ -134,19 +134,16 @@ const rating_section = {
   
       console.log(`===== CREATED ${ratingTrials.length} RATING TRIALS =====`);
   
+      // build new timeline node and append
       const ratingTimeline = { timeline: [ratingInstructions, ...ratingTrials] };
+      jsPsych.addNodeToEndOfTimeline(ratingTimeline);
+      console.log("✅ Rating trials appended to timeline (jsPsych 7.3).");
   
-      // end node then start the ratings
-      jsPsych.addNodeToEndOfTimeline(ratingTimeline, function() {
-        console.log("✅ Rating trials added to timeline.");
-        done();  // formally end the build node
-        setTimeout(() => {
-          console.log("▶Starting rating trials...");
-          jsPsych.resumeExperiment();
-        }, 50);
-      });
+      // end this node 
+      done();
     }
   };
+  
   
   
   
