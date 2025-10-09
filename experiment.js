@@ -73,7 +73,7 @@ let ratingTrials = [];
 const rating_section = {
     type: jsPsychCallFunction,
     async: true,
-    func: async function(done) {
+    func: function(done) {
       console.log("===== BUILDING RATING TRIALS =====");
   
       const baseResponses = jsPsych.data.get()
@@ -84,7 +84,7 @@ const rating_section = {
   
       if (baseResponses.length === 0) {
         console.warn("No base responses found for rating section.");
-        done(); // continue to next timeline node (skip ratings)
+        done();
         return;
       }
   
@@ -133,16 +133,21 @@ const rating_section = {
       }));
   
       console.log(`===== CREATED ${ratingTrials.length} RATING TRIALS =====`);
-
-      jsPsych.addNodeToEndOfTimeline({
+  
+      // Wwap the instructions and trials together
+      const ratingTimeline = {
         timeline: [ratingInstructions, ...ratingTrials]
-      }, function() {
-        console.log("Rating trials added to timeline — starting ratings now.");
+      };
+  
+      // wait so jsPsych finishes the current call-function node
+      setTimeout(() => {
+        jsPsych.addNodeToEndOfTimeline(ratingTimeline);
+        console.log("Rating trials added to timeline, resuming experiment...");
         jsPsych.resumeExperiment();
-        done();
-      });  
+      }, 50);
     }
-}
+  };
+  
   
 
 
