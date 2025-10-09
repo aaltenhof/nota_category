@@ -68,10 +68,8 @@ const consent = {
 };
 
 const rating_section = {
-    timeline: [],
-    on_timeline_start: function() {
+    timeline: function() {
         console.log("===== BUILDING RATING TRIALS =====");
-        
         
         const baseResponses = jsPsych.data.get()
             .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
@@ -81,8 +79,10 @@ const rating_section = {
         
         if (baseResponses.length === 0) {
             console.warn("No base responses found for rating section.");
-            return;
+            return []; 
         }
+        
+        const ratingTimeline = [];
         
         const ratings_instructions = {
             type: jsPsychHtmlKeyboardResponse,
@@ -102,7 +102,9 @@ const rating_section = {
             }
         };
         
-    
+        ratingTimeline.push(ratings_instructions);
+        
+        // create timeline variables for rating trials
         const ratingTimelineVars = baseResponses.map(response => ({
             rating_data: {
                 word: response.word || '[missing]',
@@ -116,7 +118,7 @@ const rating_section = {
             }
         }));
         
-       
+        // create rating procedure
         const rating_procedure = {
             timeline: [
                 {
@@ -165,12 +167,14 @@ const rating_section = {
             randomize_order: true
         };
         
-        this.timeline.push(ratings_instructions);
-        this.timeline.push(rating_procedure);
+        ratingTimeline.push(rating_procedure);
         
         console.log(`===== RATING SECTION READY WITH ${ratingTimelineVars.length} TRIALS =====`);
+        
+        return ratingTimeline;
     }
 };
+
 
 
 const instructions = {
