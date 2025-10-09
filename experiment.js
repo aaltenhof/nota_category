@@ -76,7 +76,7 @@ let baseResponsesForRating = [];
 const setup_rating = {
     type: jsPsychCallFunction,
     func: function() {
-        console.log("===== SETTING UP RATING TRIALS =====");
+        //console.log("===== SETTING UP RATING TRIALS =====");
         
         const baseResponses = jsPsych.data.get()
             .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
@@ -121,7 +121,13 @@ const single_rating_trial = {
             </div>
         `;
     },
-    labels: ['0 (Extremely Unlikely)', '50', '100 (Extremely Likely)'],
+    labels: [
+        '0<br>Extremely<br>Unlikely', 
+        '25<br>Unlikely', 
+        '50<br>Neutral', 
+        '75<br>Likely', 
+        '100<br>Extremely<br>Likely'
+    ],
     min: 0,
     max: 100,
     step: 1,
@@ -144,6 +150,7 @@ const single_rating_trial = {
     }
 };
 
+
 const rating_loop = {
     timeline: [single_rating_trial],
     loop_function: function() {
@@ -164,12 +171,6 @@ const rating_section = {
   
   
   
-  
-  
-
-
-
-
 const instructions = {
     type: jsPsychHtmlKeyboardResponse,  
     stimulus: `
@@ -257,13 +258,11 @@ function getFilteredData() {
     const ratingTrials = allTrials.filter(trial => trial.custom_trial_type === 'response_likelihood_rating');
 
     // Create a map for quick lookup of ratings
-    // Key: `${original_word}-${original_response}` or just `original_word` if response isn't unique enough
-    // Given 'original_word' is sufficient to link to a base trial
     const ratingMap = new Map();
     ratingTrials.forEach(ratingTrial => {
-        // The original trial_number is a more robust unique identifier if there are duplicate words
+        // use original trial_numberfor unique identifier if there are duplicate words
         const key = `${ratingTrial.original_word}-${ratingTrial.original_trial_number}`; 
-        ratingMap.set(key, ratingTrial.response); // Stores the slider rating
+        ratingMap.set(key, ratingTrial.response); // stores the slider rating
     });
 
     if (wordCompletionTrials.length === 0 && ratingTrials.length === 0) {
@@ -277,9 +276,8 @@ function getFilteredData() {
         
         wordCompletionTrials.forEach((trial) => {
             
-            // Get the rating for this specific base word trial, if applicable
             let likelihoodRating = '';
-            if (trial.list_type === 'base') { // Only base words get ratings
+            if (trial.list_type === 'base') { 
                 const key = `${trial.word}-${trial.trial_number}`;
                 likelihoodRating = ratingMap.has(key) ? ratingMap.get(key) : '';
             }
@@ -292,10 +290,10 @@ function getFilteredData() {
                 trial.pos || '',
                 trial.eng_freq || '',
                 trial.aoa_producing || '',
-                trial.list_type || '', // Use list_type instead of list_number
+                trial.list_type || '', 
                 trial.response_word || '',
                 Math.round(trial.rt || 0),
-                likelihoodRating // New column for rating
+                likelihoodRating 
             ];
             rows.push(row);
         });
