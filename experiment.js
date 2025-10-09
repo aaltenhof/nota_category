@@ -175,6 +175,111 @@ const rating_section = {
     }
 };
 
+const rating_section_alternative = {
+    timeline: [
+        {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: `
+                <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                    <p>Now you will be asked to rate some of your responses to the sentences you just filled in.</p>
+                    <p>You will see some sentences and the response that you gave for each.</p>
+                    <p>Your task is to rate, on a scale from 0 to 100, how likely you think another person would be to generate the exact same response as you did.</p>
+                    <p>0 means "Extremely Unlikely" (no one else would say this)</p>
+                    <p>100 means "Extremely Likely" (everyone else would say this)</p>
+                    <p>Use the slider to select your rating and click 'Continue'.</p>
+                    <p><strong>Press any key when you're ready to begin.</strong></p>
+                </div>
+            `,
+            data: {
+                trial_type: 'ratings_instructions'
+            }
+        },
+        {
+            timeline: [
+                {
+                    type: jsPsychHtmlSliderResponse,
+                    stimulus: function() {
+                        // Get the current base response being rated
+                        const baseResponses = jsPsych.data.get()
+                            .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
+                            .values();
+                        
+                        const idx = jsPsych.timelineVariable('idx');
+                        const response = baseResponses[idx];
+                        
+                        if (!response) {
+                            return '<p>Error: No response found</p>';
+                        }
+                        
+                        return `
+                            <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+                                <div class="trial-stimulus" style="font-size: 24px; margin: 30px 0;">
+                                    "A <span style="font-weight: bold; color: #2563eb;">${response.word}</span> is not a <span style="font-weight: bold; color: #e74c3c;">${response.response_word}</span>"
+                                </div>
+                                <p style="font-size: 18px; margin-top: 30px;">
+                                    How likely do you think another person would be to generate the exact same response?
+                                </p>
+                            </div>
+                        `;
+                    },
+                    labels: ['0 (Extremely Unlikely)', '50', '100 (Extremely Likely)'],
+                    min: 0,
+                    max: 100,
+                    step: 1,
+                    slider_start: 50,
+                    require_movement: true,
+                    button_label: 'Continue',
+                    data: function() {
+                        const baseResponses = jsPsych.data.get()
+                            .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
+                            .values();
+                        
+                        const idx = jsPsych.timelineVariable('idx');
+                        const response = baseResponses[idx];
+                        
+                        return {
+                            custom_trial_type: 'response_likelihood_rating',
+                            participant_id: participant_id,
+                            original_word: response.word || '',
+                            original_response: response.response_word || '',
+                            original_list_type: response.list_type || '',
+                            original_trial_number: response.trial_number || '',
+                            cat: response.cat || '',
+                            pos: response.pos || '',
+                            eng_freq: response.eng_freq || '',
+                            aoa_producing: response.aoa_producing || ''
+                        };
+                    },
+                    on_finish: function(data) {
+                        console.log(`Rating completed: ${data.original_word} -> ${data.original_response}, Rating: ${data.response}`);
+                    }
+                }
+            ],
+            timeline_variables: function() {
+                // Generate timeline variables based on number of base responses
+                const baseResponses = jsPsych.data.get()
+                    .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
+                    .values();
+                
+                // Create an array of indices
+                const vars = [];
+                for (let i = 0; i < baseResponses.length; i++) {
+                    vars.push({ idx: i });
+                }
+                
+                // Randomize the order
+                return jsPsych.randomization.shuffle(vars);
+            },
+            conditional_function: function() {
+                // Only run if there are base responses to rate
+                const baseResponses = jsPsych.data.get()
+                    .filter({ custom_trial_type: 'word_completion_single', list_type: 'base' })
+                    .values();
+                return baseResponses.length > 0;
+            }
+        }
+    ]
+};
 
 
 const instructions = {
@@ -552,7 +657,7 @@ async function runExperiment() {
                     return shouldContinueToList2;
                 }
             },
-            rating_section,
+            rating_section_alternative,
             save_data,
             final_screen
         ];
