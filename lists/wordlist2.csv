@@ -1,74 +1,74 @@
 word,cat,pos,sentence_frame_before,sentence_frame_after,clarification,eng_freq,aoa_producing,list_type
-Cake,food_drink,noun,, is not ,,,,2
-on,locations,adjective,To be , is not to be ,,,,2
-Grandma,people,noun,A , is not a ,,,,2
-duck,animals,noun,A , is not a ,,,,2
-orange,descriptive_words,adjective,To be , is not to be ,,,,2
-coat,clothing,noun,A , is not a ,,,,2
-backyard,outside,noun,A , is not a ,,,,2
-Talking,action_words,verb,, is not ,,,,2
-turtle,animals,noun,A , is not a ,,,,2
-new,descriptive_words,adjective,To be , is not to be ,,,,2
-car,vehicles,noun,A , is not a ,,,,2
-beach,places,noun,A , is not a ,,,,2
-Wishing,action_words,verb,, is not ,,,,2
-Sliding,action_words,verb,, is not ,,,,2
-French fries,food_drink,noun,, are not ,,,,2
-People,people,noun,, are not ,,,,2
-nurse,people,noun,A , is not a ,,,,2
-garage,furniture_rooms,noun,A , is not a ,,,,2
-zoo,places,noun,A , is not a ,,,,2
-soft,descriptive_words,adjective,To be , is not to be ,,,,2
-story,toys,noun,A , is not a ,,,,2
-sofa,furniture_rooms,noun,A , is not a ,,,,2
-aunt,people,noun,An , is not a ,,,,2
-Hiding,action_words,verb,, is not ,,,,2
-on top of,locations,adjective,To be , is not to be ,,,,2
-Tonight,time_words,noun,, is not ,,,,2
-windy,descriptive_words,adjective,To be , is not to be ,,,,2
-street,outside,noun,A , is not a ,,,,2
-hurt,descriptive_words,adjective,To be , is not to be ,,,,2
-bath,games_routines,noun,A , is not a ,,,,2
-picture,household,noun,A , is not a ,,,,2
-nail,household,noun,A , is not a ,,,,2
-babysitter,people,noun,A , is not a ,,,,2
-Pulling,action_words,verb,, is not ,,,,2
-Tasting,action_words,verb,, is not ,,,,2
-stove,furniture_rooms,noun,A , is not a ,,,,2
-Gloves,clothing,noun,, are not ,,,,2
-snack,games_routines,noun,A , is not a ,,,,2
-star,outside,noun,A , is not a ,,,,2
-fast,descriptive_words,adjective,To be , is not to be ,,,,2
-Dropping,action_words,verb,, is not ,,,,2
-cracker,food_drink,noun,A , is not a ,,,,2
-brush,household,noun,A , is not a ,,,,2
-Butter,food_drink,noun,, is not ,,,,2
-happy,descriptive_words,adjective,To be , is not to be ,,,,2
-deer,animals,noun,A , is not a ,,,,2
-Drying,action_words,verb,, is not ,,,,2
-Drawing,action_words,verb,, is not ,,,,2
-Riding,action_words,verb,, is not ,,,,2
-elephant,animals,noun,An , is not a ,,,,2
-nap,games_routines,noun,A , is not a ,,,,2
-fine,descriptive_words,adjective,To be , is not to be ,,,,2
-balloon,toys,noun,A , is not a ,,,,2
-shower,furniture_rooms,noun,A , is not a ,,,,2
-off,locations,adjective,To be , is not to be ,,,,2
-green,descriptive_words,adjective,To be , is not to be ,,,,2
-Buying,action_words,verb,, is not ,,,,2
-broken,descriptive_words,adjective,To be , is not to be ,,,,2
-plant,household,noun,A , is not a ,,,,2
-lamb,animals,noun,A , is not a ,,,,2
-Later,time_words,adverb,, is not ,,,,2
-airplane,vehicles,noun,An , is not a ,,,,2
-room,furniture_rooms,noun,A , is not a ,,,,2
-girl,people,noun,A , is not a ,,,,2
-Building,action_words,verb,, is not ,,,,2
-strawberry,food_drink,noun,A , is not a ,,,,2
-Blowing,action_words,verb,, is not ,,,,2
-penguin,animals,noun,A , is not a ,,,,2
-popsicle,food_drink,noun,A , is not a ,,,,2
-Seeing,action_words,verb,, is not ,,,,2
-Before,time_words,adverb,, is not ,,,,2
-TV,furniture_rooms,noun,A , is not a ,,,,2
-bat,toys,noun,A , is not a , (baseball) ,,,2
+naughty,descriptive_words,adjective,To be , is not to be ,,10.25,>30,2
+Dinner,games_routines,noun,, is not ,,202.67,25,2
+tiny,descriptive_words,adjective,To be , is not to be ,,32.22,>30,2
+Listening,action_words,verb,, is not ,,62.84,28,2
+blanket,household,noun,A , is not a ,,12.98,22,2
+Tuna,food_drink,noun,, is not ,,8.0,>30,2
+bottle,household,noun,A , is not a ,,50.75,21,2
+paper,household,noun,A , is not a ,,103.35,23,2
+Gum,food_drink,noun,, is not ,,13.39,28,2
+Salt,food_drink,noun,, is not ,,19.51,28,2
+cookie,food_drink,noun,A , is not a ,,16.71,19,2
+necklace,clothing,noun,A , is not a ,,9.75,28,2
+empty,descriptive_words,adjective,To be , is not to be ,,47.24,27,2
+Finding,action_words,verb,, is not ,,37.94,27,2
+toe,body_parts,noun,A , is not a ,,12.69,22,2
+glass,household,noun,A , is not a ,(vessel),60.71,27,2
+Cake,food_drink,noun,, is not ,,45.06,23,2
+light,household,noun,A , is not a ,,165.2,22,2
+Pajamas,clothing,noun,, are not ,,5.82,23,2
+sticky,descriptive_words,adjective,To be , is not to be ,,5.73,28,2
+inside,locations,adjective,To be , is not to be ,,211.27,25,2
+park,places,noun,A , is not a ,,72.12,23,2
+zipper,clothing,noun,A , is not a ,,2.82,26,2
+girl,people,noun,A , is not a ,,557.12,25,2
+shower,furniture_rooms,noun,A , is not a ,,41.12,25,2
+door,furniture_rooms,noun,A , is not a ,,292.06,22,2
+Putting,action_words,verb,, is not ,,67.98,28,2
+Throwing,action_words,verb,, is not ,,29.18,25,2
+gas station,places,noun,A , is not a ,,,28,2
+People,people,noun,, are not ,,1102.98,28,2
+refrigerator,furniture_rooms,noun,A , is not a ,,8.37,26,2
+Work ,places,noun,, is not a , (job),798.02,25,2
+drink ,food_drink,noun,A , is not a ,,247.39,23,2
+back,locations,adjective,To be , is not to be ,,2009.16,28,2
+morning,time_words,noun,A , is not a ,,439.0,27,2
+Tights,clothing,noun,, are not ,,2.65,>30,2
+roof,outside,noun,A , is not a ,,35.65,>30,2
+chicken ,animals,noun,A , is not a ,(animal) ,61.73,23,2
+car,vehicles,noun,A , is not a ,,483.06,18,2
+toliet,furniture_rooms,noun,A , is not a ,,28.9,,2
+banana,food_drink,noun,A , is not a ,,10.73,16,2
+Having,action_words,verb,, is not ,,289.25,27,2
+mouth,body_parts,noun,A , is not a ,,104.41,21,2
+sneaker,clothing,noun,A , is not a ,,0.69,>30,2
+bath,games_routines,noun,A , is not a ,,31.12,19,2
+toy ,toys,noun,A , is not a ,,16.84,23,2
+Pulling,action_words,verb,, is not ,,27.14,27,2
+brother,people,noun,A , is not a ,,283.94,28,2
+present,toys,noun,A , is not a ,,89.45,26,2
+here,locations,adjective,To be , is not to be ,,4525.25,26,2
+lamp,household,noun,A , is not a ,,12.88,28,2
+spoon,household,noun,A , is not a ,,7.61,21,2
+pencil,toys,noun,A , is not ,,9.86,28,2
+Vitamins,food_drink,noun,, are not ,,3.55,28,2
+Tasting,action_words,verb,, is not ,,1.84,28,2
+Yesterday,time_words,noun,, is not ,,96.76,>30,2
+bear,animals,noun,A , is not a ,,57.41,21,2
+Scissors,household,noun,, are not ,,6.69,27,2
+blue,descriptive_words,adjective,To be , is not to be ,,102.39,23,2
+Dropping,action_words,verb,, is not ,,16.2,27,2
+stove,furniture_rooms,noun,A , is not a ,,7.59,28,2
+pig,animals,noun,A , is not a ,,39.14,22,2
+dish,household,noun,A , is not a ,,11.45,28,2
+Pouring,action_words,verb,, is not ,,5.92,28,2
+belt,clothing,noun,A , is not a ,,24.35,28,2
+crib,furniture_rooms,noun,A , is not a ,,6.2,26,2
+fast,descriptive_words,adjective,To be , is not to be ,,137.45,26,2
+high,descriptive_words,adjective,To be , is not to be ,,195.0,28,2
+stuck,descriptive_words,adjective,To be , is not to be ,,66.65,27,2
+brush,household,noun,A , is not a ,,14.16,23,2
+Money,household,noun,, is not ,,640.76,25,2
+Beans,food_drink,noun,, are not ,,14.43,26,2
+basket,household,noun,A , is not a ,,13.18,27,2
