@@ -110,11 +110,14 @@ const rating_instructions = {
 const single_rating_trial = {
     type: jsPsychHtmlSliderResponse,
     stimulus: function() {
+        const before = item.sentence_frame_before || '';
+        const after = item.sentence_frame_after || '';
+        const clarification = item.clarification ? ` ${item.clarification}` : '';
         const response = baseResponsesForRating[currentRatingIndex];
         return `
             <div style="text-align: center; max-width: 800px; margin: 0 auto;">
                 <div class="trial-stimulus" style="font-size: 24px; margin: 30px 0;">
-                    "A <span style="font-weight: bold; color: #2563eb;">${response.word}</span> is not a
+                    ${before}<span style="font-weight: bold; color: #2563eb;">${response.word}</span>${clarification}${after}
                     <span style="font-weight: bold; color: #e74c3c;">${response.response_word}</span>"
                 </div>
                 <p>How likely do you think another person would be to generate the exact same response?</p>
@@ -183,6 +186,7 @@ const instructions = {
             <p>Your task is to complete the sentence by filling in the blank with a word or phrase that makes sense.</p>
             <p>After typing your response, press Enter to continue to the next word.</p>
             <p>There are no right or wrong answers - we're interested in what comes to mind for you.</p>
+            <p>After you complete this task, you'll be asked to rate some of your responses.</p>
             <p><strong>Press any key when you're ready to begin.</strong></p>
         </div>
     `,
@@ -442,9 +446,9 @@ const list3CompleteMessage = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `
         <div style="text-align: center; max-width: 600px; margin: 0 auto;">
-            <h2>You're all done! </h2>
-            <p>Thank you for your participation!</p>
-            <p><em>Press any key to continue to get your completion code.</em></p>
+            <h2>You're all done generating words! </h2>
+            <p>Now you'll move on the the next task</p>
+            <p><em>Press any key to continue.</em></p>
         </div>
     `,
     data: {

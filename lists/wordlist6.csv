@@ -70,5 +70,5 @@ strawberry,food_drink,noun,A , is not a ,,5.53,23,6
 Cereal,food_drink,noun,, is not ,,6.35,23,6
 Hearing,action_words,verb,, is not ,,44.73,28,6
 bicycle,vehicles,noun,A , is not a ,,6.61,23,6
-tape,household,noun,A , is not a ,,68.84,27,6
+tape,household,noun,A piece of , is not a ,,68.84,27,6
 melon,food_drink,noun,A , is not a ,,4.27,28,6
