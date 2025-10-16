@@ -110,10 +110,10 @@ const rating_instructions = {
 const single_rating_trial = {
     type: jsPsychHtmlSliderResponse,
     stimulus: function() {
-        const before = item.sentence_frame_before || '';
-        const after = item.sentence_frame_after || '';
-        const clarification = item.clarification ? ` ${item.clarification}` : '';
         const response = baseResponsesForRating[currentRatingIndex];
+        const before = response.sentence_frame_before || '';
+        const after = response.sentence_frame_after || '';
+        const clarification = response.clarification ? ` ${response.clarification}` : ''
         return `
             <div style="text-align: center; max-width: 800px; margin: 0 auto;">
                 <div class="trial-stimulus" style="font-size: 24px; margin: 30px 0;">
@@ -241,6 +241,9 @@ function createTrials(wordsData, listType) {
                 eng_freq: item.eng_freq,
                 aoa_producing: item.aoa_producing,
                 list_type: listType,
+                sentence_frame_before: item.sentence_frame_before || '',
+                sentence_frame_after: item.sentence_frame_after || '',
+                clarification: item.clarification || ''
             },
             on_finish: function(data) {
                 data.response_word = data.response ? data.response.response : '';
