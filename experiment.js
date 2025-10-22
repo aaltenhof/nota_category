@@ -1,5 +1,19 @@
-// generate random participant 
-let participant_id = `participant${Math.floor(Math.random() * 999) + 1}`;
+
+function getUrlParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+const workerId = getUrlParam('workerId');
+
+let participant_id;
+if (workerId) {
+    participant_id = workerId;
+    console.log('Using MTurk Worker ID:', participant_id);
+} else {
+    participant_id = `participant${Math.floor(Math.random() * 999) + 1}`;
+    console.log('No worker ID found, using random ID:', participant_id);
+}
 
 // function to generate a random string for the completion code 
 function generateRandomString(length) {
@@ -475,13 +489,11 @@ var final_screen = {
         return `
             <div style="text-align: center; max-width: 600px; margin: 0 auto;">
                 <h2>Thank you!</h2>
-                <p>You have completed the experiment! </p>
-                <p>Your completion code is: <strong style="font-size: 18px; color: #2563eb;">${completion_code}</strong></p>
-                <p><em>Click the button below to return to SONA.</em></p>
+                <p>You have completed the experiment! Now you will complete a brief survey.</p>
             </div>
         `;
     },
-    choices: ['Finish'],
+    choices: ['Continue'],
     data: {
         trial_type: 'final',
         completion_code: completion_code,
@@ -489,7 +501,7 @@ var final_screen = {
     },  
     on_finish: function() {
         setTimeout(function() {
-            window.location.href = `https://uwmadison.sona-systems.com/default.aspx?logout=Y`;
+            window.location.href = `https://uwmadison.co1.qualtrics.com/jfe/form/SV_4MJACPV9w7cHSHY`;
         }, 100);
     }
 };
