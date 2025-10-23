@@ -30,7 +30,7 @@ const completion_code = generateRandomString(3) + 'zvz' + generateRandomString(3
 const filename = `${participant_id}.csv`;
 
 const jsPsych = initJsPsych({
-    show_progress_bar: false,
+    show_progress_bar: true,
     on_finish: function() {
         console.log("Experiment finished!");
     }
