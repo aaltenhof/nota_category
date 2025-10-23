@@ -404,7 +404,7 @@ const checkContinueList1 = {
             <div style="text-align: center; max-width: 600px; margin: 0 auto;">
                 <h2>You've completed this section!</h2>
                 <p>Would you like to do more words?</p>
-                <p><em>The next section will take about the same amount of time as the one you just completed.</em></p>
+                <p><em>The next section will take about the same amount of time as the one you just completed. You will receive an additional 0.75 cents for doing more words!</em></p>
             </div>
         `;
     },
@@ -435,7 +435,7 @@ const checkContinueList2 = {
             <div style="text-align: center; max-width: 600px; margin: 0 auto;">
                 <h2>You've completed this section!</h2>
                 <p>Would you like to do more words?</p>
-                <p><em>The next section will take about the same amount of time as the one you just completed.</em></p>
+                <p><em>The next section will take about the same amount of time as the one you just completed.  You will receive an additional 0.75 cents for completing more words!</em></p>
             </div>
         `;
     },
