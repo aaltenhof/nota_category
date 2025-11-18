@@ -396,28 +396,6 @@ async function loadWordsForCondition(condition) {
     }
 }
 
-const checkContinueList1 = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: function() {
-        completedLists = 1; 
-        const listsRemaining = 3 - completedLists;
-        return `
-            <div style="text-align: center; max-width: 600px; margin: 0 auto;">
-                <h2>You've completed this section!</h2>
-                <p>Would you like to do more words?</p>
-                <p><em>The next section will take about the same amount of time as the one you just completed. You will receive an additional 75 cents for doing more words!</em></p>
-            </div>
-        `;
-    },
-    choices: ['Yes, I\'ll do more words!', 'No, I\'m done'],
-    data: {
-        trial_type: 'continue_choice',
-        list_just_completed: 1
-    },
-    on_finish: function(data) {
-        shouldContinueToList2 = (data.response === 0); 
-    }
-};
 
 
 
