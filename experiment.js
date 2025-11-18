@@ -255,6 +255,7 @@ function createTrials(wordsData, listType) {
                 eng_freq: item.eng_freq,
                 aoa_producing: item.aoa_producing,
                 list_type: listType,
+                list_num: listType,
                 sentence_frame_before: item.sentence_frame_before || '',
                 sentence_frame_after: item.sentence_frame_after || '',
                 clarification: item.clarification || ''
@@ -418,68 +419,7 @@ const checkContinueList1 = {
     }
 };
 
-// conditional node for List 2 trials
-const list2_conditional_node = {
-    timeline: [], 
-    conditional_function: function(){
-        return shouldContinueToList2; 
-    }
-};
 
-const checkContinueList2 = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: function() {
-        completedLists = 2; 
-        const listsRemaining = 3 - completedLists;
-        return `
-            <div style="text-align: center; max-width: 600px; margin: 0 auto;">
-                <h2>You've completed this section!</h2>
-                <p>Would you like to do more words?</p>
-                <p><em>The next section will take about the same amount of time as the one you just completed.  You will receive an additional 75 cents for completing more words!</em></p>
-            </div>
-        `;
-    },
-    choices: ['Yes, I\'ll do more words!', 'No, I\'m done'],
-    data: {
-        trial_type: 'continue_choice',
-        list_just_completed: 2
-    },
-    conditional_function: function() {
-        return shouldContinueToList2;
-    },
-    on_finish: function(data) {
-        shouldContinueToList3 = (data.response === 0);
-    }
-};
-
-const list3_conditional_node = {
-    timeline: [], 
-    conditional_function: function(){
-        return shouldContinueToList3; 
-    }
-};
-
-const list3CompleteMessage = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: `
-        <div style="text-align: center; max-width: 600px; margin: 0 auto;">
-            <h2>You're all done generating words! </h2>
-            <p>Now you'll move on the the next task</p>
-            <p><em>Press any key to continue.</em></p>
-        </div>
-    `,
-    data: {
-        trial_type: 'list3_complete'
-    },
-    conditional_function: function() {
-        return shouldContinueToList3;
-    },
-    on_finish: function() {
-        if (shouldContinueToList3) {
-            completedLists = 3;
-        }
-    }
-};
 
 var final_screen = {
     type: jsPsychHtmlButtonResponse,
@@ -528,40 +468,13 @@ async function runExperiment() {
             throw new Error(`No words loaded for condition ${condition2} (List 2)`);
         }
         list2Trials = createTrials(wordsData2, 2);
-        console.log(`Created ${list2Trials.length} trials for list 2`);
-        
-        const condition3 = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
-        const wordsData3 = await loadWordsForCondition(condition3);
-        if (wordsData3.length === 0) {
-            throw new Error(`No words loaded for condition ${condition3} (List 3)`);
-        }
-        list3Trials = createTrials(wordsData3, 3);
-        console.log(`Created ${list3Trials.length} trials for list 3`);
-        
+
         timeline = [
             consent,
             instructions,
             ...baseListTrials, 
             ...list1Trials,
-            checkContinueList1,
-            {
-                timeline: [
-                    ...list2Trials,
-                    checkContinueList2,
-                    {
-                        timeline: [
-                            ...list3Trials,
-                            list3CompleteMessage
-                        ],
-                        conditional_function: function() {
-                            return shouldContinueToList3;
-                        }
-                    }
-                ],
-                conditional_function: function() {
-                    return shouldContinueToList2;
-                }
-            },
+            ...list2Trials,
             rating_section,
             save_data,
             final_screen
