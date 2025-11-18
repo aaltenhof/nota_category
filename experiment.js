@@ -4,16 +4,21 @@ function getUrlParam(param) {
     return urlParams.get(param);
 }
 
+const sonaId = getUrlParam('sona_id'); 
 const workerId = getUrlParam('workerId');
 
 let participant_id;
-if (workerId) {
+if (sonaId) {
+    participant_id = sonaId;
+    console.log('Using SONA ID:', participant_id);
+} else if (workerId) {
     participant_id = workerId;
     console.log('Using MTurk Worker ID:', participant_id);
 } else {
     participant_id = `participant${Math.floor(Math.random() * 999) + 1}`;
     console.log('No worker ID found, using random ID:', participant_id);
 }
+
 
 // function to generate a random string for the completion code 
 function generateRandomString(length) {
@@ -402,8 +407,6 @@ async function loadWordsForCondition(condition) {
 var final_screen = {
     type: jsPsychHtmlButtonResponse,
     stimulus: function() {
-        const totalLists = completedLists; 
-        
         return `
             <div style="text-align: center; max-width: 600px; margin: 0 auto;">
                 <h2>Thank you!</h2>
@@ -419,7 +422,14 @@ var final_screen = {
     },  
     on_finish: function() {
         setTimeout(function() {
-            window.location.href = `https://uwmadison.co1.qualtrics.com/jfe/form/SV_4MJACPV9w7cHSHY`;
+            // Pass sona_id to Qualtrics as a URL parameter
+            let qualtricsUrl = `https://uwmadison.co1.qualtrics.com/jfe/form/SV_4MJACPV9w7cHSHY`;
+            
+            if (sonaId) {
+                qualtricsUrl += `?sona_id=${sonaId}`;
+            }
+            
+            window.location.href = qualtricsUrl;
         }, 100);
     }
 };
