@@ -450,7 +450,7 @@ async function runExperiment() {
             throw new Error(`No words loaded for condition ${condition1} (List 1)`);
         }
         list1Trials = createTrials(wordsData1, 1);
-        console.log(`Created ${list1Trials.length} trials for list 1`);
+        console.log(`Created ${list1Trials.length} trials for list ${condition1}`);
         
         //const condition2 = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
         const condition2 = 1;
@@ -459,6 +459,7 @@ async function runExperiment() {
             throw new Error(`No words loaded for condition ${condition2} (List 2)`);
         }
         list2Trials = createTrials(wordsData2, 2);
+        console.log(`Created ${list2Trials.length} trials for list ${condition2}`);
 
         timeline = [
             consent,
