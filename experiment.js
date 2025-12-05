@@ -444,7 +444,7 @@ async function runExperiment() {
 
 
         //const condition1 = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
-        const condition1 = 4;
+        const condition1 = 2;
         const wordsData1 = await loadWordsForCondition(condition1);
         if (wordsData1.length === 0) {
             throw new Error(`No words loaded for condition ${condition1} (List 1)`);
@@ -453,7 +453,7 @@ async function runExperiment() {
         console.log(`Created ${list1Trials.length} trials for list ${condition1}`);
         
         //const condition2 = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
-        const condition2 = 5;
+        const condition2 = 3;
         const wordsData2 = await loadWordsForCondition(condition2);
         if (wordsData2.length === 0) {
             throw new Error(`No words loaded for condition ${condition2} (List 2)`);
