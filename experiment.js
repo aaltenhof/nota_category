@@ -444,7 +444,7 @@ async function runExperiment() {
 
 
         //const condition1 = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
-        const condition1 = 3; // word list 4
+        const condition1 = 4; // word list 5
         const wordsData1 = await loadWordsForCondition(condition1);
         if (wordsData1.length === 0) {
             throw new Error(`No words loaded for condition ${condition1} (List 1)`);
@@ -453,7 +453,7 @@ async function runExperiment() {
         console.log(`Created ${list1Trials.length} trials for list ${condition1}`);
         
         //const condition2 = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
-        const condition2 = 6; // word list 7
+        const condition2 = 1; // word list 2
         const wordsData2 = await loadWordsForCondition(condition2);
         if (wordsData2.length === 0) {
             throw new Error(`No words loaded for condition ${condition2} (List 2)`);
@@ -461,12 +461,22 @@ async function runExperiment() {
         list2Trials = createTrials(wordsData2, 2);
         console.log(`Created ${list2Trials.length} trials for list ${condition2}`);
 
+        //const condition3 = await jsPsychPipe.getCondition("iEGcC0iYDj4r");
+        const condition3 = 2; // word list 3
+        const wordsData3 = await loadWordsForCondition(condition3);
+        if (wordsData3.length === 0) {
+            throw new Error(`No words loaded for condition ${condition3} (List 3)`);
+        }
+        list3Trials = createTrials(wordsData3, 3);
+        console.log(`Created ${list3Trials.length} trials for list ${condition3}`);
+
         timeline = [
             consent,
             instructions,
             ...baseListTrials, 
             ...list1Trials,
             ...list2Trials,
+            ...list3Trials,
             rating_section,
             save_data,
             final_screen
