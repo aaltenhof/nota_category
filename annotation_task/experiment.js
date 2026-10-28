@@ -77,8 +77,8 @@ function followupFor(tag, pos) {
 // Answers that are claims about the target rather than alternatives to it. They get no group or tag;
 // `key` is saved in `excluded`, using the same labels as the phrase annotation (prescriptive / descriptive).
 const BINS = [
-    { key: 'prescriptive', title: 'Normative claim',  subtitle: 'a judgment or rule about the target (scissors → toy, stairs → safe)' },
-    { key: 'descriptive',  title: 'Factual claim',    subtitle: 'a category or property the target lacks (bubbles → solid, ant → mammal)' },
+    { key: 'prescriptive', title: 'Normative claim',  subtitle: 'a judgment or rule about the target' },
+    { key: 'descriptive',  title: 'Factual claim',    subtitle: 'a category or property the target lacks' },
     { key: 'doesnt_fit',   title: "Doesn't fit",      subtitle: "unclear or doesn't make sense" }
 ];
 
@@ -468,11 +468,6 @@ function buildSortHTML(item) {
     return `
         <div id="sort-task">
             <div class="frame">${buildFrameHTML(item)}</div>
-            <p class="task-hint">
-                Sort the answers into groups by <strong>how they differ from <span class="word-highlight">${escapeHTML(item.target_word)}</span></strong>.
-                Name each group by completing "They differ in&hellip;", then pick a relationship type for each answer. Answers that aren't contrasts go in the bins on the left.
-                The number on each answer is how many people gave it.
-            </p>
 
             <div id="sort-columns">
                 <div id="left-column">
@@ -508,7 +503,7 @@ function buildGroupHTML(groupId, target) {
         <div class="drop-zone group-box" data-zone="${groupId}">
             <div class="group-header">
                 <div style="flex:1;">
-                    <div class="group-prompt">They differ from <strong>${escapeHTML(target)}</strong> in&hellip;</div>
+                    <div class="group-prompt">Dimension</div>
                     <input class="group-label" type="text" maxlength="100" placeholder="e.g. time, how welcome it is" autocomplete="off">
                     <select class="group-setall" title="Give every answer in this group the same relationship type">
                         <option value="">Set all answers to&hellip;</option>
