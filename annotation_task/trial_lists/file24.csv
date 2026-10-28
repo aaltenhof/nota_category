@@ -1,0 +1,20 @@
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
+24,away,adj,locations,To be , is not to be ,,183,11,6,here,97,close,38,near,20,home,9,there,8,present,4,,,,,,,,,,,,
+24,bad,adj,descriptive_words,To be , is not to be ,,643,27,5,good,593,evil,12,nice,5,kind,4,mean,4,,,,,,,,,,,,,,
+24,nice,adj,descriptive_words,To be , is not to be ,,188,10,4,mean,163,rude,11,bad,4,kind,3,,,,,,,,,,,,,,,,
+24,Night,noun,time_words,, is not ,,187,6,2,day,165,morning,17,,,,,,,,,,,,,,,,,,,,
+24,box,noun,household,A , is not a ,,177,68,12,circle,38,bag,14,container,8,shoe,7,ball,6,bin,5,bowl,5,home,5,sphere,5,envelope,4,crate,3,drawer,3
+24,Soup,noun,food_drink,, is not ,,135,44,12,cereal,20,salad,16,solid,16,hot,11,bread,6,water,6,drink,5,sandwich,5,pasta,4,cracker,3,food,3,stew,3
+24,Cheese,noun,food_drink,, is not ,,153,53,12,milk,30,meat,19,fruit,13,bread,12,cracker,7,butter,5,ham,5,food,4,water,4,dairy,3,green,3,vegetable,3
+24,cookie,noun,food_drink,A , is not a ,,178,46,12,cake,70,brownie,22,fruit,13,cupcake,7,vegetable,5,carrot,4,milk,4,salad,4,chip,3,food,3,meal,3,monster,3
+24,flag,noun,outside,A , is not a ,,177,77,11,pole,29,blanket,15,sign,11,banner,9,poster,5,shirt,5,toy,5,chair,4,paper,4,book,3,nation,3,,
+24,mouse,noun,animals,A , is not a ,,181,34,8,rat,90,cat,26,dog,9,elephant,6,horse,5,house,3,lion,3,mouse,3,,,,,,,,
+24,leg,noun,body_parts,A , is not a ,,186,21,4,arm,136,foot,18,hand,11,toe,4,,,,,,,,,,,,,,,,
+24,Green beans,noun,food_drink,, are not ,,141,50,12,fruit,35,black bean,13,pea,8,broccoli,7,candy,5,carrot,5,asparagus,4,potato,4,bean,3,blue,3,corn,3,meat,3
+24,aunt,noun,people,An , is not a ,,191,15,3,uncle,168,mom,4,grandma,3,,,,,,,,,,,,,,,,,,
+24,knife,noun,household,A , is not a ,,177,27,4,fork,74,spoon,55,toy,16,gun,5,,,,,,,,,,,,,,,,
+24,Sauce,noun,food_drink,, is not ,,96,49,8,solid,15,dressing,7,food,6,drink,5,soup,4,water,4,meal,3,syrup,3,,,,,,,,
+24,Playing,verb,action_words,, is not ,,133,54,7,sleep,22,work,17,fight,14,sit,13,study,5,hurt,4,run,3,,,,,,,,,,
+24,Going,verb,action_words,, is not ,,182,19,6,stay,76,come,53,leave,26,stop,6,be,4,go,3,,,,,,,,,,,,
+24,Hiding,verb,action_words,, is not ,,158,25,8,seek,79,find,20,show,18,run,8,appear,4,see,4,being seen,3,jump,3,,,,,,,,
+24,Giving,verb,action_words,, is not ,,180,17,4,take,109,receive,35,get,16,keep,4,,,,,,,,,,,,,,,,

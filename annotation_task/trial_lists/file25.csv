@@ -1,0 +1,20 @@
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
+25,noisy,adj,descriptive_words,To be , is not to be ,,188,12,3,quiet,159,loud,14,silent,6,,,,,,,,,,,,,,,,,,
+25,off,adj,locations,To be , is not to be ,,188,7,1,on,182,,,,,,,,,,,,,,,,,,,,,,
+25,downtown,adj,places,To be , is not to be ,,179,30,9,uptown,118,home,7,in the suburbs,7,in the country,5,inside,4,rural,4,in suburbs,3,in town,3,suburban,3,,,,,,
+25,zoo,noun,places,A , is not a ,,176,66,12,home,18,aquarium,16,house,16,park,14,playground,12,farm,11,animal,6,forest,5,school,5,museum,4,jungle,3,sanctuary,3
+25,water,noun,food_drink,A , is not a ,(beverage) ,323,91,12,soda,71,food,31,land,29,fire,14,juice,14,coffee,10,beer,7,milk,7,pool,7,desert,6,sand,6,solid,6
+25,puzzle,noun,toys,A , is not a ,,166,69,12,game,44,book,8,painting,8,board game,5,piece,5,job,4,movie,4,answer,3,chore,3,maze,3,picture,3,show,3
+25,shoulder,noun,body_parts,A , is not a ,,177,46,8,elbow,41,arm,29,knee,19,leg,19,foot,9,hand,7,head,6,hip,6,,,,,,,,
+25,plate,noun,household,A , is not a ,,179,31,8,bowl,94,fork,21,cup,16,spoon,10,dish,3,napkin,3,table,3,toy,3,,,,,,,,
+25,watch ,noun,household,A , is not a ,,182,40,9,clock,55,phone,31,bracelet,26,necklace,13,ring,7,toy,5,shoe,4,time,3,timer,3,,,,,,
+25,Lips,noun,body_parts,, are not ,,158,26,11,eye,38,tooth,33,nose,15,mouth,13,dry,9,toe,8,tongue,8,ear,7,foot,5,hand,4,finger,3,,
+25,Gloves,noun,clothing,, are not ,,158,25,6,mitten,59,sock,25,hat,18,cold,17,hand,11,shoe,6,,,,,,,,,,,,
+25,donkey,noun,animals,A , is not a ,,183,35,7,horse,113,cow,11,mule,9,dog,5,ass,4,pig,4,bird,3,,,,,,,,,,
+25,refrigerator,noun,furniture_rooms,A , is not a ,,182,30,7,freezer,78,oven,26,microwave,18,stove,15,sink,10,food,3,kitchen,3,,,,,,,,,,
+25,hamburger,noun,food_drink,A , is not a ,,187,34,11,hotdog,75,cheeseburger,27,sandwich,16,salad,8,fry,7,taco,7,french fry,5,pizza,5,chicken,4,snack,3,soup,3,,
+25,boot,noun,clothing,A , is not a ,,186,39,12,shoe,41,sneaker,28,heel,18,glove,14,sandal,13,foot,10,hat,10,sock,8,slipper,5,flip-flop,4,tennis shoe,4,shirt,3
+25,Clapping,verb,action_words,, is not ,,108,44,12,snap,19,stomp,7,cheer,6,slap,6,shout,5,sing,5,yell,5,allow,3,boo,3,hit,3,shake,3,stand,3
+25,Running,verb,action_words,, is not ,,159,17,4,walk,135,jog,4,swim,4,sleep,3,,,,,,,,,,,,,,,,
+25,Smiling,verb,action_words,, is not ,,154,8,3,frown,135,cry,9,laugh,5,,,,,,,,,,,,,,,,,,
+25,Riding,verb,action_words,, is not ,,166,44,10,walk,51,drive,23,sit,15,run,12,fall,5,jump,4,watch,4,bike,3,fly,3,stand,3,,,,

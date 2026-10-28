@@ -1,0 +1,20 @@
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
+22,next to,adj,locations,To be , is not to be ,,178,39,12,away from,17,behind,16,on top of,12,far,11,above,9,far away,9,beside,8,in front of,8,last,8,under,7,apart,6,away,6
+22,mad,adj,descriptive_words,To be , is not to be ,,182,19,6,happy,126,calm,16,sad,13,content,6,angry,4,glad,3,,,,,,,,,,,,
+22,green,adj,descriptive_words,To be , is not to be ,,184,15,9,blue,61,red,52,yellow,28,orange,8,pink,8,brown,7,purple,7,black,4,healthy,3,,,,,,
+22,eye,noun,body_parts,An , is not a ,,179,50,10,nose,51,mouth,27,ear,23,eyebrow,6,foot,6,leg,4,lip,4,camera,3,toe,3,tooth,3,,,,
+22,Work ,noun,places,, is not a , (job),167,60,12,hobby,25,chore,15,vacation,13,fun,12,game,11,school,7,play,6,joke,4,life,4,pleasure,4,hassle,3,home,3
+22,movie,noun,places,A , is not a ,,190,30,4,show,93,tv show,31,book,30,film,6,,,,,,,,,,,,,,,,
+22,sun,noun,outside,A , is not a ,,635,57,11,moon,411,planet,87,star,35,cloud,13,cold,11,plant,6,ball,5,galaxy,4,son,4,square,4,rain,3,,
+22,call ,noun,games_routines,A , is not a ,(on the phone) ,179,53,9,text,90,facetime,9,voicemail,6,conversation,5,chore,3,hug,3,meeting,3,message,3,video,3,,,,,,
+22,nap,noun,games_routines,A , is not a ,,149,62,11,sleep,43,bed,7,run,7,workout,7,rest,5,bedtime,4,long sleep,4,activity,3,dream,3,exercise,3,full sleep,3,,
+22,crib,noun,furniture_rooms,A , is not a ,,182,55,9,bed,86,house,10,couch,9,chair,7,baby,6,home,6,basket,3,cage,3,car,3,,,,,,
+22,butterfly,noun,animals,A , is not a ,,185,45,12,bird,27,caterpillar,23,moth,18,bee,17,bug,12,worm,9,fly,8,dragonfly,7,spider,6,dog,5,fish,4,ant,3
+22,pet,noun,people,A , is not a ,,172,60,11,human,31,person,26,toy,22,wild animal,8,animal,7,food,4,lion,4,meal,4,dog,3,friend,3,object,3,,
+22,monkey,noun,animals,A , is not a ,,189,51,12,human,22,gorilla,14,dog,13,fish,12,ape,10,cat,7,lion,7,banana,6,bird,6,person,6,tiger,6,zebra,6
+22,table,noun,furniture_rooms,A , is not a ,,181,34,8,chair,119,desk,11,bed,9,bench,3,couch,3,dance floor,3,lamp,3,stool,3,,,,,,,,
+22,penny,noun,household,A , is not a ,,189,19,5,nickel,57,dime,56,quarter,40,dollar,18,money,3,,,,,,,,,,,,,,
+22,Kissing,verb,action_words,, is not ,,145,41,8,hug,70,love,12,touch,6,lick,5,make out,4,punch,4,eat,3,smile,3,,,,,,,,
+22,Listening,verb,action_words,, is not ,,173,24,6,talk,61,hear,39,speak,18,ignore,16,watch,13,see,5,,,,,,,,,,,,
+22,Hating,verb,action_words,, is not ,,152,4,2,love,133,like,17,,,,,,,,,,,,,,,,,,,,
+22,Building,verb,action_words,, is not ,,145,34,4,break,53,destroy,42,tear down,9,tear,5,,,,,,,,,,,,,,,,

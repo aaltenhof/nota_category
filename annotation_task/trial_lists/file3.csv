@@ -1,0 +1,21 @@
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
+3,cute,adj,descriptive_words,To be , is not to be ,,188,21,4,ugly,152,hot,9,scary,6,weird,3,,,,,,,,,,,,,,,,
+3,big,adj,descriptive_words,To be , is not to be ,,190,8,2,small,178,little,6,,,,,,,,,,,,,,,,,,,,
+3,soft,adj,descriptive_words,To be , is not to be ,,178,21,2,hard,138,rough,20,,,,,,,,,,,,,,,,,,,,
+3,lollipop,noun,food_drink,A , is not a ,,185,74,11,sucker,25,chocolate,19,fruit,18,candy,10,popsicle,9,meal,7,toy,7,vegetable,7,ice cream,5,gum,3,tootsie roll,3,,
+3,cow,noun,animals,A , is not a ,,188,32,12,pig,47,horse,43,chicken,20,dog,11,sheep,11,cat,7,bird,6,bull,4,moose,4,pet,4,calf,3,fish,3
+3,glue,noun,toys,A , is not ,,122,43,10,tape,38,scissors,10,water,8,smooth,6,food,4,stick,4,sticker,4,clean,3,paper,3,red,3,,,,
+3,Pizza,noun,food_drink,, is not ,,141,50,12,pasta,30,cold,8,pie,8,salad,8,bread,6,burger,6,fries,6,candy,5,fruit,5,hamburger,4,spaghetti,4,taco,4
+3,girl,noun,people,A , is not a ,,184,16,2,boy,166,woman,3,,,,,,,,,,,,,,,,,,,,
+3,hose,noun,outside,A , is not a ,,186,75,12,sprinkler,26,faucet,11,sink,11,shower,10,snake,8,toy,7,horse,6,fountain,5,garden,5,water,5,bucket,4,house,4
+3,Dinner,noun,games_routines,, is not ,,171,14,2,lunch,91,breakfast,67,,,,,,,,,,,,,,,,,,,,
+3,swing,noun,outside,A , is not a ,,191,72,8,slide,80,toy,13,chair,6,ladder,5,seesaw,4,stool,4,playground,3,seat,3,,,,,,,,
+3,Butter,noun,food_drink,, is not ,,144,49,12,bread,20,margarine,17,oil,13,milk,12,cheese,7,cream cheese,5,blue,4,cream,4,jam,4,food,3,jelly,3,salt,3
+3,sled,noun,vehicles,A , is not a ,,183,67,12,car,29,ski,23,snowboard,18,sleigh,8,slide,5,toy,5,tube,5,bicycle,4,boat,4,hill,4,shovel,4,snow,4
+3,yard,noun,places,A , is not a ,,180,68,12,house,24,foot,23,meter,11,garden,9,field,7,grass,7,fence,6,pool,6,mile,5,lawn,4,porch,4,room,4
+3,helicopter,noun,vehicles,A , is not a ,,189,24,7,plane,98,car,36,airplane,17,boat,8,jet,4,train,4,ship,3,,,,,,,,,,
+3,tiger,noun,animals,A , is not a ,,191,35,12,lion,88,dog,15,zebra,11,bear,8,cheetah,8,cat,6,fish,5,giraffe,4,horse,4,leopard,4,cow,3,elephant,3
+3,Dancing,verb,action_words,, is not ,,124,32,7,sing,29,walk,20,stand,16,sit,13,run,8,sleep,6,swim,3,,,,,,,,,,
+3,Making,verb,action_words,, is not ,,181,50,9,break,51,destroy,40,buy,9,create,7,do,6,eat,6,take,6,bake,5,get,3,,,,,,
+3,Waiting,verb,action_words,, is not ,,152,37,10,go,54,leave,19,do,16,hurry,6,rush,6,stay,5,stand,4,eat,3,run,3,want,3,,,,
+3,Sitting,verb,action_words,, is not ,,187,11,2,stand,174,walk,3,,,,,,,,,,,,,,,,,,,,

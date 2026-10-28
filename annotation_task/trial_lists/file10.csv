@@ -1,0 +1,21 @@
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
+10,old,adj,descriptive_words,To be , is not to be ,,181,10,1,young,172,,,,,,,,,,,,,,,,,,,,,,
+10,new,adj,descriptive_words,To be , is not to be ,,186,6,1,old,181,,,,,,,,,,,,,,,,,,,,,,
+10,high,adj,descriptive_words,To be , is not to be ,,184,6,3,low,166,sober,11,down,3,,,,,,,,,,,,,,,,,,
+10,store,noun,places,A , is not a ,,185,68,12,house,34,home,29,restaurant,12,mall,10,shop,10,gas station,4,hospital,4,park,4,bank,3,bedroom,3,gymnasium,3,playground,3
+10,Hair,noun,body_parts,, is not ,,96,47,5,skin,20,nail,11,finger,5,foot,4,tooth,4,,,,,,,,,,,,,,
+10,paper,noun,household,A , is not a ,,183,60,12,pen,37,pencil,27,rock,20,book,7,computer,7,scissor,6,tree,6,cardboard,5,ipad,4,laptop,4,scissors,4,plane,3
+10,bench,noun,furniture_rooms,A , is not a ,,188,47,11,chair,52,bed,28,couch,22,stool,9,table,8,seat,6,swing,5,car,4,desk,4,house,4,sofa,4,,
+10,oven,noun,furniture_rooms,A , is not a ,,189,33,10,stove,68,microwave,47,refrigerator,15,sink,8,toaster,5,dishwasher,4,home,4,stovetop,4,bed,3,pan,3,,,,
+10,Meat,noun,food_drink,, is not ,,154,38,9,vegetable,55,fruit,19,vegan,13,vegetarian,13,fish,5,plant,5,candy,3,greens,3,murder,3,,,,,,
+10,bath,noun,games_routines,A , is not a ,,185,22,4,shower,143,toilet,9,sink,7,tub,4,,,,,,,,,,,,,,,,
+10,Chocolate,noun,food_drink,, is not ,,127,37,8,vanilla,54,candy,9,fruit,8,sour,8,caramel,4,milk,4,meal,3,protein,3,,,,,,,,
+10,frog,noun,animals,A , is not a ,,188,43,12,toad,61,fish,23,dog,18,prince,9,bird,7,mammal,7,lizard,6,cat,5,snake,5,horse,3,tadpole,3,turtle,3
+10,bird,noun,animals,A , is not a ,,179,65,12,dog,22,fish,19,plane,13,mammal,11,cow,8,human,8,reptile,8,bear,4,bee,4,bug,4,mouse,4,bat,3
+10,lamb,noun,animals,A , is not a ,,189,37,12,sheep,56,cow,34,goat,28,pig,11,wolf,7,horse,5,lion,4,calf,3,chicken,3,dog,3,duck,3,frog,3
+10,backyard,noun,outside,A , is not a ,,186,47,7,front yard,109,house,14,playground,5,garden,4,pool,4,porch,4,room,3,,,,,,,,,,
+10,Money,noun,household,, is not ,,103,47,8,everything,18,happiness,15,food,9,coin,4,gold,4,good,3,paper,3,power,3,,,,,,,,
+10,Drying,verb,action_words,, is not ,,124,25,7,wet,56,wash,22,soak,8,get wet,6,clean,4,cry,4,dampen,3,,,,,,,,,,
+10,Sleeping,verb,action_words,, is not ,,82,31,8,wake,20,run,10,walk,6,nap,5,eat,3,live,3,think,3,wake up,3,,,,,,,,
+10,Knocking,verb,action_words,, is not ,,140,51,12,open,14,bang,10,ring,10,tap,8,yell,8,enter,7,pound,7,clap,6,wait,5,barge in,4,kick,4,allow,3
+10,Hugging,verb,action_words,, is not ,,164,45,10,kiss,77,fight,8,hit,8,push,6,shove,5,slap,5,avoid,4,hurt,3,kick,3,leave,3,,,,

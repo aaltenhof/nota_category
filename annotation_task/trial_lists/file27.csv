@@ -1,0 +1,20 @@
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
+27,fast,adj,descriptive_words,To be , is not to be ,,184,5,1,slow,180,,,,,,,,,,,,,,,,,,,,,,
+27,there,adj,locations,To be , is not to be ,,179,14,4,here,138,away,12,gone,12,present,3,,,,,,,,,,,,,,,,
+27,pretty,adj,descriptive_words,To be , is not to be ,,190,14,1,ugly,174,,,,,,,,,,,,,,,,,,,,,,
+27,Vanilla,noun,food_drink,, is not ,,179,15,1,chocolate,164,,,,,,,,,,,,,,,,,,,,,,
+27,penguin,noun,animals,A , is not a ,,174,67,12,bird,28,polar bear,16,bear,11,fish,10,dog,8,seal,8,duck,5,reptile,4,cow,3,elephant,3,giraffe,3,horse,3
+27,dish,noun,household,A , is not a ,,182,63,12,plate,29,bowl,19,cup,18,fork,12,food,7,spoon,6,paper,5,glass,4,meal,4,napkin,4,pan,4,tray,4
+27,tray,noun,household,A , is not a ,,188,58,9,plate,54,table,26,bowl,20,cup,10,dish,9,pan,5,food,4,sled,3,weapon,3,,,,,,
+27,animal,noun,animals,An , is not a ,,186,50,12,human,46,plant,22,person,16,object,14,insect,8,rock,7,food,5,mammal,5,fish,4,fruit,4,toy,4,bug,3
+27,baby,noun,people,A , is not a ,,178,38,9,adult,92,toy,12,child,9,man,7,toddler,6,grown-up,5,teenager,5,kid,4,pet,4,,,,,,
+27,coat,noun,clothing,A , is not a ,,185,53,12,jacket,36,shirt,32,sweatshirt,11,hat,10,pants,8,shoe,8,pant,6,sweater,6,t-shirt,6,dress,5,hoodie,4,glove,3
+27,chair,noun,furniture_rooms,A , is not a ,,179,36,9,table,57,bed,27,couch,25,desk,14,stool,10,bench,6,sofa,4,floor,3,toy,3,,,,,,
+27,mailman,noun,people,A , is not a ,,184,83,12,mailwoman,13,fireman,12,dog,11,doctor,10,milkman,10,firefighter,7,garbage man,7,driver,4,lawyer,4,teacher,4,chef,3,chew toy,3
+27,uncle,noun,people,A , is not a ,,187,18,3,aunt,163,dad,4,brother,3,,,,,,,,,,,,,,,,,,
+27,garage,noun,furniture_rooms,A , is not a ,,183,51,12,house,35,car,21,bedroom,15,home,13,driveway,11,kitchen,8,door,7,living room,7,room,6,porch,5,basement,3,pool,3
+27,Soap,noun,household,, is not a ,,166,67,10,food,28,water,18,shampoo,15,dirt,9,towel,6,toy,6,conditioner,5,tool,4,soup,3,toothpaste,3,,,,
+27,Finishing,verb,action_words,, is not ,,161,22,6,start,119,begin,7,hunt,4,stop,4,leave,3,quit,3,,,,,,,,,,,,
+27,Splashing,verb,action_words,, is not ,,126,49,12,swim,38,drown,9,dry,5,soak,5,spray,5,allow,4,float,3,jump,3,run,3,squirt,3,throw,3,wade,3
+27,Talking,verb,action_words,, is not ,,122,25,10,listen,58,yell,18,hear,5,whisper,5,laugh,4,walk,4,shout,3,sing,3,speak,3,think,3,,,,
+27,Fixing,verb,action_words,, is not ,,184,30,4,break,124,destroy,19,help,4,ruin,3,,,,,,,,,,,,,,,,

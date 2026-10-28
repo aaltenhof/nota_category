@@ -1,0 +1,20 @@
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
+21,here,adj,locations,To be , is not to be ,,181,7,2,there,170,away,6,,,,,,,,,,,,,,,,,,,,
+21,cold,adj,descriptive_words,To be , is not to be ,,180,5,2,hot,107,warm,70,,,,,,,,,,,,,,,,,,,,
+21,sad,adj,descriptive_words,To be , is not to be ,,183,12,2,happy,168,depressed,3,,,,,,,,,,,,,,,,,,,,
+21,Pajamas,noun,clothing,, are not ,,113,46,6,clothes,29,jeans,15,dress,9,suit,8,pants,4,work clothes,4,,,,,,,,,,,,
+21,train,noun,vehicles,A , is not a ,,188,22,6,car,113,bus,27,plane,18,bicycle,5,ship,4,boat,3,,,,,,,,,,,,
+21,story,noun,toys,A , is not a ,,187,89,12,book,26,fact,12,tale,11,lie,10,movie,10,game,6,computer,5,song,5,novel,4,sentence,4,truth,4,word,4
+21,Today,noun,time_words,, is not ,,625,29,10,tomorrow,426,yesterday,126,monday,14,tuesday,8,wednesday,8,friday,7,day,5,fun,5,sunday,3,thursday,3,,,,
+21,Underpants,noun,clothing,, are not ,,148,37,10,pants,44,sock,15,bra,14,shirt,10,shorts,8,diaper,7,clothes,6,over pants,4,underwear,4,skirt,3,,,,
+21,roof,noun,outside,A , is not a ,,184,45,9,floor,58,house,33,wall,12,basement,11,door,10,ceiling,7,home,5,foundation,3,ground,3,,,,,,
+21,man,noun,people,A , is not a ,,193,17,3,woman,163,boy,9,girl,6,,,,,,,,,,,,,,,,,,
+21,jar,noun,household,A , is not a ,,191,51,12,can,34,cup,22,bowl,20,container,10,plate,10,lid,9,bottle,8,glass,8,box,6,mug,6,jam,4,bucket,3
+21,turkey,noun,animals,A , is not a ,,185,46,9,chicken,98,ham,12,duck,7,bird,6,dog,4,fish,4,cow,3,deer,3,goose,3,,,,,,
+21,brother,noun,people,A , is not a ,,183,10,1,sister,172,,,,,,,,,,,,,,,,,,,,,,
+21,sheep,noun,animals,A , is not a ,,193,46,10,cow,45,goat,35,wolf,22,lamb,15,dog,11,horse,8,pig,6,hen,4,reptile,4,lion,3,,,,
+21,room,noun,furniture_rooms,A , is not a ,,183,67,12,house,56,home,14,bed,7,park,6,door,5,bathroom,4,building,4,field,4,car,3,hallway,3,kitchen,3,outside,3
+21,Catching,verb,action_words,, is not ,,184,26,6,throw,107,drop,19,release,19,miss,6,chase,5,let go,3,,,,,,,,,,,,
+21,Dropping,verb,action_words,, is not ,,177,36,12,pick up,46,catch,25,hold,25,pick,9,lift,8,fall,7,grab,7,take,5,throw,5,fly,4,drip,3,keep,3
+21,Blowing,verb,action_words,, is not ,,173,43,7,suck,83,inhale,18,breathe,12,kiss,6,sniff,5,eat,4,touch,3,,,,,,,,,,
+21,Showing,verb,action_words,, is not ,,170,35,6,tell,63,hide,54,see,7,conceal,4,look,4,cover,3,,,,,,,,,,,,

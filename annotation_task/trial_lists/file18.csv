@@ -1,0 +1,20 @@
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
+18,hungry,adj,descriptive_words,To be , is not to be ,,179,15,6,full,139,starving,9,satiated,6,thirsty,6,fed,5,satisfied,5,,,,,,,,,,,,
+18,hot,adj,descriptive_words,To be , is not to be ,,193,9,2,cold,182,ugly,4,,,,,,,,,,,,,,,,,,,,
+18,Now,adj,time_words,, is not ,,187,16,7,later,93,then,35,never,30,tomorrow,9,past,5,forever,3,yesterday,3,,,,,,,,,,
+18,Breakfast,noun,games_routines,, is not ,,178,9,2,dinner,98,lunch,73,,,,,,,,,,,,,,,,,,,,
+18,hand,noun,body_parts,A , is not a ,,181,26,6,foot,111,leg,13,arm,12,finger,11,toe,6,head,5,,,,,,,,,,,,
+18,diaper,noun,clothing,A , is not a ,,161,63,12,underwear,22,toilet,11,shirt,10,toy,9,baby,8,pant,7,hat,5,pants,5,sock,5,pad,4,pair of underwear,4,bathroom,3
+18,shoe,noun,clothing,A , is not a ,,625,113,12,sock,150,hat,78,shirt,46,glove,43,foot,40,boot,34,food,14,sandal,14,toy,14,slipper,11,heel,8,bag,6
+18,Mittens,noun,clothing,, are not ,,181,24,8,glove,98,cold,20,hat,15,scarf,9,sock,9,kitten,6,boot,3,coat,3,,,,,,,,
+18,Ice cream,noun,food_drink,, is not ,,81,42,8,cake,12,meal,5,gelato,4,milk,4,soup,4,cookie,3,popsicle,3,sorbet,3,,,,,,,,
+18,park,noun,places,A , is not a ,,179,81,12,house,11,school,11,playground,10,building,7,street,7,home,6,pool,6,beach,5,car,4,city,4,forest,4,lake,4
+18,necklace,noun,clothing,A , is not a ,,183,27,5,bracelet,103,ring,31,earring,17,chain,3,hat,3,,,,,,,,,,,,,,
+18,pumpkin,noun,food_drink,A , is not a ,,177,60,12,squash,25,apple,23,fruit,19,vegetable,11,pear,6,carriage,5,christmas decoration,4,jack-o-lantern,4,melon,4,orange,4,pie,4,watermelon,4
+18,nurse,noun,people,A , is not a ,,177,24,3,doctor,145,lawyer,3,surgeon,3,,,,,,,,,,,,,,,,,,
+18,glass,noun,household,A , is not a ,(vessel),178,59,12,plastic,25,bowl,21,cup,20,plate,12,mug,11,bottle,9,vase,8,can,6,metal,4,toy,4,plastic cup,3,water bottle,3
+18,yogurt,noun,food_drink,A , is not a ,,172,72,12,meal,19,milk,15,fruit,14,ice cream,12,soup,8,drink,5,cereal,4,egg,4,solid,4,apple,3,banana,3,bread,3
+18,day,noun,time_words,A , is not a ,,182,14,5,night,122,week,35,year,8,month,5,hour,3,,,,,,,,,,,,,,
+18,Shaking,verb,action_words,, is not ,,85,47,8,stand still,8,sit,7,shiver,6,stand,5,stay still,5,hold,4,jump,3,stir,3,,,,,,,,
+18,Biting,verb,action_words,, is not ,,142,28,10,chew,42,lick,34,suck,11,swallow,7,kiss,6,spit,6,eat,5,hit,3,scratch,3,smile,3,,,,
+18,Climbing,verb,action_words,, is not ,,154,29,10,fall,61,walk,27,crawl,9,run,9,jump,6,sit,6,hike,4,dig,3,drop,3,swim,3,,,,

@@ -1,0 +1,20 @@
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
+20,inside,adj,locations,To be , is not to be ,,185,5,2,outside,179,out,3,,,,,,,,,,,,,,,,,,,,
+20,dirty,adj,descriptive_words,To be , is not to be ,,182,4,1,clean,179,,,,,,,,,,,,,,,,,,,,,,
+20,on,adj,locations,To be , is not to be ,,191,16,5,off,135,under,19,in,14,below,6,out,4,,,,,,,,,,,,,,
+20,game,noun,toys,A , is not ,,101,50,10,book,10,work,10,fun,7,homework,4,joke,4,life,4,movie,4,puzzle,4,chore,3,test,3,,,,
+20,tractor,noun,vehicles,A , is not a ,,186,42,7,car,105,truck,14,trailer,9,horse,7,farm,5,bicycle,4,bus,3,,,,,,,,,,
+20,head,noun,body_parts,A , is not a ,,184,40,12,foot,69,toe,22,arm,11,body,7,heart,7,tail,7,butt,6,leg,6,neck,6,shoulder,6,hair,4,hand,3
+20,bathroom,noun,furniture_rooms,A , is not a ,,181,35,10,kitchen,58,bedroom,55,living room,10,bed,6,closet,5,house,5,room,4,sink,4,shower,3,tub,3,,,,
+20,jacket,noun,clothing,A , is not a ,,187,45,12,shirt,40,coat,37,sweater,15,hoodie,8,sweatshirt,8,dress,6,hat,6,pants,6,sock,6,t-shirt,6,shoe,4,vest,4
+20,raisin,noun,food_drink,A , is not a ,,179,43,12,grape,72,fruit,12,apple,11,cranberry,9,vegetable,8,craisin,7,nut,6,date,5,strawberry,4,blueberry,3,prune,3,watermelon,3
+20,Keys,noun,household,, are not ,,139,58,9,lock,33,car,15,toy,9,door,8,card,6,food,6,phone,3,quiet,3,wallet,3,,,,,,
+20,Peas,noun,food_drink,, are not ,,146,48,12,fruit,28,carrot,25,blue,8,bean,7,corn,7,pod,7,yellow,7,banana,3,edamame,3,green,3,green bean,3,orange,3
+20,belt,noun,clothing,A , is not a ,,184,68,12,weapon,18,whip,15,shoelace,10,pant,9,shirt,9,shoe,9,necklace,8,rope,6,string,6,pants,5,sock,5,tie,5
+20,ball,noun,toys,A , is not a ,,179,67,12,square,37,bat,13,cube,8,toy,7,food,6,frisbee,6,rock,5,stick,5,puck,4,tool,4,balloon,3,basket,3
+20,clock,noun,household,A , is not a ,,185,72,12,watch,50,timer,10,phone,9,time,9,alarm,8,television,5,food,4,mirror,4,bomb,3,hand,3,lamp,3,stopwatch,3
+20,circus,noun,places,A , is not a ,,175,76,12,zoo,21,clown,16,show,14,movie,7,school,7,play,6,game,4,house,4,joke,4,parade,4,party,4,home,3
+20,Fitting,verb,action_words,, is not ,,100,51,10,unfit,11,break,8,squeeze,6,stand out,5,fight,4,wear,4,make,3,overflow,3,sleep,3,stretch,3,,,,
+20,Sweeping,verb,action_words,, is not ,,160,41,8,mop,59,vacuum,29,clean,11,dirty,6,dust,6,run,5,stand,3,wipe,3,,,,,,,,
+20,Reading,verb,action_words,, is not ,,152,27,7,write,60,watch,33,listen,20,sleep,7,play,4,hear,3,watch tv,3,,,,,,,,,,
+20,Working,verb,action_words,, is not ,,129,35,7,sleep,38,relax,25,play,16,rest,8,sit,6,run,3,slack,3,,,,,,,,,,

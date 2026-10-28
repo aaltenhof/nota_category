@@ -1,0 +1,20 @@
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
+19,empty,adj,descriptive_words,To be , is not to be ,,181,7,1,full,175,,,,,,,,,,,,,,,,,,,,,,
+19,on top of,adj,locations,To be , is not to be ,,190,26,12,below,63,under,49,underneath,14,below of,11,inside,6,on bottom,6,beneath,4,inside of,4,on bottom of,4,beside,3,bottom,3,off of,3
+19,over,adj,locations,To be , is not to be ,,153,22,5,under,112,done,11,here,3,stuck,3,together,3,,,,,,,,,,,,,,
+19,gas station,noun,places,A , is not a ,,176,65,12,restaurant,50,grocery store,20,home,8,car,7,store,7,house,6,rest stop,5,bank,3,hotel,3,mall,3,movie theater,3,school,3
+19,Tomorrow,noun,time_words,, is not ,,190,9,2,today,165,yesterday,18,,,,,,,,,,,,,,,,,,,,
+19,plant,noun,household,A , is not a ,,179,74,12,animal,27,tree,21,pet,10,flower,8,rock,8,toy,7,food,5,human,4,bee,3,bird,3,dirt,3,house,3
+19,cup,noun,household,A , is not a ,,188,38,6,bowl,55,plate,53,mug,27,bottle,8,glass,6,fork,3,,,,,,,,,,,,
+19,bedroom,noun,furniture_rooms,A , is not a ,,192,37,8,kitchen,58,bathroom,48,living room,28,house,10,home,5,office,5,bed,3,dining room,3,,,,,,,,
+19,elephant,noun,animals,An , is not a ,,171,49,12,mouse,31,giraffe,28,ant,9,rhinoceros,9,tiger,8,dog,7,bird,6,cat,5,horse,5,cow,4,fish,4,hippopotamus,4
+19,tape,noun,household,A piece of , is not a ,,178,80,12,glue,24,paper,14,glue stick,10,scissor,10,solution,7,staple,6,stapler,6,sticker,6,nail,4,bandaid,3,fix,3,food,3
+19,couch,noun,furniture_rooms,A , is not a ,,187,37,7,chair,73,bed,49,sofa,15,table,5,rug,4,floor,3,seat,3,,,,,,,,,,
+19,Woods,noun,places,, are not  , (forest),151,53,12,beach,15,ocean,15,safe,13,desert,11,lake,9,rainforest,6,city,5,tree,5,grassland,4,river,4,building,3,field,3
+19,arm,noun,body_parts,An , is not a ,,188,14,4,leg,162,hand,8,foot,5,finger,3,,,,,,,,,,,,,,,,
+19,broom,noun,household,A , is not a ,,189,41,10,mop,82,vacuum,28,dustpan,9,brush,6,stick,6,pan,5,swiffer,5,shovel,4,witch,4,fork,3,,,,
+19,chicken ,noun,animals,A , is not a ,(animal) ,346,78,12,beef,55,cow,50,steak,32,egg,24,turkey,18,pig,17,rooster,16,duck,13,fish,12,dog,9,hen,5,vegetable,5
+19,Ripping,verb,action_words,, is not ,,147,49,10,sew,29,tear,28,fix,9,glue,8,mend,8,put together,5,shred,5,tape,4,close,3,cut,3,,,,
+19,Painting,verb,action_words,, is not ,,147,30,5,draw,84,write,16,color,11,sculpt,3,sketch,3,,,,,,,,,,,,,,
+19,Writing,verb,action_words,, is not ,,159,30,7,read,59,type,22,draw,17,speak,14,talk,11,erase,6,sing,3,,,,,,,,,,
+19,Throwing,verb,action_words,, is not ,,175,26,9,catch,108,hold,15,grab,7,drop,5,toss,5,hit,4,keep,4,push,4,take,4,,,,,,

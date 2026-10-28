@@ -1,0 +1,21 @@
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
+4,slow,adj,descriptive_words,To be , is not to be ,,182,7,1,fast,176,,,,,,,,,,,,,,,,,,,,,,
+4,sick,adj,descriptive_words,To be , is not to be ,,185,13,3,healthy,138,well,29,okay,5,,,,,,,,,,,,,,,,,,
+4,above,adj,locations,To be , is not to be ,,193,9,3,below,166,under,18,down,3,,,,,,,,,,,,,,,,,,
+4,vacuum,noun,household,A , is not a ,,173,57,5,broom,72,mop,31,toy,6,sweeper,4,dustpan,3,,,,,,,,,,,,,,
+4,giraffe,noun,animals,A , is not a ,,176,45,12,elephant,38,zebra,19,dog,13,cow,10,hippopotamus,9,fish,8,horse,8,rhinoceros,7,bird,6,bear,4,lion,4,ant,3
+4,bear,noun,animals,A , is not a ,,182,66,12,dog,24,cat,15,lion,12,wolf,9,mouse,8,deer,7,tiger,7,cow,5,fish,5,friend,5,man,5,cub,4
+4,party,noun,places,A , is not a ,,155,74,12,funeral,13,library,11,function,9,gathering,6,class,5,hangout,5,house,5,dinner,4,home,4,meeting,4,place,4,study session,4
+4,Carrots,noun,food_drink,, are not ,,180,45,12,fruit,60,apple,14,celery,12,broccoli,10,cucumber,9,green,9,red,8,orange,5,pepper,5,yellow,4,blue,3,lettuce,3
+4,block,noun,toys,A , is not a ,,185,83,12,circle,31,brick,14,ball,11,cube,9,sphere,9,house,5,car,4,lego,4,paper,4,square,4,city,3,piece,3
+4,tree,noun,outside,A , is not a ,,180,55,11,bush,57,flower,17,plant,11,house,8,leaf,5,stick,5,animal,4,grass,4,shrub,4,fern,3,food,3,,
+4,belly button,noun,body_parts,A , is not a ,,183,57,12,hole,16,stomach,16,nose,13,finger,12,ear,11,toe,10,eye,8,foot,8,hand,7,mouth,7,arm,5,button,5
+4,fish,noun,animals,A , is not a ,(animal) ,624,104,12,dog,103,mammal,102,bird,63,human,28,cow,22,shark,22,bear,16,cat,16,horse,16,person,15,reptile,15,whale,11
+4,zebra,noun,animals,A , is not a ,,191,40,12,horse,53,lion,28,giraffe,22,cow,9,dog,7,tiger,7,donkey,6,fish,6,cat,5,cheetah,4,moose,4,animal,3
+4,bee,noun,animals,A , is not a ,,186,41,12,wasp,39,bird,18,butterfly,18,fly,17,flower,13,ladybug,10,bug,6,dog,6,hornet,6,fish,5,animal,4,ant,4
+4,closet,noun,furniture_rooms,A , is not a ,,174,52,12,room,45,bed,14,bedroom,14,dresser,12,drawer,11,bathroom,9,house,8,wardrobe,5,cabinet,3,door,3,hanger,3,kitchen,3
+4,Lunch,noun,games_routines,, is not ,,181,14,2,dinner,138,breakfast,30,,,,,,,,,,,,,,,,,,,,
+4,Thinking,verb,action_words,, is not ,,133,40,11,do,25,speak,14,sleep,10,feel,9,know,9,say,9,talk,8,believe,6,see,4,act,3,forget,3,,
+4,Drawing,verb,action_words,, is not ,,171,31,9,paint,54,write,37,color,20,erase,10,read,7,sing,5,eat,4,sketch,4,type,4,,,,,,
+4,Hitting,verb,action_words,, is not ,,146,67,12,hug,19,pet,10,slap,8,touch,7,kiss,5,help,4,kick,4,punch,4,scratch,4,bump,3,love,3,miss,3
+4,Standing,verb,action_words,, is not ,,187,9,4,sit,167,walk,7,fall,3,jump,3,,,,,,,,,,,,,,,,

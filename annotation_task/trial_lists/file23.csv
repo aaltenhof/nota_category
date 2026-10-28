@@ -1,0 +1,20 @@
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
+23,last,adj,descriptive_words,To be , is not to be ,,181,7,2,first,173,bad,3,,,,,,,,,,,,,,,,,,,,
+23,down,adj,locations,To be , is not to be ,,192,8,1,up,182,,,,,,,,,,,,,,,,,,,,,,
+23,scared,adj,descriptive_words,To be , is not to be ,,185,41,12,brave,42,happy,26,confident,20,afraid,14,fearless,10,calm,7,content,6,safe,6,secure,5,courageous,4,excited,4,okay,4
+23,basement,noun,furniture_rooms,A , is not a ,,180,40,10,attic,67,house,14,roof,14,upstairs,14,living room,10,bedroom,8,kitchen,7,room,7,penthouse,4,loft,3,,,,
+23,wolf,noun,animals,A , is not a ,,181,43,10,dog,62,cat,28,bear,11,coyote,9,sheep,9,pet,7,fox,6,lion,5,cow,3,deer,3,,,,
+23,Noodles,noun,food_drink,, are not ,,116,46,12,rice,14,soup,9,pasta,8,vegetable,8,cold,7,meat,5,pizza,5,protein,4,bread,3,fruit,3,pea,3,spaghetti,3
+23,Pudding,noun,food_drink,, is not ,,145,53,11,jello,28,cake,18,ice cream,13,soup,11,solid,7,dinner,4,water,4,chocolate,3,fruit,3,rice,3,yogurt,3,,
+23,chin,noun,body_parts,A , is not a ,,178,41,12,forehead,34,nose,32,mouth,14,face,11,eye,10,cheek,9,ear,7,foot,5,hand,5,lip,5,neck,5,jaw,4
+23,playground,noun,places,A , is not a ,,175,58,12,school,23,park,22,house,9,office,8,room,8,classroom,7,home,7,garden,6,zoo,5,building,4,field,4,jail,4
+23,egg,noun,food_drink,An , is not a ,,632,143,12,chicken,167,fruit,76,vegetable,24,animal,13,bacon,13,bird,12,square,11,toy,11,shell,10,apple,9,banana,9,food,9
+23,rooster,noun,animals,A , is not a ,,189,32,11,chicken,67,hen,48,crow,13,cow,12,duck,5,cat,4,dog,4,fish,4,turkey,4,female,3,pig,3,,
+23,hen,noun,animals,A , is not a ,,192,44,9,rooster,74,chicken,36,chick,9,cow,9,duck,8,goose,5,pig,5,cock,3,crow,3,,,,,,
+23,donut,noun,food_drink,A , is not a ,,182,58,12,bagel,31,cake,18,fruit,11,muffin,9,cookie,8,hole,7,coffee,6,vegetable,6,cupcake,5,dessert,5,sandwich,5,breakfast,4
+23,soda/pop,noun,food_drink,A , is not a ,,173,34,9,water,88,coffee,12,food,11,juice,11,drink,7,beer,3,smoothie,3,snack,3,treat,3,,,,,,
+23,TV,noun,furniture_rooms,A , is not a ,,178,49,9,phone,39,radio,33,computer,25,book,12,ipad,10,show,4,remote,3,stand,3,toy,3,,,,,,
+23,Shopping,verb,games_routines,, is not ,,131,45,9,save,32,sell,15,steal,14,buy,7,work,6,eat,5,run,4,spend,4,sleep,3,,,,,,
+23,Hurrying,verb,action_words,, is not ,,121,32,8,slow,30,take your time,15,wait,15,slow down,12,rush,7,take time,5,lag,4,walk,3,,,,,,,,
+23,Crying,verb,action_words,, is not ,,112,16,2,laugh,51,smile,42,,,,,,,,,,,,,,,,,,,,
+23,Falling,verb,action_words,, is not ,,153,35,12,stand,54,fly,16,rise,11,climb,6,get up,6,jump,6,sit,5,catch,4,stay,4,stand up,3,swim,3,walk,3

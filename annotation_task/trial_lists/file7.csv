@@ -1,0 +1,21 @@
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
+7,heavy,adj,descriptive_words,To be , is not to be ,,190,10,2,light,176,skinny,5,,,,,,,,,,,,,,,,,,,,
+7,better,adj,descriptive_words,To be , is not to be ,,191,17,2,bad,168,good,7,,,,,,,,,,,,,,,,,,,,
+7,red,adj,descriptive_words,To be , is not to be ,,179,13,9,blue,96,green,22,yellow,20,orange,14,pink,7,happy,5,angry,3,black,3,white,3,,,,,,
+7,cracker,noun,food_drink,A , is not a ,,173,59,12,chip,39,cheese,17,meal,17,bread,12,fruit,7,cookie,6,soup,6,biscuit,5,sandwich,4,cake,3,nut,3,vegetable,3
+7,house,noun,places,A , is not a ,,185,55,11,home,69,car,15,apartment,14,school,11,hotel,5,park,4,tent,4,boat,3,office,3,store,3,street,3,,
+7,pencil,noun,toys,A , is not ,,177,21,5,pen,138,paper,7,eraser,6,crayon,5,marker,5,,,,,,,,,,,,,,
+7,Beads,noun,clothing,, are not ,,134,52,12,string,20,necklace,13,food,10,bean,7,bracelet,6,ball,5,bread,5,gem,5,jewelry,5,square,5,jewel,4,button,3
+7,firetruck,noun,vehicles,A , is not a ,,182,52,4,police car,53,ambulance,35,car,32,cop car,6,,,,,,,,,,,,,,,,
+7,Pants,noun,clothing,, are not ,,183,23,5,shirt,93,shorts,43,shoe,12,skirt,10,jacket,3,,,,,,,,,,,,,,
+7,potato chip,noun,food_drink,A , is not a ,,173,62,12,meal,17,fruit,16,vegetable,13,pretzel,12,fry,11,potato,11,cracker,8,snack,7,carrot,5,french fry,5,apple,3,crisp,3
+7,picnic,noun,places,A , is not a ,,575,168,12,dinner,77,restaurant,65,date,36,meal,33,table,31,party,28,place,14,lunch,11,park,11,blanket,9,beach,7,dog,7
+7,lady,noun,people,A , is not a ,,190,23,3,man,148,gentleman,14,woman,3,,,,,,,,,,,,,,,,,,
+7,sky,noun,outside,A , is not a ,,184,43,11,ground,81,floor,14,sea,12,grass,8,cloud,7,ocean,7,field,6,lake,3,place,3,star,3,sun,3,,
+7,garden,noun,outside,A , is not a ,,181,71,12,house,15,farm,12,park,11,flower,10,forest,9,yard,8,field,7,home,6,playground,6,pool,6,backyard,4,city,4
+7,shovel,noun,outside,A , is not a ,,187,58,12,rake,33,spoon,21,hoe,17,hammer,14,ax,7,bucket,7,plow,7,toy,6,food,5,fork,4,tool,4,broom,3
+7,camping trip,noun,places,A , is not a ,,169,74,9,vacation,39,hotel,13,beach trip,11,beach vacation,8,resort,5,beach,4,hotel stay,4,road trip,4,work trip,3,,,,,,
+7,Putting,verb,action_words,, is not ,,177,39,12,take,64,place,19,grab,9,pull,9,drive,5,keep,5,leave,5,pick up,5,set,5,give,4,get,3,hold,3
+7,Jumping,verb,action_words,, is not ,,177,29,10,sit,55,stand,37,run,20,walk,11,fall,10,stand still,7,skip,6,dance,3,hop,3,squat,3,,,,
+7,Hearing,verb,action_words,, is not ,,174,30,9,listen,51,see,47,speak,12,talk,12,ignore,9,watch,9,eat,4,say,4,touch,3,,,,,,
+7,Singing,verb,action_words,, is not ,,163,33,12,dance,48,talk,38,yell,11,scream,10,shout,8,speak,8,whisper,4,hum,3,listen,3,read,3,run,3,sleep,3

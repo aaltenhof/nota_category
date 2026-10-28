@@ -1,0 +1,20 @@
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
+14,up,adj,locations,To be , is not to be ,,640,11,2,down,621,asleep,7,,,,,,,,,,,,,,,,,,,,
+14,behind,adj,locations,To be , is not to be ,,188,17,5,in front,81,ahead,65,in front of,21,above,4,beside,4,,,,,,,,,,,,,,
+14,yellow,adj,descriptive_words,To be , is not to be ,,619,34,12,blue,135,green,132,red,113,orange,85,brown,38,sad,25,purple,20,black,18,white,11,pink,8,happy,5,mellow,3
+14,Vitamins,noun,food_drink,, are not ,,120,42,9,medicine,17,mineral,16,food,13,candy,12,drug,8,pill,5,fruit,4,medication,4,meal,3,,,,,,
+14,owl,noun,animals,A , is not a ,,187,66,12,bird,19,fish,18,dog,15,cat,12,eagle,8,pigeon,7,mammal,6,bat,5,chicken,4,fox,4,hawk,4,parrot,4
+14,pen,noun,toys,A , is not ,,171,24,4,pencil,138,paper,6,ink,3,marker,3,,,,,,,,,,,,,,,,
+14,basket,noun,household,A , is not a ,,181,77,12,bag,18,bin,13,purse,11,bowl,8,bucket,8,picnic,8,box,7,cup,7,plate,7,backpack,5,ball,5,blanket,5
+14,Stairs,noun,furniture_rooms,, are not ,,514,84,12,elevator,156,ladder,64,slide,63,flat,41,ramp,23,escalator,21,chair,12,safe,11,floor,9,food,6,hallway,6,step,6
+14,radio,noun,household,A , is not a ,,175,46,5,television,64,phone,43,speaker,12,camera,3,stereo,3,,,,,,,,,,,,,,
+14,Food,noun,food_drink,, is not ,,122,41,4,drink,44,water,29,animal,3,object,3,,,,,,,,,,,,,,,,
+14,Chicken,noun,food_drink,, is not ,(food) ,346,78,12,beef,55,cow,50,steak,32,egg,24,turkey,18,pig,17,rooster,16,duck,13,fish,12,dog,9,hen,5,vegetable,5
+14,pig,noun,animals,A , is not a ,,183,37,12,cow,74,horse,18,dog,17,chicken,16,sheep,5,duck,4,goat,4,bear,3,bird,3,cat,3,fish,3,hog,3
+14,Dad,noun,people,A , is not a ,,187,11,1,mom,177,,,,,,,,,,,,,,,,,,,,,,
+14,Jelly,noun,food_drink,, is not ,,162,37,6,peanut butter,58,jam,52,butter,5,jello,4,solid,4,bread,3,,,,,,,,,,,,
+14,pickle,noun,food_drink,A , is not ,,146,52,9,cucumber,56,fruit,9,sweet,8,gross,5,red,5,blue,4,meat,3,sandwich,3,tomato,3,,,,,,
+14,Tights,noun,clothing,, are not ,,107,27,5,pants,28,leggings,25,jeans,19,sweatpants,7,shirt,4,,,,,,,,,,,,,,
+14,Picking,verb,action_words,, is not ,,157,51,12,choose,39,leave,15,put,9,take,8,pull,7,lick,5,scratch,4,throw,4,eat,3,force,3,give,3,grab,3
+14,Pouring,verb,action_words,, is not ,,171,55,12,drink,31,spill,16,sprinkle,9,dump,8,fill,8,sip,8,drip,6,take,6,catch,5,place,5,pull,4,scoop,4
+14,Holding,verb,action_words,, is not ,,177,41,8,let go,50,drop,48,release,11,give,8,throw,8,grab,6,carry,4,touch,4,,,,,,,,
