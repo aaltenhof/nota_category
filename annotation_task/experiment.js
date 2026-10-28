@@ -12,7 +12,7 @@ const MAX_RESPONSES = 12;   // must match MAX_RESPONSES in make_trial_lists.py
 //   counterpart    the dimension has two values or two ends (brother → sister, hot → cold, giving → take)
 //   sibling        one of many alternatives, including functional ones (tiger → lion, yellow → blue, stairs → elevator)
 //   near_synonym   almost the same, but a distinction is being drawn (hearing → listen, house → home)
-//   broader        banana → fruit          narrower    plant → tree
+//   broader        banana → fruit          narrower    a kind or (usually atypical) example: plant → tree, present → car
 //   part_whole     ankle → foot            goes_together  keys → lock, jelly → peanut butter
 //   form           sound or spelling (ant → aunt)
 const TAGS = [
@@ -20,7 +20,7 @@ const TAGS = [
     { key: 'sibling',       label: 'Sibling' },
     { key: 'near_synonym',  label: 'Near-synonym' },
     { key: 'broader',       label: 'Broader category' },
-    { key: 'narrower',      label: 'Narrower category' },
+    { key: 'narrower',      label: 'Narrower category / example' },
     { key: 'part_whole',    label: 'Part or whole' },
     { key: 'goes_together', label: 'Goes together' },
     { key: 'form',          label: 'Sound or spelling' },
@@ -30,27 +30,26 @@ const TAGS = [
 const TAG_OPTIONS = TAGS.map(t => `<option value="${t.key}">${t.label}</option>`).join('');
 
 // ─── Follow-up questions ──────────────────────────────────────────────────────
-// A yes/no that appears on the chip for some tags (and, optionally, only for some target parts of speech).
+// A second dropdown that appears on the chip for some tags (optionally only for some target parts of speech).
 // Required once it appears; reset if the tag changes. `column` is the results column it's saved in.
 const FOLLOWUPS = {
     counterpart: {
-        column:   'undoes',
-        short:    'Undoes?',
-        question: 'Does one undo the other? (make → break, find → lose, open → close). ' +
-                  'Opposite direction (give → take) or ending it (carry → drop) is no.',
-        pos:      ['verb']
+        column:   'counterpart_type',
+        short:    'How opposite?',
+        question: 'Either/or: if it\'s not one, it\'s the other (dead → alive). ' +
+                  'Scale: there\'s an in-between or neutral point (hot → cold, up → down). ' +
+                  'Two sides: swap who\'s who and you get the other word (buy → sell, under → over). ' +
+                  'Undoes: one reverses the change the other makes (make → break). ' +
+                  'None: explain in notes.',
+        options: [
+            { key: 'either_or', label: 'Either/or' },
+            { key: 'scale',     label: 'Ends of a scale' },
+            { key: 'two_sides', label: 'Two sides' },
+            { key: 'undoes',    label: 'Undoes' },
+            { key: 'none',      label: 'None of these' }
+        ]
     }
 };
-
-// Group-level: only available when every answer in the group is tagged Sibling
-const SEQUENCE_LABEL = 'These form a fixed sequence';
-const SEQUENCE_HELP  = 'A sequence people would list in order: days, meals, coins, first/second, baby/child/adult. ' +
-                       'Colors don\'t count. Only available when every answer in the group is a Sibling.';
-
-function groupAllSiblings(state, groupId) {
-    const idx = state.chipZone.map((z, i) => z === groupId ? i : -1).filter(i => i >= 0);
-    return idx.length > 0 && idx.every(i => state.chipTag[i] === 'sibling');
-}
 
 // the follow-up for this tag on this target, or null
 function followupFor(tag, pos) {
@@ -61,19 +60,30 @@ function followupFor(tag, pos) {
 
 function followupHTML(f) {
     if (!f) return '';
-    return `
-        <option value="">${f.short}</option>
-        <option value="yes">${f.short} yes</option>
-        <option value="no">${f.short} no</option>`;
+    return `<option value="">${f.short}</option>` +
+           f.options.map(o => `<option value="${o.key}">${o.label}</option>`).join('');
 }
 
+
+// the follow-up for this tag on this target, or null
+function followupFor(tag, pos) {
+    const f = FOLLOWUPS[tag];
+    if (!f || (f.pos && !f.pos.includes(pos))) return null;
+    return f;
+}
+
+
 // ─── Exclusion bins ───────────────────────────────────────────────────────────
-// Answers that aren't contrasts with the target. They get no group or tag; `key` is saved in `excluded`.
+// Answers that are claims about the target rather than alternatives to it. They get no group or tag;
+// `key` is saved in `excluded`, using the same labels as the phrase annotation (prescriptive / descriptive).
 const BINS = [
-    { key: 'normative',  title: 'Normative claim',  subtitle: 'a judgment or rule about the target (scissors → toy, stairs → safe)' },
-    { key: 'factual',    title: 'Factual claim',    subtitle: 'a category or property the target lacks (bubbles → solid, ant → mammal)' },
-    { key: 'doesnt_fit', title: "Doesn't fit",      subtitle: "unclear or doesn't make sense" }
+    { key: 'prescriptive', title: 'Normative claim',  subtitle: 'a judgment or rule about the target (scissors → toy, stairs → safe)' },
+    { key: 'descriptive',  title: 'Factual claim',    subtitle: 'a category or property the target lacks (bubbles → solid, ant → mammal)' },
+    { key: 'doesnt_fit',   title: "Doesn't fit",      subtitle: "unclear or doesn't make sense" }
 ];
+
+// bin keys used by earlier versions of the page
+const OLD_ZONES = { nofit: 'doesnt_fit', normative: 'prescriptive', factual: 'descriptive' };
 
 function isGroupZone(zone) {
     return /^g\d+$/.test(zone);
@@ -180,10 +190,9 @@ function chipHTML(r, idx) {
 // display:   responses in the order shown in the bank (fixed per coder, so revisits look the same)
 // chipZone:  display idx -> 'bank' | a BINS key | 'g1', 'g2', ...
 // chipTag:   display idx -> relationship tag key ('' if not tagged yet); kept if the chip moves groups
-// chipFollowup: display idx -> '' | 'yes' | 'no' for the tag's follow-up question (see FOLLOWUPS)
-// groups:    group id -> { label, defaultTag, sequence }
+// chipFollowup: display idx -> '' or an option key for the tag's follow-up question (see FOLLOWUPS)
+// groups:    group id -> { label, defaultTag }
 //            defaultTag = last "Set all to" choice, given to answers dropped in later
-//            sequence   = the (all-Sibling) group forms a fixed sequence
 // notes:     free-text notes on this target
 function newAnnotation(item) {
     const display = shuffle(getResponses(item));
@@ -315,7 +324,8 @@ function restoreFromResults(resultRows) {
         state.chipZone = display.map(x => {
             const r = rows.find(row => row.response === x.response);
             if (!r) return 'bank';
-            if (BINS.some(b => b.key === r.excluded)) return r.excluded;
+            const excluded = OLD_ZONES[r.excluded] || r.excluded;
+            if (BINS.some(b => b.key === excluded)) return excluded;
             if (r.group_num !== '') return `g${r.group_num}`;
             return 'bank';
         });
@@ -329,15 +339,14 @@ function restoreFromResults(resultRows) {
             const r = rows.find(row => row.response === x.response);
             const f = followupFor(state.chipTag[i], item.target_pos);
             if (!r || !f) return '';
-            return r[f.column] === '1' ? 'yes' : r[f.column] === '0' ? 'no' : '';
+            return f.options.some(o => o.key === r[f.column]) ? r[f.column] : '';
         });
 
         rows.forEach(r => {
             if (r.group_num === '' || state.groups[`g${r.group_num}`]) return;
             state.groups[`g${r.group_num}`] = {
                 label:      r.group_label || '',
-                defaultTag: '',
-                sequence:   r.group_sequence === '1'
+                defaultTag: ''
             };
         });
         state.groupOrder = Object.keys(state.groups).sort((a, b) => parseInt(a.slice(1)) - parseInt(b.slice(1)));
@@ -380,8 +389,13 @@ function restoreFromLocal() {
             // autosaves from earlier versions of the page
             if (!s.chipTag) s.chipTag = s.display.map(() => '');
             if (!s.chipFollowup) s.chipFollowup = s.display.map(() => '');
+            // drop follow-up answers that aren't valid options any more (e.g. the old yes/no)
+            s.chipFollowup = s.chipFollowup.map((v, i) => {
+                const f = followupFor(s.chipTag[i], item.target_pos);
+                return f && f.options.some(o => o.key === v) ? v : '';
+            });
             if (s.notes === undefined) s.notes = '';
-            s.chipZone = s.chipZone.map(z => z === 'nofit' ? 'doesnt_fit' : z);
+            s.chipZone = s.chipZone.map(z => OLD_ZONES[z] || z);
             s.completed = isComplete(s, item.target_pos);
             annotations[itemKey(item)] = s;
         });
@@ -456,7 +470,7 @@ function buildSortHTML(item) {
             <div class="frame">${buildFrameHTML(item)}</div>
             <p class="task-hint">
                 Sort the answers into groups by <strong>how they differ from <span class="word-highlight">${escapeHTML(item.target_word)}</span></strong>.
-                Name each group, then pick a relationship type for each answer. Answers that aren't contrasts go in the bins on the left.
+                Name each group by completing "They differ in&hellip;", then pick a relationship type for each answer. Answers that aren't contrasts go in the bins on the left.
                 The number on each answer is how many people gave it.
             </p>
 
@@ -494,15 +508,12 @@ function buildGroupHTML(groupId, target) {
         <div class="drop-zone group-box" data-zone="${groupId}">
             <div class="group-header">
                 <div style="flex:1;">
-                    <div class="group-prompt">How do these differ from <strong>${escapeHTML(target)}</strong>?</div>
-                    <input class="group-label" type="text" maxlength="100" placeholder="Name this group" autocomplete="off">
+                    <div class="group-prompt">They differ from <strong>${escapeHTML(target)}</strong> in&hellip;</div>
+                    <input class="group-label" type="text" maxlength="100" placeholder="e.g. time, how welcome it is" autocomplete="off">
                     <select class="group-setall" title="Give every answer in this group the same relationship type">
                         <option value="">Set all answers to&hellip;</option>
                         ${TAG_OPTIONS}
                     </select>
-                    <label class="group-sequence" title="${escapeHTML(SEQUENCE_HELP)}">
-                        <input type="checkbox" class="group-sequence-box"> ${SEQUENCE_LABEL}
-                    </label>
                 </div>
                 <button class="group-remove" title="Remove group">&times;</button>
             </div>
@@ -552,14 +563,7 @@ function setupSortLogic(item, state) {
 
         const labelInput = box.querySelector('.group-label');
         const setAll     = box.querySelector('.group-setall');
-        const sequence   = box.querySelector('.group-sequence-box');
         labelInput.value = state.groups[groupId].label;
-        sequence.checked = !!state.groups[groupId].sequence;
-
-        sequence.addEventListener('change', (e) => {
-            state.groups[groupId].sequence = e.target.checked;
-            markChanged();
-        });
 
         labelInput.addEventListener('input', (e) => {
             state.groups[groupId].label = e.target.value;
@@ -600,7 +604,7 @@ function setupSortLogic(item, state) {
 
     function createGroup() {
         const groupId = `g${state.nextGroup++}`;
-        state.groups[groupId] = { label: '', defaultTag: '', sequence: false };
+        state.groups[groupId] = { label: '', defaultTag: '' };
         state.groupOrder.push(groupId);
         state.nGroupsCreated++;
         return addGroupBox(groupId);
@@ -681,11 +685,6 @@ function setupSortLogic(item, state) {
             const g = box.dataset.zone;
             const hasChips = state.chipZone.includes(g);
             box.classList.toggle('needs-label', hasChips && state.groups[g].label.trim() === '');
-
-            // sequence checkbox only applies when the whole group is Siblings (its value is kept, just inactive)
-            const allSiblings = groupAllSiblings(state, g);
-            box.querySelector('.group-sequence-box').disabled = !allSiblings;
-            box.querySelector('.group-sequence').classList.toggle('inactive', !allSiblings);
         });
         task.querySelectorAll('.chip').forEach(chip => {
             const i = chip.dataset.idx;
@@ -785,15 +784,15 @@ function setupSortLogic(item, state) {
 // Long format: one row per response per target. Targets the RA hasn't touched are left out.
 // Groups that ended up empty are dropped and the rest are renumbered 1..k in the order they were created.
 function followupValue(state, i, inGroup, tag, pos) {
-    if (!inGroup || state.chipTag[i] !== tag || !followupFor(tag, pos) || !state.chipFollowup[i]) return '';
-    return state.chipFollowup[i] === 'yes' ? 1 : 0;
+    if (!inGroup || state.chipTag[i] !== tag || !followupFor(tag, pos)) return '';
+    return state.chipFollowup[i];
 }
 
 function getResultsCSV() {
     const header = [
         'coder', 'list_num', 'target_word', 'target_pos', 'target_cat',
         'response', 'response_count', 'response_rank', 'display_order',
-        'excluded', 'group_num', 'group_label', 'response_tag', 'undoes', 'group_sequence', 'group_size',
+        'excluded', 'group_num', 'group_label', 'response_tag', 'counterpart_type', 'group_size',
         'n_responses', 'n_groups', 'n_excluded', 'n_moves', 'n_groups_created', 'n_groups_removed',
         'time_on_target_s', 'completed', 'notes', 'last_saved'
     ];
@@ -830,7 +829,6 @@ function getResultsCSV() {
                 inGroup ? state.groups[zone].label.trim() : '',
                 inGroup ? state.chipTag[i] : '',
                 followupValue(state, i, inGroup, 'counterpart', item.target_pos),
-                inGroup && groupAllSiblings(state, zone) ? (state.groups[zone].sequence ? 1 : 0) : '',
                 inGroup ? groupSize[zone] : '',
                 state.display.length,
                 usedGroups.length,
