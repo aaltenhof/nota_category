@@ -1,23 +1,27 @@
 // Contrast annotation task for RAs.
 // RAs upload a work unit (trial_lists/fileN.csv) and, optionally, their results from a previous session.
 // For each target they sort the top responses into groups, name each group by how it differs from the
-// target, and pick one relationship tag. Results download as a CSV (one row per response).
+// target, and tag each response with its relationship to the target. Results download as a CSV
+// (one row per response).
 
 const MAX_RESPONSES = 12;   // must match MAX_RESPONSES in make_trial_lists.py
 
 // ─── Relationship tags ────────────────────────────────────────────────────────
-// Exactly one per group. Edit this list to change what RAs see; `key` is what gets saved.
+// Exactly one per response (answers in a group). Edit this list to change what RAs see; `key` is what
+// gets saved. Labels are kept short so they fit on the chip.
 const TAGS = [
-    { key: 'same_kind',     label: 'Same kind (apple → orange)' },
-    { key: 'broader',       label: 'Broader category (apple → fruit)' },
-    { key: 'narrower',      label: 'More specific (fruit → apple)' },
-    { key: 'part_whole',    label: 'Part or whole (arm → hand)' },
-    { key: 'property',      label: 'Property (apple → blue)' },
-    { key: 'use_situation', label: 'Use or situation (bat → ball)' },
-    { key: 'form',          label: 'Sound or spelling (pear → pair)' },
-    { key: 'other_sense',   label: 'Other sense of the target' },
+    { key: 'same_kind',     label: 'Same kind' },
+    { key: 'broader',       label: 'Broader category' },
+    { key: 'narrower',      label: 'More specific' },
+    { key: 'part_whole',    label: 'Part or whole' },
+    { key: 'property',      label: 'Property' },
+    { key: 'use_situation', label: 'Use or situation' },
+    { key: 'form',          label: 'Sound or spelling' },
+    { key: 'other_sense',   label: 'Other sense of target' },
     { key: 'other',         label: 'Other' }
 ];
+
+const TAG_OPTIONS = TAGS.map(t => `<option value="${t.key}">${t.label}</option>`).join('');
 
 // ─── Global state ─────────────────────────────────────────────────────────────
 let coder = '';
@@ -108,18 +112,24 @@ function chipHTML(r, idx) {
         <div class="chip" data-idx="${idx}" title="${r.count} people gave this response">
             <span class="chip-word">${escapeHTML(r.response)}</span>
             <span class="chip-count">${r.count}</span>
+            <select class="chip-tag">
+                <option value="">Relationship&hellip;</option>
+                ${TAG_OPTIONS}
+            </select>
         </div>`;
 }
 
 // ─── Annotation state ─────────────────────────────────────────────────────────
 // display:   responses in the order shown in the bank (fixed per coder, so revisits look the same)
 // chipZone:  display idx -> 'bank' | 'nofit' | 'g1', 'g2', ...
-// groups:    group id -> { label, tag }
+// chipTag:   display idx -> relationship tag key ('' if not tagged yet); kept if the chip moves groups
+// groups:    group id -> { label, defaultTag } (defaultTag = last "Set all to" choice, given to new chips)
 function newAnnotation(item) {
     const display = shuffle(getResponses(item));
     return {
         display:        display,
         chipZone:       display.map(() => 'bank'),
+        chipTag:        display.map(() => ''),
         groups:         {},
         groupOrder:     [],
         nextGroup:      1,
@@ -138,7 +148,10 @@ function getProblems(state) {
     state.groupOrder.forEach(g => {
         if (!state.chipZone.includes(g)) return;   // empty groups are ignored
         if (state.groups[g].label.trim() === '') nUnnamed++;
-        if (!state.groups[g].tag) nUntagged++;
+    });
+    // only answers in a group need a tag (not ones in the bank or "doesn't fit")
+    state.chipZone.forEach((z, i) => {
+        if (z.startsWith('g') && !state.chipTag[i]) nUntagged++;
     });
     return { nUnsorted, nUnnamed, nUntagged };
 }
@@ -243,9 +256,14 @@ function restoreFromResults(resultRows) {
             return 'bank';
         });
 
+        state.chipTag = display.map(x => {
+            const r = rows.find(row => row.response === x.response);
+            return r ? (r.response_tag || '') : '';
+        });
+
         rows.forEach(r => {
             if (r.group_num === '' || state.groups[`g${r.group_num}`]) return;
-            state.groups[`g${r.group_num}`] = { label: r.group_label || '', tag: r.group_tag || '' };
+            state.groups[`g${r.group_num}`] = { label: r.group_label || '', defaultTag: '' };
         });
         state.groupOrder = Object.keys(state.groups).sort((a, b) => parseInt(a.slice(1)) - parseInt(b.slice(1)));
         state.nextGroup = state.groupOrder.length ? Math.max(...state.groupOrder.map(g => parseInt(g.slice(1)))) + 1 : 1;
@@ -282,7 +300,9 @@ function restoreFromLocal() {
         // only keep targets that are in this work unit
         unit.items.forEach(item => {
             const s = saved.annotations[itemKey(item)];
-            if (s) annotations[itemKey(item)] = s;
+            if (!s) return;
+            if (!s.chipTag) s.chipTag = s.display.map(() => '');   // autosaves from before per-response tags
+            annotations[itemKey(item)] = s;
         });
         return Object.keys(annotations).length > 0;
     } catch (e) {
@@ -355,7 +375,7 @@ function buildSortHTML(item) {
             <div class="frame">${buildFrameHTML(item)}</div>
             <p class="task-hint">
                 Sort the answers into groups by <strong>how they differ from <span class="word-highlight">${escapeHTML(item.target_word)}</span></strong>.
-                Name each group and pick one relationship type. The number on each answer is how many people gave it.
+                Name each group, then pick a relationship type for each answer. The number on each answer is how many people gave it.
             </p>
 
             <div id="sort-columns">
@@ -382,16 +402,15 @@ function buildSortHTML(item) {
 }
 
 function buildGroupHTML(groupId, target) {
-    const options = TAGS.map(t => `<option value="${t.key}">${escapeHTML(t.label)}</option>`).join('');
     return `
         <div class="drop-zone group-box" data-zone="${groupId}">
             <div class="group-header">
                 <div style="flex:1;">
                     <div class="group-prompt">How do these differ from <strong>${escapeHTML(target)}</strong>?</div>
                     <input class="group-label" type="text" maxlength="100" placeholder="Name this group" autocomplete="off">
-                    <select class="group-tag">
-                        <option value="">Relationship type&hellip;</option>
-                        ${options}
+                    <select class="group-setall" title="Give every answer in this group the same relationship type">
+                        <option value="">Set all answers to&hellip;</option>
+                        ${TAG_OPTIONS}
                     </select>
                 </div>
                 <button class="group-remove" title="Remove group">&times;</button>
@@ -430,16 +449,24 @@ function setupSortLogic(item, state) {
         const box = zoneEl(groupId);
 
         const labelInput = box.querySelector('.group-label');
-        const tagSelect  = box.querySelector('.group-tag');
+        const setAll     = box.querySelector('.group-setall');
         labelInput.value = state.groups[groupId].label;
-        tagSelect.value  = state.groups[groupId].tag;
 
         labelInput.addEventListener('input', (e) => {
             state.groups[groupId].label = e.target.value;
             markChanged();
         });
-        tagSelect.addEventListener('change', (e) => {
-            state.groups[groupId].tag = e.target.value;
+
+        // tag every answer currently in the group; answers added later get it too if they're untagged
+        setAll.addEventListener('change', (e) => {
+            const tag = e.target.value;
+            if (!tag) return;
+            state.groups[groupId].defaultTag = tag;
+            box.querySelectorAll('.chip').forEach(chip => {
+                state.chipTag[chip.dataset.idx] = tag;
+                chip.querySelector('.chip-tag').value = tag;
+            });
+            e.target.value = '';
             markChanged();
         });
 
@@ -462,7 +489,7 @@ function setupSortLogic(item, state) {
 
     function createGroup() {
         const groupId = `g${state.nextGroup++}`;
-        state.groups[groupId] = { label: '', tag: '' };
+        state.groups[groupId] = { label: '', defaultTag: '' };
         state.groupOrder.push(groupId);
         state.nGroupsCreated++;
         return addGroupBox(groupId);
@@ -473,6 +500,14 @@ function setupSortLogic(item, state) {
     state.display.forEach((r, i) => {
         const zone = zoneEl(state.chipZone[i]) || zoneEl('bank');
         zone.querySelector('.chip-holder').insertAdjacentHTML('beforeend', chipHTML(r, i));
+        zone.querySelector(`.chip[data-idx="${i}"] .chip-tag`).value = state.chipTag[i];
+    });
+
+    // per-answer relationship tags
+    task.addEventListener('change', (e) => {
+        if (!e.target.classList.contains('chip-tag')) return;
+        state.chipTag[e.target.closest('.chip').dataset.idx] = e.target.value;
+        markChanged();
     });
 
     newZone.addEventListener('click', () => {
@@ -498,6 +533,13 @@ function setupSortLogic(item, state) {
         state.chipZone[chip.dataset.idx] = zoneId;
         state.nMoves++;
 
+        // an untagged answer dropped into a group picks up that group's "Set all" choice, if any
+        const group = state.groups[zoneId];
+        if (group && group.defaultTag && !state.chipTag[chip.dataset.idx]) {
+            state.chipTag[chip.dataset.idx] = group.defaultTag;
+            chip.querySelector('.chip-tag').value = group.defaultTag;
+        }
+
         if (focusLabel) zone.querySelector('.group-label').focus();
         markChanged();
     }
@@ -507,8 +549,11 @@ function setupSortLogic(item, state) {
         groupArea.querySelectorAll('.group-box').forEach(box => {
             const g = box.dataset.zone;
             const hasChips = state.chipZone.includes(g);
-            const missing  = hasChips && (state.groups[g].label.trim() === '' || !state.groups[g].tag);
-            box.classList.toggle('needs-label', missing);
+            box.classList.toggle('needs-label', hasChips && state.groups[g].label.trim() === '');
+        });
+        task.querySelectorAll('.chip').forEach(chip => {
+            const i = chip.dataset.idx;
+            chip.classList.toggle('needs-tag', state.chipZone[i].startsWith('g') && !state.chipTag[i]);
         });
 
         const p = getProblems(state);
@@ -519,7 +564,7 @@ function setupSortLogic(item, state) {
             const parts = [];
             if (p.nUnsorted > 0) parts.push(`Answers left to sort: ${p.nUnsorted}`);
             if (p.nUnnamed > 0)  parts.push(`Groups without a name: ${p.nUnnamed}`);
-            if (p.nUntagged > 0) parts.push(`Groups without a relationship type: ${p.nUntagged}`);
+            if (p.nUntagged > 0) parts.push(`Answers without a relationship type: ${p.nUntagged}`);
             status.textContent = parts.join(' · ');
         }
     }
@@ -533,7 +578,7 @@ function setupSortLogic(item, state) {
 
     task.addEventListener('pointerdown', (e) => {
         const chip = e.target.closest('.chip');
-        if (!chip) return;
+        if (!chip || e.target.closest('select')) return;
         e.preventDefault();
         if (document.activeElement) document.activeElement.blur();
 
@@ -605,7 +650,7 @@ function getResultsCSV() {
     const header = [
         'coder', 'list_num', 'target_word', 'target_pos', 'target_cat',
         'response', 'response_count', 'response_rank', 'display_order',
-        'doesnt_fit', 'group_num', 'group_label', 'group_tag', 'group_size',
+        'doesnt_fit', 'group_num', 'group_label', 'response_tag', 'group_size',
         'n_responses', 'n_groups', 'n_doesnt_fit', 'n_moves', 'n_groups_created', 'n_groups_removed',
         'time_on_target_s', 'completed', 'last_saved'
     ];
@@ -640,7 +685,7 @@ function getResultsCSV() {
                 zone === 'nofit' ? 1 : 0,
                 inGroup ? groupNum[zone] : '',
                 inGroup ? state.groups[zone].label.trim() : '',
-                inGroup ? state.groups[zone].tag : '',
+                inGroup ? state.chipTag[i] : '',
                 inGroup ? groupSize[zone] : '',
                 state.display.length,
                 usedGroups.length,
