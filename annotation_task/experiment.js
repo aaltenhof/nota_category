@@ -1,27 +1,45 @@
 // Contrast annotation task for RAs.
 // RAs upload a work unit (trial_lists/fileN.csv) and, optionally, their results from a previous session.
 // For each target they sort the top responses into groups, name each group by how it differs from the
-// target, and tag each response with its relationship to the target. Results download as a CSV
-// (one row per response).
+// target, and tag each response with its relationship to the target. Answers that aren't contrasts
+// go in an exclusion bin instead. Results download as a CSV (one row per response).
 
 const MAX_RESPONSES = 12;   // must match MAX_RESPONSES in make_trial_lists.py
 
 // ─── Relationship tags ────────────────────────────────────────────────────────
 // Exactly one per response (answers in a group). Edit this list to change what RAs see; `key` is what
 // gets saved. Labels are kept short so they fit on the chip.
+//   counterpart    the dimension has two values or two ends (brother → sister, hot → cold, giving → take)
+//   sibling        one of many alternatives, including functional ones (tiger → lion, yellow → blue, stairs → elevator)
+//   near_synonym   almost the same, but a distinction is being drawn (hearing → listen, house → home)
+//   broader        banana → fruit          narrower    plant → tree
+//   part_whole     ankle → foot            goes_together  keys → lock, jelly → peanut butter
+//   form           sound or spelling (ant → aunt)
 const TAGS = [
-    { key: 'same_kind',     label: 'Same kind' },
+    { key: 'counterpart',   label: 'Counterpart' },
+    { key: 'sibling',       label: 'Sibling' },
+    { key: 'near_synonym',  label: 'Near-synonym' },
     { key: 'broader',       label: 'Broader category' },
-    { key: 'narrower',      label: 'More specific' },
+    { key: 'narrower',      label: 'Narrower category' },
     { key: 'part_whole',    label: 'Part or whole' },
-    { key: 'property',      label: 'Property' },
-    { key: 'use_situation', label: 'Use or situation' },
+    { key: 'goes_together', label: 'Goes together' },
     { key: 'form',          label: 'Sound or spelling' },
-    { key: 'other_sense',   label: 'Other sense of target' },
     { key: 'other',         label: 'Other' }
 ];
 
 const TAG_OPTIONS = TAGS.map(t => `<option value="${t.key}">${t.label}</option>`).join('');
+
+// ─── Exclusion bins ───────────────────────────────────────────────────────────
+// Answers that aren't contrasts with the target. They get no group or tag; `key` is saved in `excluded`.
+const BINS = [
+    { key: 'normative',  title: 'Normative claim',  subtitle: 'a judgment or rule about the target (scissors → toy, stairs → safe)' },
+    { key: 'factual',    title: 'Factual claim',    subtitle: 'a category or property the target lacks (bubbles → solid, ant → mammal)' },
+    { key: 'doesnt_fit', title: "Doesn't fit",      subtitle: "unclear or doesn't make sense" }
+];
+
+function isGroupZone(zone) {
+    return /^g\d+$/.test(zone);
+}
 
 // ─── Global state ─────────────────────────────────────────────────────────────
 let coder = '';
@@ -121,9 +139,12 @@ function chipHTML(r, idx) {
 
 // ─── Annotation state ─────────────────────────────────────────────────────────
 // display:   responses in the order shown in the bank (fixed per coder, so revisits look the same)
-// chipZone:  display idx -> 'bank' | 'nofit' | 'g1', 'g2', ...
+// chipZone:  display idx -> 'bank' | a BINS key | 'g1', 'g2', ...
 // chipTag:   display idx -> relationship tag key ('' if not tagged yet); kept if the chip moves groups
-// groups:    group id -> { label, defaultTag } (defaultTag = last "Set all to" choice, given to new chips)
+// groups:    group id -> { label, defaultTag, otherSense }
+//            defaultTag = last "Set all to" choice, given to answers dropped in later
+//            otherSense = the group relies on a different sense of the target
+// notes:     free-text notes on this target
 function newAnnotation(item) {
     const display = shuffle(getResponses(item));
     return {
@@ -136,6 +157,7 @@ function newAnnotation(item) {
         nMoves:         0,
         nGroupsCreated: 0,
         nGroupsRemoved: 0,
+        notes:          '',
         timeSpent:      0,       // seconds
         completed:      false,
         lastSaved:      ''
@@ -149,9 +171,9 @@ function getProblems(state) {
         if (!state.chipZone.includes(g)) return;   // empty groups are ignored
         if (state.groups[g].label.trim() === '') nUnnamed++;
     });
-    // only answers in a group need a tag (not ones in the bank or "doesn't fit")
+    // only answers in a group need a tag (not ones in the bank or an exclusion bin)
     state.chipZone.forEach((z, i) => {
-        if (z.startsWith('g') && !state.chipTag[i]) nUntagged++;
+        if (isGroupZone(z) && !state.chipTag[i]) nUntagged++;
     });
     return { nUnsorted, nUnnamed, nUntagged };
 }
@@ -162,7 +184,7 @@ function isComplete(state) {
 }
 
 function isTouched(state) {
-    return state && (state.nMoves > 0 || state.groupOrder.length > 0);
+    return state && (state.nMoves > 0 || state.groupOrder.length > 0 || state.notes.trim() !== '');
 }
 
 // ─── Start screen ─────────────────────────────────────────────────────────────
@@ -251,7 +273,7 @@ function restoreFromResults(resultRows) {
         state.chipZone = display.map(x => {
             const r = rows.find(row => row.response === x.response);
             if (!r) return 'bank';
-            if (r.doesnt_fit === '1') return 'nofit';
+            if (BINS.some(b => b.key === r.excluded)) return r.excluded;
             if (r.group_num !== '') return `g${r.group_num}`;
             return 'bank';
         });
@@ -263,7 +285,11 @@ function restoreFromResults(resultRows) {
 
         rows.forEach(r => {
             if (r.group_num === '' || state.groups[`g${r.group_num}`]) return;
-            state.groups[`g${r.group_num}`] = { label: r.group_label || '', defaultTag: '' };
+            state.groups[`g${r.group_num}`] = {
+                label:      r.group_label || '',
+                defaultTag: '',
+                otherSense: r.group_other_sense === '1'
+            };
         });
         state.groupOrder = Object.keys(state.groups).sort((a, b) => parseInt(a.slice(1)) - parseInt(b.slice(1)));
         state.nextGroup = state.groupOrder.length ? Math.max(...state.groupOrder.map(g => parseInt(g.slice(1)))) + 1 : 1;
@@ -273,6 +299,7 @@ function restoreFromResults(resultRows) {
         state.nGroupsCreated = parseInt(first.n_groups_created, 10) || 0;
         state.nGroupsRemoved = parseInt(first.n_groups_removed, 10) || 0;
         state.timeSpent      = parseFloat(first.time_on_target_s) || 0;
+        state.notes          = first.notes || '';
         state.lastSaved      = first.last_saved || '';
         state.completed      = isComplete(state);
 
@@ -301,7 +328,10 @@ function restoreFromLocal() {
         unit.items.forEach(item => {
             const s = saved.annotations[itemKey(item)];
             if (!s) return;
-            if (!s.chipTag) s.chipTag = s.display.map(() => '');   // autosaves from before per-response tags
+            // autosaves from earlier versions of the page
+            if (!s.chipTag) s.chipTag = s.display.map(() => '');
+            if (s.notes === undefined) s.notes = '';
+            s.chipZone = s.chipZone.map(z => z === 'nofit' ? 'doesnt_fit' : z);
             annotations[itemKey(item)] = s;
         });
         return Object.keys(annotations).length > 0;
@@ -375,7 +405,8 @@ function buildSortHTML(item) {
             <div class="frame">${buildFrameHTML(item)}</div>
             <p class="task-hint">
                 Sort the answers into groups by <strong>how they differ from <span class="word-highlight">${escapeHTML(item.target_word)}</span></strong>.
-                Name each group, then pick a relationship type for each answer. The number on each answer is how many people gave it.
+                Name each group, then pick a relationship type for each answer. Answers that aren't contrasts go in the bins on the left.
+                The number on each answer is how many people gave it.
             </p>
 
             <div id="sort-columns">
@@ -384,10 +415,11 @@ function buildSortHTML(item) {
                         <div class="zone-title">Answers to sort</div>
                         <div class="chip-holder"></div>
                     </div>
-                    <div id="nofit-zone" class="drop-zone" data-zone="nofit">
-                        <div class="zone-title">Doesn't fit <span class="zone-subtitle">(unclear or doesn't make sense)</span></div>
+                    ${BINS.map(b => `
+                    <div class="drop-zone exclude-zone" data-zone="${b.key}">
+                        <div class="zone-title">${b.title} <span class="zone-subtitle">${escapeHTML(b.subtitle)}</span></div>
                         <div class="chip-holder"></div>
-                    </div>
+                    </div>`).join('')}
                 </div>
 
                 <div id="group-area">
@@ -396,6 +428,11 @@ function buildSortHTML(item) {
                         <small>drag an answer here, or click</small>
                     </div>
                 </div>
+            </div>
+
+            <div id="notes-box">
+                <label for="target-notes">Notes on <strong>${escapeHTML(item.target_word)}</strong></label>
+                <textarea id="target-notes" rows="2" placeholder="Anything odd about this target or its answers, or a decision you weren't sure about"></textarea>
             </div>
         </div>
     `;
@@ -412,6 +449,9 @@ function buildGroupHTML(groupId, target) {
                         <option value="">Set all answers to&hellip;</option>
                         ${TAG_OPTIONS}
                     </select>
+                    <label class="group-sense">
+                        <input type="checkbox" class="group-other-sense"> Uses a different sense of <strong>${escapeHTML(target)}</strong>
+                    </label>
                 </div>
                 <button class="group-remove" title="Remove group">&times;</button>
             </div>
@@ -450,7 +490,14 @@ function setupSortLogic(item, state) {
 
         const labelInput = box.querySelector('.group-label');
         const setAll     = box.querySelector('.group-setall');
-        labelInput.value = state.groups[groupId].label;
+        const otherSense = box.querySelector('.group-other-sense');
+        labelInput.value   = state.groups[groupId].label;
+        otherSense.checked = !!state.groups[groupId].otherSense;
+
+        otherSense.addEventListener('change', (e) => {
+            state.groups[groupId].otherSense = e.target.checked;
+            markChanged();
+        });
 
         labelInput.addEventListener('input', (e) => {
             state.groups[groupId].label = e.target.value;
@@ -489,7 +536,7 @@ function setupSortLogic(item, state) {
 
     function createGroup() {
         const groupId = `g${state.nextGroup++}`;
-        state.groups[groupId] = { label: '', defaultTag: '' };
+        state.groups[groupId] = { label: '', defaultTag: '', otherSense: false };
         state.groupOrder.push(groupId);
         state.nGroupsCreated++;
         return addGroupBox(groupId);
@@ -501,6 +548,14 @@ function setupSortLogic(item, state) {
         const zone = zoneEl(state.chipZone[i]) || zoneEl('bank');
         zone.querySelector('.chip-holder').insertAdjacentHTML('beforeend', chipHTML(r, i));
         zone.querySelector(`.chip[data-idx="${i}"] .chip-tag`).value = state.chipTag[i];
+    });
+
+    // notes
+    const notesBox = document.getElementById('target-notes');
+    notesBox.value = state.notes;
+    notesBox.addEventListener('input', (e) => {
+        state.notes = e.target.value;
+        markChanged();
     });
 
     // per-answer relationship tags
@@ -553,7 +608,7 @@ function setupSortLogic(item, state) {
         });
         task.querySelectorAll('.chip').forEach(chip => {
             const i = chip.dataset.idx;
-            chip.classList.toggle('needs-tag', state.chipZone[i].startsWith('g') && !state.chipTag[i]);
+            chip.classList.toggle('needs-tag', isGroupZone(state.chipZone[i]) && !state.chipTag[i]);
         });
 
         const p = getProblems(state);
@@ -650,9 +705,9 @@ function getResultsCSV() {
     const header = [
         'coder', 'list_num', 'target_word', 'target_pos', 'target_cat',
         'response', 'response_count', 'response_rank', 'display_order',
-        'doesnt_fit', 'group_num', 'group_label', 'response_tag', 'group_size',
-        'n_responses', 'n_groups', 'n_doesnt_fit', 'n_moves', 'n_groups_created', 'n_groups_removed',
-        'time_on_target_s', 'completed', 'last_saved'
+        'excluded', 'group_num', 'group_label', 'response_tag', 'group_other_sense', 'group_size',
+        'n_responses', 'n_groups', 'n_excluded', 'n_moves', 'n_groups_created', 'n_groups_removed',
+        'time_on_target_s', 'completed', 'notes', 'last_saved'
     ];
 
     const rows = [];
@@ -667,7 +722,7 @@ function getResultsCSV() {
         const groupSize = {};
         state.chipZone.forEach(z => { groupSize[z] = (groupSize[z] || 0) + 1; });
 
-        const nDoesntFit = state.chipZone.filter(z => z === 'nofit').length;
+        const nExcluded = state.chipZone.filter(z => BINS.some(b => b.key === z)).length;
 
         state.display.forEach((r, i) => {
             const zone = state.chipZone[i];
@@ -682,19 +737,21 @@ function getResultsCSV() {
                 r.count,
                 r.rank,
                 i + 1,
-                zone === 'nofit' ? 1 : 0,
+                BINS.some(b => b.key === zone) ? zone : '',
                 inGroup ? groupNum[zone] : '',
                 inGroup ? state.groups[zone].label.trim() : '',
                 inGroup ? state.chipTag[i] : '',
+                inGroup ? (state.groups[zone].otherSense ? 1 : 0) : '',
                 inGroup ? groupSize[zone] : '',
                 state.display.length,
                 usedGroups.length,
-                nDoesntFit,
+                nExcluded,
                 state.nMoves,
                 state.nGroupsCreated,
                 state.nGroupsRemoved,
                 Math.round(state.timeSpent),
                 state.completed ? 1 : 0,
+                state.notes.trim(),
                 state.lastSaved
             ]);
         });
