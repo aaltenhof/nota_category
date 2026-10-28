@@ -1,36 +1,33 @@
-function getUrlParam(param) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
-}
-
-const sonaId = getUrlParam('sona_id');
-const workerId = getUrlParam('workerId');
-
-// ?list=N loads trial_lists/fileN.csv directly instead of asking DataPipe (for piloting / RAs)
-const listOverride = getUrlParam('list');
-
-let participant_id;
-if (sonaId) {
-    participant_id = sonaId;
-    console.log('Using SONA ID:', participant_id);
-} else if (workerId) {
-    participant_id = workerId;
-    console.log('Using MTurk Worker ID:', participant_id);
-} else {
-    participant_id = `participant${Math.floor(Math.random() * 999) + 1}`;
-    console.log('No worker ID found, using random ID:', participant_id);
-}
-
-const jsPsych = initJsPsych({
-    show_progress_bar: true,
-    on_finish: function() {}
-});
-
-let timeline = [];
-let globalTrialNumber = 0;
-let assignedList = null;
+// Contrast annotation task for RAs.
+// RAs upload a work unit (trial_lists/fileN.csv) and, optionally, their results from a previous session.
+// For each target they sort the top responses into groups, name each group by how it differs from the
+// target, and pick one relationship tag. Results download as a CSV (one row per response).
 
 const MAX_RESPONSES = 12;   // must match MAX_RESPONSES in make_trial_lists.py
+
+// ─── Relationship tags ────────────────────────────────────────────────────────
+// Exactly one per group. Edit this list to change what RAs see; `key` is what gets saved.
+const TAGS = [
+    { key: 'same_kind',     label: 'Same kind (apple → orange)' },
+    { key: 'broader',       label: 'Broader category (apple → fruit)' },
+    { key: 'narrower',      label: 'More specific (fruit → apple)' },
+    { key: 'part_whole',    label: 'Part or whole (arm → hand)' },
+    { key: 'property',      label: 'Property (apple → blue)' },
+    { key: 'use_situation', label: 'Use or situation (bat → ball)' },
+    { key: 'form',          label: 'Sound or spelling (pear → pair)' },
+    { key: 'other_sense',   label: 'Other sense of the target' },
+    { key: 'other',         label: 'Other' }
+];
+
+// ─── Global state ─────────────────────────────────────────────────────────────
+let coder = '';
+let unit = { listNum: null, items: [] };   // items are in this coder's sidebar order
+let annotations = {};                      // target key -> annotation state
+let currentIndex = 0;
+let currentStart = null;                   // when the current target was opened
+let unsavedChanges = false;
+let lastDownload = null;
+let restoreNote = '';                      // shown until the RA changes something
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function escapeHTML(s) {
@@ -42,6 +39,10 @@ function escapeHTML(s) {
         .replace(/'/g, '&#39;');
 }
 
+function itemKey(item) {
+    return `${item.target_word}_${item.target_pos}`;
+}
+
 // Same frame logic as the original nota task: before + target + clarification + after + blank
 function buildFrameHTML(item) {
     const before = item.sentence_frame_before || '';
@@ -50,7 +51,7 @@ function buildFrameHTML(item) {
     return `${before}<span class="word-highlight">${escapeHTML(item.target_word)}</span>${clarification}${after}<span class="frame-blank">______</span>`;
 }
 
-// Pull response1..responseN / count1..countN out of a trial-list row
+// Pull response1..responseN / count1..countN out of a work-unit row
 function getResponses(item) {
     const responses = [];
     for (let i = 1; i <= MAX_RESPONSES; i++) {
@@ -65,6 +66,43 @@ function getResponses(item) {
     return responses;
 }
 
+function shuffle(arr, rand = Math.random) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(rand() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+// Seeded RNG so each coder gets their own, but stable, target order for a work unit
+function seededRandom(seedString) {
+    let h = 1779033703 ^ seedString.length;
+    for (let i = 0; i < seedString.length; i++) {
+        h = Math.imul(h ^ seedString.charCodeAt(i), 3432918353);
+        h = (h << 13) | (h >>> 19);
+    }
+    let a = h >>> 0;
+    return function() {
+        a |= 0; a = (a + 0x6D2B79F5) | 0;
+        let t = Math.imul(a ^ (a >>> 15), 1 | a);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+}
+
+function parseCSVFile(file) {
+    return new Promise((resolve, reject) => {
+        Papa.parse(file, {
+            header: true,
+            skipEmptyLines: true,
+            dynamicTyping: false,   // keep responses like "true" or "1" as strings
+            complete: results => resolve(results.data),
+            error: err => reject(err)
+        });
+    });
+}
+
 function chipHTML(r, idx) {
     return `
         <div class="chip" data-idx="${idx}" title="${r.count} people gave this response">
@@ -73,153 +111,258 @@ function chipHTML(r, idx) {
         </div>`;
 }
 
-// ─── Consent ──────────────────────────────────────────────────────────────────
-const consent = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: `
-        <div class="consent-text">
-            <h3>Consent to Participate in Research</h3>
-
-            <p>The task you are about to do is sponsored by University of Wisconsin-Madison. It is part of a protocol titled "What are we learning from language?"</p>
-
-            <p>The task you are asked to do involves making simple responses to words and sentences. For example, you may be asked to rate a pair of words on their similarity or to indicate how true you think a given sentence is. More detailed instructions for this specific task will be provided on the next screen.</p>
-
-            <p>This task has no direct benefits. We do not anticipate any psychosocial risks. There is a risk of a confidentiality breach. Participants may become fatigued or frustrated due to the length of the study.</p>
-
-            <p>The responses you submit as part of this task will be stored on a secure server and accessible only to researchers who have been approved by UW-Madison. Processed data with all identifiers removed could be used for future research studies or distributed to another investigator for future research studies without additional informed consent from the subject or the legally authorized representative.</p>
-
-            <p>You are free to decline to participate, to end participation at any time for any reason, or to refuse to answer any individual question without penalty or loss of earned compensation. We will not retain data from partial responses. If you would like to withdraw your data after participating, you may send an email lupyan@wisc.edu or complete this form which will allow you to make a request anonymously.</p>
-
-            <p>If you have any questions or concerns about this task please contact the principal investigator: Prof. Gary Lupyan at lupyan@wisc.edu.</p>
-
-            <p>If you are not satisfied with response of the research team, have more questions, or want to talk with someone about your rights as a research participant, you should contact University of Wisconsin's Education Research and Social &amp; Behavioral Science IRB Office at 608-263-2320.</p>
-
-            <p><strong>By clicking the box below, I consent to participate in this task and affirm that I am at least 18 years old.</strong></p>
-        </div>
-    `,
-    choices: ['I Agree', 'I Do Not Agree'],
-    data: { trial_type: 'consent' },
-    on_finish: function(data) {
-        if (data.response == 1) {
-            jsPsych.endExperiment('Thank you for your time. The experiment has been ended.');
-        }
-    }
-};
-
-// ─── Instructions ─────────────────────────────────────────────────────────────
-// Worked example uses "lemon", which is not a target word. Counts are illustrative only.
-const exampleGroups = [
-    { label: 'other citrus fruits', responses: [{ response: 'lime', count: 52 }, { response: 'orange', count: 38 }, { response: 'grapefruit', count: 11 }] },
-    { label: 'other fruits',        responses: [{ response: 'apple', count: 20 }, { response: 'banana', count: 12 }] },
-    { label: 'different taste',     responses: [{ response: 'sweet', count: 9 }, { response: 'sugar', count: 4 }] }
-];
-
-function buildExampleHTML() {
-    const groups = exampleGroups.map(g => `
-        <div class="drop-zone group-box" style="min-height:0;">
-            <div class="group-prompt">How do these differ from <strong>lemon</strong>?</div>
-            <div class="group-label" style="margin-bottom:8px; background:#fff;">${g.label}</div>
-            <div class="chip-holder">${g.responses.map((r, i) => chipHTML(r, i)).join('')}</div>
-        </div>`).join('');
-
-    return `
-        <div style="border:1px solid #ddd; border-radius:8px; padding:16px; margin:20px 0; text-align:center;">
-            <div class="frame">A <span class="word-highlight">lemon</span> is not a <span class="frame-blank">______</span></div>
-            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; margin-top:14px; text-align:left;">
-                ${groups}
-            </div>
-        </div>`;
+// ─── Annotation state ─────────────────────────────────────────────────────────
+// display:   responses in the order shown in the bank (fixed per coder, so revisits look the same)
+// chipZone:  display idx -> 'bank' | 'nofit' | 'g1', 'g2', ...
+// groups:    group id -> { label, tag }
+function newAnnotation(item) {
+    const display = shuffle(getResponses(item));
+    return {
+        display:        display,
+        chipZone:       display.map(() => 'bank'),
+        groups:         {},
+        groupOrder:     [],
+        nextGroup:      1,
+        nMoves:         0,
+        nGroupsCreated: 0,
+        nGroupsRemoved: 0,
+        timeSpent:      0,       // seconds
+        completed:      false,
+        lastSaved:      ''
+    };
 }
 
-const instructions = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: () => `
-        <div style="max-width: 850px; margin: 0 auto; text-align: center; font-family: sans-serif;">
-            <h2>Instructions</h2>
-            <p>In an earlier study, people completed sentences like <strong>"A lemon is not a ______."</strong></p>
+function getProblems(state) {
+    const nUnsorted = state.chipZone.filter(z => z === 'bank').length;
+    let nUnnamed = 0, nUntagged = 0;
+    state.groupOrder.forEach(g => {
+        if (!state.chipZone.includes(g)) return;   // empty groups are ignored
+        if (state.groups[g].label.trim() === '') nUnnamed++;
+        if (!state.groups[g].tag) nUntagged++;
+    });
+    return { nUnsorted, nUnnamed, nUntagged };
+}
 
-            <p>On each screen of this study, you will see one of those sentences along with the <strong>most common answers</strong> people gave.
-            The number next to each answer is <strong>how many people</strong> gave that answer.</p>
+function isComplete(state) {
+    const p = getProblems(state);
+    return p.nUnsorted === 0 && p.nUnnamed === 0 && p.nUntagged === 0;
+}
 
-            <p>Your job is to <strong>sort the answers into groups</strong> based on <strong>how they differ</strong> from the word in the sentence,
-            and then <strong>give each group a name</strong> that describes that difference in your own words.</p>
+function isTouched(state) {
+    return state && (state.nMoves > 0 || state.groupOrder.length > 0);
+}
 
-            <p>For example, <em>lime</em>, <em>orange</em>, and <em>grapefruit</em> all differ from <em>lemon</em> in the same way: they are other citrus fruits.
-            <em>Sweet</em> and <em>sugar</em> differ from <em>lemon</em> in a different way: they are about taste.</p>
+// ─── Start screen ─────────────────────────────────────────────────────────────
+async function startAnnotating() {
+    const errorEl = document.getElementById('start-error');
+    errorEl.textContent = '';
 
-            ${buildExampleHTML()}
+    coder = document.getElementById('coder-input').value.trim().toUpperCase();
+    const unitFile = document.getElementById('unit-input').files[0];
+    const resultsFile = document.getElementById('results-input').files[0];
 
-            <div style="text-align:left; max-width:700px; margin:0 auto;">
-                <ul style="line-height:1.7;">
-                    <li>Drag an answer onto <strong>+ New group</strong> to start a group, then type a name for it.</li>
-                    <li>Make as many or as few groups as you need. A group can have just one answer.</li>
-                    <li>If an answer doesn't make sense, or you can't tell how it relates to the word, drag it to <strong>Doesn't fit</strong>.</li>
-                    <li>You must place <strong>every answer</strong> and name <strong>every group</strong> before you can continue.</li>
-                </ul>
-            </div>
+    if (!coder) { errorEl.textContent = 'Please enter your initials.'; return; }
+    if (!unitFile) { errorEl.textContent = 'Please choose a work unit file.'; return; }
 
-            <p>You will do a practice trial first to get a better sense of how the task works.</p>
+    try {
+        // load work unit
+        const rows = await parseCSVFile(unitFile);
+        if (rows.length === 0 || !('target_word' in rows[0]) || !('response1' in rows[0])) {
+            throw new Error(`${unitFile.name} doesn't look like a work unit file.`);
+        }
+        unit.listNum = rows[0].list_num;
+        unit.items = shuffle(rows, seededRandom(`${coder}_${unit.listNum}`));
+        console.log(`Loaded work unit ${unit.listNum}: ${unit.items.length} targets`);
 
-            <p><strong>Press any key when you're ready to begin.</strong></p>
-        </div>
-    `,
-    data: { trial_type: 'instructions' }
-};
+        // restore previous work: uploaded results file first, otherwise this browser's autosave
+        let restoredFrom = '';
+        if (resultsFile) {
+            const resultRows = await parseCSVFile(resultsFile);
+            const fileUnit = resultRows.length ? resultRows[0].list_num : null;
+            if (fileUnit && String(fileUnit) !== String(unit.listNum)) {
+                throw new Error(`That results file is for work unit ${fileUnit}, not work unit ${unit.listNum}.`);
+            }
+            restoreFromResults(resultRows);
+            restoredFrom = `Restored ${Object.keys(annotations).length} targets from ${resultsFile.name}.`;
+        } else if (restoreFromLocal()) {
+            restoredFrom = 'Restored autosaved work from this browser. Download your results to keep a copy.';
+            unsavedChanges = true;
+        }
 
-// ─── Practice ─────────────────────────────────────────────────────────────────
-// "guitar" is not a target word. Counts are illustrative only.
-const practiceItem = {
-    target_word: 'guitar', target_pos: 'noun', target_cat: 'practice',
-    sentence_frame_before: 'A ', sentence_frame_after: ' is not a ', clarification: '',
-    response1: 'piano',   count1: 48,
-    response2: 'violin',  count2: 31,
-    response3: 'drum',    count3: 24,
-    response4: 'ukulele', count4: 14,
-    response5: 'flute',   count5: 9,
-    response6: 'song',    count6: 5,
-    response7: 'quiet',   count7: 4
-};
+        unit.items.forEach(item => {
+            if (!annotations[itemKey(item)]) annotations[itemKey(item)] = newAnnotation(item);
+        });
 
-// ─── Begin Main Study ─────────────────────────────────────────────────────────
-const beginMainStudy = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: `
-        <div style="max-width: 700px; margin: 0 auto; text-align: center; font-family: sans-serif;">
-            <h2>Ready to Begin</h2>
-            <p style="font-size: 16px; line-height: 1.6;">
-                Great job! You've completed the practice trial.
-            </p>
-            <p style="font-size: 16px; line-height: 1.6;">
-                You're now ready to begin the main study. The task will be exactly the same:
-                sort the answers into groups by how they differ from the word, and give each group a name.
-            </p>
-            <p style="font-size: 16px; line-height: 1.6; margin-top: 20px;">
-                <strong>Click Continue when you're ready to start.</strong>
-            </p>
-        </div>
-    `,
-    choices: ['Continue'],
-    data: { trial_type: 'begin_main_study' }
-};
+        document.getElementById('start-screen').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        document.getElementById('unit-title').textContent = `Work unit ${unit.listNum}`;
+        document.getElementById('unit-meta').textContent = `Coder: ${coder}`;
+        restoreNote = restoredFrom;
+
+        // open the first target that isn't finished
+        const firstOpen = unit.items.findIndex(item => !annotations[itemKey(item)].completed);
+        openTarget(firstOpen === -1 ? 0 : firstOpen);
+
+    } catch (error) {
+        console.error('Error starting:', error);
+        errorEl.textContent = error.message;
+    }
+}
+
+// ─── Restore from a downloaded results file ──────────────────────────────────
+function restoreFromResults(resultRows) {
+    const byKey = {};
+    resultRows.forEach(r => {
+        const key = `${r.target_word}_${r.target_pos}`;
+        (byKey[key] = byKey[key] || []).push(r);
+    });
+
+    unit.items.forEach(item => {
+        const key = itemKey(item);
+        const rows = byKey[key];
+        if (!rows) return;
+
+        rows.sort((a, b) => parseInt(a.display_order, 10) - parseInt(b.display_order, 10));
+        const responses = getResponses(item);
+        const state = newAnnotation(item);
+
+        // rebuild display order from the file; anything not in the file goes to the end
+        const display = [];
+        rows.forEach(r => {
+            const match = responses.find(x => x.response === r.response && !display.includes(x));
+            if (match) display.push(match);
+        });
+        responses.forEach(x => { if (!display.includes(x)) display.push(x); });
+        state.display = display;
+
+        state.chipZone = display.map(x => {
+            const r = rows.find(row => row.response === x.response);
+            if (!r) return 'bank';
+            if (r.doesnt_fit === '1') return 'nofit';
+            if (r.group_num !== '') return `g${r.group_num}`;
+            return 'bank';
+        });
+
+        rows.forEach(r => {
+            if (r.group_num === '' || state.groups[`g${r.group_num}`]) return;
+            state.groups[`g${r.group_num}`] = { label: r.group_label || '', tag: r.group_tag || '' };
+        });
+        state.groupOrder = Object.keys(state.groups).sort((a, b) => parseInt(a.slice(1)) - parseInt(b.slice(1)));
+        state.nextGroup = state.groupOrder.length ? Math.max(...state.groupOrder.map(g => parseInt(g.slice(1)))) + 1 : 1;
+
+        const first = rows[0];
+        state.nMoves         = parseInt(first.n_moves, 10) || 0;
+        state.nGroupsCreated = parseInt(first.n_groups_created, 10) || 0;
+        state.nGroupsRemoved = parseInt(first.n_groups_removed, 10) || 0;
+        state.timeSpent      = parseFloat(first.time_on_target_s) || 0;
+        state.lastSaved      = first.last_saved || '';
+        state.completed      = isComplete(state);
+
+        annotations[key] = state;
+    });
+}
+
+// ─── Autosave (this browser only; the downloaded file is the real save) ──────
+function localKey() {
+    return `nota_annotation_${coder}_unit${unit.listNum}`;
+}
+
+function autosave() {
+    try {
+        localStorage.setItem(localKey(), JSON.stringify({ savedAt: new Date().toISOString(), annotations }));
+    } catch (e) {
+        console.warn('Autosave failed:', e);
+    }
+}
+
+function restoreFromLocal() {
+    try {
+        const saved = JSON.parse(localStorage.getItem(localKey()) || 'null');
+        if (!saved || !saved.annotations) return false;
+        // only keep targets that are in this work unit
+        unit.items.forEach(item => {
+            const s = saved.annotations[itemKey(item)];
+            if (s) annotations[itemKey(item)] = s;
+        });
+        return Object.keys(annotations).length > 0;
+    } catch (e) {
+        console.warn('Could not read autosave:', e);
+        return false;
+    }
+}
+
+// ─── Sidebar ──────────────────────────────────────────────────────────────────
+function renderSidebar() {
+    const list = document.getElementById('target-list');
+    list.innerHTML = unit.items.map((item, i) => {
+        const state = annotations[itemKey(item)];
+        let status = '';
+        if (state.completed)       status = '<span class="target-status done">&#10003;</span>';
+        else if (isTouched(state)) status = '<span class="target-status partial">&#9679;</span>';
+        return `
+            <button class="target-btn ${i === currentIndex ? 'current' : ''}" data-i="${i}">
+                <span>${escapeHTML(item.target_word)}<span class="target-pos">${escapeHTML(item.target_pos)}</span></span>
+                ${status}
+            </button>`;
+    }).join('');
+
+    list.querySelectorAll('.target-btn').forEach(btn => {
+        btn.addEventListener('click', () => openTarget(parseInt(btn.dataset.i, 10)));
+    });
+
+    const nDone = unit.items.filter(item => annotations[itemKey(item)].completed).length;
+    document.getElementById('progress').textContent = `${nDone} / ${unit.items.length} done`;
+
+    const note = document.getElementById('save-note');
+    if (restoreNote) {
+        note.textContent = restoreNote;
+    } else if (unsavedChanges) {
+        note.textContent = 'Changes not downloaded yet.';
+        note.classList.add('unsaved');
+    } else if (lastDownload) {
+        note.textContent = `Downloaded at ${lastDownload}.`;
+        note.classList.remove('unsaved');
+    }
+}
+
+// ─── Navigation ───────────────────────────────────────────────────────────────
+function closeCurrentTarget() {
+    if (currentStart === null) return;
+    const state = annotations[itemKey(unit.items[currentIndex])];
+    state.timeSpent += (Date.now() - currentStart) / 1000;
+    currentStart = null;
+}
+
+function openTarget(i) {
+    closeCurrentTarget();
+    currentIndex = i;
+    currentStart = Date.now();
+
+    const item = unit.items[i];
+    document.getElementById('sort-container').innerHTML = buildSortHTML(item);
+    setupSortLogic(item, annotations[itemKey(item)]);
+
+    document.getElementById('prev-btn').disabled = i === 0;
+    document.getElementById('next-btn').disabled = i === unit.items.length - 1;
+    renderSidebar();
+    window.scrollTo(0, 0);
+}
 
 // ─── Sorting HTML builder ─────────────────────────────────────────────────────
-// displayResponses is already shuffled; chip data-idx indexes into it
-function buildSortHTML(item, displayResponses) {
-    const chips = displayResponses.map((r, i) => chipHTML(r, i)).join('');
-
+function buildSortHTML(item) {
     return `
         <div id="sort-task">
             <div class="frame">${buildFrameHTML(item)}</div>
             <p class="task-hint">
-                Sort the answers into groups by <strong>how they differ from <span class="word-highlight">${escapeHTML(item.target_word)}</span></strong>,
-                and give each group a name. The number on each answer is how many people gave it.
+                Sort the answers into groups by <strong>how they differ from <span class="word-highlight">${escapeHTML(item.target_word)}</span></strong>.
+                Name each group and pick one relationship type. The number on each answer is how many people gave it.
             </p>
 
             <div id="sort-columns">
                 <div id="left-column">
                     <div id="response-bank" class="drop-zone" data-zone="bank">
                         <div class="zone-title">Answers to sort</div>
-                        <div class="chip-holder">${chips}</div>
+                        <div class="chip-holder"></div>
                     </div>
                     <div id="nofit-zone" class="drop-zone" data-zone="nofit">
                         <div class="zone-title">Doesn't fit <span class="zone-subtitle">(unclear or doesn't make sense)</span></div>
@@ -234,19 +377,22 @@ function buildSortHTML(item, displayResponses) {
                     </div>
                 </div>
             </div>
-
-            <p id="sort-status"></p>
         </div>
     `;
 }
 
 function buildGroupHTML(groupId, target) {
+    const options = TAGS.map(t => `<option value="${t.key}">${escapeHTML(t.label)}</option>`).join('');
     return `
         <div class="drop-zone group-box" data-zone="${groupId}">
             <div class="group-header">
                 <div style="flex:1;">
                     <div class="group-prompt">How do these differ from <strong>${escapeHTML(target)}</strong>?</div>
                     <input class="group-label" type="text" maxlength="100" placeholder="Name this group" autocomplete="off">
+                    <select class="group-tag">
+                        <option value="">Relationship type&hellip;</option>
+                        ${options}
+                    </select>
                 </div>
                 <button class="group-remove" title="Remove group">&times;</button>
             </div>
@@ -254,67 +400,85 @@ function buildGroupHTML(groupId, target) {
         </div>`;
 }
 
-// Store sort state globally so it persists after DOM is cleared
-let sortState = {};
-
-// ─── Sort logic (called from on_load) ────────────────────────────────────────
-function setupSortLogic(item, displayResponses) {
+// ─── Sort logic ───────────────────────────────────────────────────────────────
+// Builds the boxes and chips from the saved state, then keeps the state up to date as the RA works
+function setupSortLogic(item, state) {
     const task = document.getElementById('sort-task');
     if (!task) return;
 
-    const groupArea   = document.getElementById('group-area');
-    const newZone     = document.getElementById('new-group-zone');
-    const continueBtn = document.getElementById('jspsych-continue-btn');
+    const groupArea = document.getElementById('group-area');
+    const newZone   = document.getElementById('new-group-zone');
 
-    // Reset state for this trial
-    sortState = {
-        chipZone:    displayResponses.map(() => 'bank'),   // chip idx -> 'bank' | 'nofit' | 'g1', 'g2', ...
-        groupLabels: {},                                    // group id -> label text
-        groupOrder:  [],                                    // group ids in creation order
-        nextGroup:   1,
-        nMoves:      0,
-        nGroupsCreated: 0,
-        nGroupsRemoved: 0
-    };
+    function zoneEl(zoneId) {
+        return task.querySelector(`[data-zone="${zoneId}"]`);
+    }
 
-    if (continueBtn) continueBtn.disabled = true;
+    // anything changed: re-check completion, autosave, refresh sidebar/status
+    function markChanged() {
+        state.completed = isComplete(state);
+        state.lastSaved = new Date().toISOString();
+        unsavedChanges = true;
+        restoreNote = '';
+        autosave();
+        updateStatus();
+        renderSidebar();
+    }
 
     // ── Groups ──────────────────────────────────────────────────────────────
-    function createGroup() {
-        const groupId = `g${sortState.nextGroup++}`;
+    function addGroupBox(groupId) {
         newZone.insertAdjacentHTML('beforebegin', buildGroupHTML(groupId, item.target_word));
-        const box = groupArea.querySelector(`[data-zone="${groupId}"]`);
+        const box = zoneEl(groupId);
 
-        sortState.groupLabels[groupId] = '';
-        sortState.groupOrder.push(groupId);
-        sortState.nGroupsCreated++;
+        const labelInput = box.querySelector('.group-label');
+        const tagSelect  = box.querySelector('.group-tag');
+        labelInput.value = state.groups[groupId].label;
+        tagSelect.value  = state.groups[groupId].tag;
 
-        box.querySelector('.group-label').addEventListener('input', (e) => {
-            sortState.groupLabels[groupId] = e.target.value;
-            updateStatus();
+        labelInput.addEventListener('input', (e) => {
+            state.groups[groupId].label = e.target.value;
+            markChanged();
+        });
+        tagSelect.addEventListener('change', (e) => {
+            state.groups[groupId].tag = e.target.value;
+            markChanged();
         });
 
         // removing a group sends its answers back to the bank
         box.querySelector('.group-remove').addEventListener('click', () => {
-            const bankHolder = document.querySelector('#response-bank .chip-holder');
+            const bankHolder = zoneEl('bank').querySelector('.chip-holder');
             box.querySelectorAll('.chip').forEach(chip => {
                 bankHolder.appendChild(chip);
-                sortState.chipZone[chip.dataset.idx] = 'bank';
+                state.chipZone[chip.dataset.idx] = 'bank';
             });
             box.remove();
-            delete sortState.groupLabels[groupId];
-            sortState.groupOrder = sortState.groupOrder.filter(g => g !== groupId);
-            sortState.nGroupsRemoved++;
-            updateStatus();
+            delete state.groups[groupId];
+            state.groupOrder = state.groupOrder.filter(g => g !== groupId);
+            state.nGroupsRemoved++;
+            markChanged();
         });
 
         return box;
     }
 
+    function createGroup() {
+        const groupId = `g${state.nextGroup++}`;
+        state.groups[groupId] = { label: '', tag: '' };
+        state.groupOrder.push(groupId);
+        state.nGroupsCreated++;
+        return addGroupBox(groupId);
+    }
+
+    // ── Rebuild from saved state ────────────────────────────────────────────
+    state.groupOrder.forEach(g => addGroupBox(g));
+    state.display.forEach((r, i) => {
+        const zone = zoneEl(state.chipZone[i]) || zoneEl('bank');
+        zone.querySelector('.chip-holder').insertAdjacentHTML('beforeend', chipHTML(r, i));
+    });
+
     newZone.addEventListener('click', () => {
         const box = createGroup();
         box.querySelector('.group-label').focus();
-        updateStatus();
+        markChanged();
     });
 
     // ── Dropping ────────────────────────────────────────────────────────────
@@ -328,40 +492,36 @@ function setupSortLogic(item, displayResponses) {
             focusLabel = true;
         }
 
-        if (sortState.chipZone[chip.dataset.idx] === zoneId) return;
+        if (state.chipZone[chip.dataset.idx] === zoneId) return;
 
         zone.querySelector('.chip-holder').appendChild(chip);
-        sortState.chipZone[chip.dataset.idx] = zoneId;
-        sortState.nMoves++;
+        state.chipZone[chip.dataset.idx] = zoneId;
+        state.nMoves++;
 
         if (focusLabel) zone.querySelector('.group-label').focus();
-        updateStatus();
+        markChanged();
     }
 
     // ── Validation / status line ────────────────────────────────────────────
     function updateStatus() {
-        const nUnsorted = sortState.chipZone.filter(z => z === 'bank').length;
-
-        let nUnnamed = 0;
         groupArea.querySelectorAll('.group-box').forEach(box => {
-            const groupId = box.dataset.zone;
-            const hasChips = sortState.chipZone.includes(groupId);
-            const unnamed  = hasChips && sortState.groupLabels[groupId].trim() === '';
-            box.classList.toggle('needs-label', unnamed);
-            if (unnamed) nUnnamed++;
+            const g = box.dataset.zone;
+            const hasChips = state.chipZone.includes(g);
+            const missing  = hasChips && (state.groups[g].label.trim() === '' || !state.groups[g].tag);
+            box.classList.toggle('needs-label', missing);
         });
 
+        const p = getProblems(state);
         const status = document.getElementById('sort-status');
-        if (nUnsorted === 0 && nUnnamed === 0) {
-            status.innerHTML = '<span style="color:#27ae60;">All answers sorted. Click Continue when you\'re happy with your groups.</span>';
+        if (p.nUnsorted === 0 && p.nUnnamed === 0 && p.nUntagged === 0) {
+            status.innerHTML = '<span style="color:#27ae60;">&#10003; Done</span>';
         } else {
             const parts = [];
-            if (nUnsorted > 0) parts.push(`Answers left to sort: ${nUnsorted}`);
-            if (nUnnamed > 0)  parts.push(`Groups that still need a name: ${nUnnamed}`);
+            if (p.nUnsorted > 0) parts.push(`Answers left to sort: ${p.nUnsorted}`);
+            if (p.nUnnamed > 0)  parts.push(`Groups without a name: ${p.nUnnamed}`);
+            if (p.nUntagged > 0) parts.push(`Groups without a relationship type: ${p.nUntagged}`);
             status.textContent = parts.join(' · ');
         }
-
-        if (continueBtn) continueBtn.disabled = !(nUnsorted === 0 && nUnnamed === 0);
     }
 
     // ── Dragging ────────────────────────────────────────────────────────────
@@ -371,332 +531,175 @@ function setupSortLogic(item, displayResponses) {
         return el ? el.closest('.drop-zone') : null;
     }
 
-    task.querySelectorAll('.chip').forEach(chip => {
-        chip.addEventListener('pointerdown', (e) => {
-            e.preventDefault();
-            if (document.activeElement) document.activeElement.blur();
+    task.addEventListener('pointerdown', (e) => {
+        const chip = e.target.closest('.chip');
+        if (!chip) return;
+        e.preventDefault();
+        if (document.activeElement) document.activeElement.blur();
 
-            const rect  = chip.getBoundingClientRect();
-            const offX  = e.clientX - rect.left;
-            const offY  = e.clientY - rect.top;
+        const rect  = chip.getBoundingClientRect();
+        const offX  = e.clientX - rect.left;
+        const offY  = e.clientY - rect.top;
 
-            const ghost = chip.cloneNode(true);
-            ghost.classList.add('ghost');
-            ghost.style.width = rect.width + 'px';
-            ghost.style.left  = rect.left + 'px';
-            ghost.style.top   = rect.top  + 'px';
-            document.body.appendChild(ghost);
-            chip.classList.add('placeholder');
+        const ghost = chip.cloneNode(true);
+        ghost.classList.add('ghost');
+        ghost.style.width = rect.width + 'px';
+        ghost.style.left  = rect.left + 'px';
+        ghost.style.top   = rect.top  + 'px';
+        document.body.appendChild(ghost);
+        chip.classList.add('placeholder');
 
-            let overZone = null;
-            let lastY    = e.clientY;
-            let scrolling = true;
+        let overZone  = null;
+        let lastY     = e.clientY;
+        let scrolling = true;
 
-            // scroll the page when dragging near the top or bottom edge
-            function autoScroll() {
-                if (!scrolling) return;
-                const edge = 60;
-                if (lastY < edge) window.scrollBy(0, -12);
-                else if (lastY > window.innerHeight - edge) window.scrollBy(0, 12);
-                requestAnimationFrame(autoScroll);
-            }
+        // scroll the page when dragging near the top or bottom edge
+        function autoScroll() {
+            if (!scrolling) return;
+            const edge = 60;
+            if (lastY < edge) window.scrollBy(0, -12);
+            else if (lastY > window.innerHeight - edge) window.scrollBy(0, 12);
             requestAnimationFrame(autoScroll);
+        }
+        requestAnimationFrame(autoScroll);
 
-            function onMove(ev) {
-                lastY = ev.clientY;
-                ghost.style.left = (ev.clientX - offX) + 'px';
-                ghost.style.top  = (ev.clientY - offY) + 'px';
+        function onMove(ev) {
+            lastY = ev.clientY;
+            ghost.style.left = (ev.clientX - offX) + 'px';
+            ghost.style.top  = (ev.clientY - offY) + 'px';
 
-                const z = zoneAt(ev.clientX, ev.clientY);
-                if (z !== overZone) {
-                    if (overZone) overZone.classList.remove('drag-over');
-                    if (z) z.classList.add('drag-over');
-                    overZone = z;
-                }
-            }
-
-            function onUp(ev) {
-                scrolling = false;
-                document.removeEventListener('pointermove', onMove);
-                document.removeEventListener('pointerup', onUp);
-                document.removeEventListener('pointercancel', onUp);
-
-                ghost.remove();
-                chip.classList.remove('placeholder');
+            const z = zoneAt(ev.clientX, ev.clientY);
+            if (z !== overZone) {
                 if (overZone) overZone.classList.remove('drag-over');
-
-                const z = zoneAt(ev.clientX, ev.clientY);
-                if (z) dropChip(chip, z);
+                if (z) z.classList.add('drag-over');
+                overZone = z;
             }
+        }
 
-            document.addEventListener('pointermove', onMove);
-            document.addEventListener('pointerup', onUp);
-            document.addEventListener('pointercancel', onUp);
-        });
+        function onUp(ev) {
+            scrolling = false;
+            document.removeEventListener('pointermove', onMove);
+            document.removeEventListener('pointerup', onUp);
+            document.removeEventListener('pointercancel', onUp);
+
+            ghost.remove();
+            chip.classList.remove('placeholder');
+            if (overZone) overZone.classList.remove('drag-over');
+
+            const z = zoneAt(ev.clientX, ev.clientY);
+            if (z && task.contains(z)) dropChip(chip, z);
+        }
+
+        document.addEventListener('pointermove', onMove);
+        document.addEventListener('pointerup', onUp);
+        document.addEventListener('pointercancel', onUp);
     });
 
     updateStatus();
 }
 
-// ─── Result extraction (called from on_finish) ───────────────────────────────
-// Returns one entry per response with its final group. Groups that ended up empty are dropped and the
-// rest are renumbered 1..k in the order they were created.
-function getSortResult(displayResponses) {
-    const usedGroups = sortState.groupOrder.filter(g => sortState.chipZone.includes(g));
-    const groupNum   = {};
-    usedGroups.forEach((g, i) => { groupNum[g] = i + 1; });
-
-    const groupSize = {};
-    sortState.chipZone.forEach(z => { groupSize[z] = (groupSize[z] || 0) + 1; });
-
-    return displayResponses.map((r, i) => {
-        const zone = sortState.chipZone[i];
-        const inGroup = zone in groupNum;
-        return {
-            response:      r.response,
-            count:         r.count,
-            rank:          r.rank,
-            display_order: i + 1,
-            doesnt_fit:    zone === 'nofit' ? 1 : 0,
-            group_num:     inGroup ? groupNum[zone] : '',
-            group_label:   inGroup ? sortState.groupLabels[zone].trim() : '',
-            group_size:    inGroup ? groupSize[zone] : ''
-        };
-    });
-}
-
-// ─── Trial factory ────────────────────────────────────────────────────────────
-function createSortTrial(item, trialNum, isPractice) {
-    // Randomize the order answers appear in the bank
-    const displayResponses = jsPsych.randomization.shuffle(getResponses(item));
-
-    return {
-        type: jsPsychHtmlButtonResponse,
-        stimulus: () => buildSortHTML(item, displayResponses),
-        choices: ['Continue'],
-        button_html: '<button class="jspsych-btn" id="jspsych-continue-btn" disabled>%choice%</button>',
-        on_load: function() {
-            if (isPractice) {
-                // Request fullscreen
-                const elem = document.documentElement;
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen().catch(err => {
-                        console.log('Fullscreen request failed:', err);
-                    });
-                }
-            }
-            setupSortLogic(item, displayResponses);
-        },
-        data: {
-            custom_trial_type: 'sort_label',
-            is_practice:       isPractice ? 1 : 0,
-            trial_number:      trialNum,
-            participant_id:    participant_id,
-            target_word:       item.target_word,
-            target_pos:        item.target_pos,
-            target_cat:        item.target_cat,
-            n_responses:       displayResponses.length,
-            viewport_w: window.innerWidth  || null,
-            viewport_h: window.innerHeight || null
-        },
-        on_finish: function(data) {
-            const result = getSortResult(displayResponses);
-            data.list_num         = assignedList;
-            data.sort_result      = result;
-            data.n_groups         = new Set(result.filter(r => r.group_num !== '').map(r => r.group_num)).size;
-            data.n_doesnt_fit     = result.filter(r => r.doesnt_fit === 1).length;
-            data.n_moves          = sortState.nMoves;
-            data.n_groups_created = sortState.nGroupsCreated;
-            data.n_groups_removed = sortState.nGroupsRemoved;
-        }
-    };
-}
-
-function createTrials(trialsData) {
-    const experimentTrials = [];
-
-    trialsData.forEach((item) => {
-        globalTrialNumber++;
-        experimentTrials.push(createSortTrial(item, globalTrialNumber, false));
-    });
-
-    return experimentTrials;
-}
-
-const practiceTrial = createSortTrial(practiceItem, 0, true);
-
 // ─── Data export ──────────────────────────────────────────────────────────────
-// Long format: one row per response per trial
-function getFilteredData() {
-    const sortTrials = jsPsych.data.get()
-        .filter({ custom_trial_type: 'sort_label' })
-        .values();
-
+// Long format: one row per response per target. Targets the RA hasn't touched are left out.
+// Groups that ended up empty are dropped and the rest are renumbered 1..k in the order they were created.
+function getResultsCSV() {
     const header = [
-        'subjCode', 'list_num', 'trial_num', 'is_practice',
-        'target_word', 'target_pos', 'target_cat',
+        'coder', 'list_num', 'target_word', 'target_pos', 'target_cat',
         'response', 'response_count', 'response_rank', 'display_order',
-        'doesnt_fit', 'group_num', 'group_label', 'group_size',
+        'doesnt_fit', 'group_num', 'group_label', 'group_tag', 'group_size',
         'n_responses', 'n_groups', 'n_doesnt_fit', 'n_moves', 'n_groups_created', 'n_groups_removed',
-        'rt', 'viewport_w', 'viewport_h'
-    ].join(',');
+        'time_on_target_s', 'completed', 'last_saved'
+    ];
 
-    if (sortTrials.length === 0) {
-        console.warn('No sort trials found for saving!');
-        return header + '\n';
-    }
+    const rows = [];
+    unit.items.forEach(item => {
+        const state = annotations[itemKey(item)];
+        if (!isTouched(state)) return;
 
-    try {
-        const rows = [];
-        sortTrials.forEach(trial => {
-            (trial.sort_result || []).forEach(r => {
-                const row = [
-                    trial.participant_id      || participant_id,
-                    trial.list_num            ?? '',
-                    trial.trial_number        ?? 'NA',
-                    trial.is_practice         ?? '',
-                    trial.target_word         || '',
-                    trial.target_pos          || '',
-                    trial.target_cat          || '',
-                    r.response,
-                    r.count,
-                    r.rank,
-                    r.display_order,
-                    r.doesnt_fit,
-                    r.group_num,
-                    r.group_label,
-                    r.group_size,
-                    trial.n_responses         ?? '',
-                    trial.n_groups            ?? '',
-                    trial.n_doesnt_fit        ?? '',
-                    trial.n_moves             ?? '',
-                    trial.n_groups_created    ?? '',
-                    trial.n_groups_removed    ?? '',
-                    Math.round(trial.rt       || 0),
-                    trial.viewport_w          ?? '',
-                    trial.viewport_h          ?? ''
-                ];
+        const usedGroups = state.groupOrder.filter(g => state.chipZone.includes(g));
+        const groupNum = {};
+        usedGroups.forEach((g, i) => { groupNum[g] = i + 1; });
 
-                rows.push(row.map(value => {
-                    const s = String(value);
-                    if (s.includes(',') || s.includes('"') || s.includes('\n')) {
-                        return `"${s.replace(/"/g, '""').replace(/\n/g, ' ')}"`;
-                    }
-                    return s;
-                }).join(','));
-            });
+        const groupSize = {};
+        state.chipZone.forEach(z => { groupSize[z] = (groupSize[z] || 0) + 1; });
+
+        const nDoesntFit = state.chipZone.filter(z => z === 'nofit').length;
+
+        state.display.forEach((r, i) => {
+            const zone = state.chipZone[i];
+            const inGroup = zone in groupNum;
+            rows.push([
+                coder,
+                unit.listNum,
+                item.target_word,
+                item.target_pos,
+                item.target_cat || '',
+                r.response,
+                r.count,
+                r.rank,
+                i + 1,
+                zone === 'nofit' ? 1 : 0,
+                inGroup ? groupNum[zone] : '',
+                inGroup ? state.groups[zone].label.trim() : '',
+                inGroup ? state.groups[zone].tag : '',
+                inGroup ? groupSize[zone] : '',
+                state.display.length,
+                usedGroups.length,
+                nDoesntFit,
+                state.nMoves,
+                state.nGroupsCreated,
+                state.nGroupsRemoved,
+                Math.round(state.timeSpent),
+                state.completed ? 1 : 0,
+                state.lastSaved
+            ]);
         });
+    });
 
-        return header + '\n' + rows.join('\n');
-    } catch (error) {
-        console.error('Error in getFilteredData:', error);
-        return 'error\n';
-    }
-}
-
-// ─── Data save ────────────────────────────────────────────────────────────────
-var save_data = {
-    type: jsPsychPipe,
-    action: 'save',
-    experiment_id: 'REPLACE_WITH_DATAPIPE_ID',   // TODO: DataPipe experiment ID
-    filename: `${participant_id}.csv`,
-    data_string: getFilteredData,
-    on_finish: function(data) {
-        if (data.success) {
-            console.log('Data saved successfully!');
-        } else {
-            console.error('Error saving to DataPipe:', data.message);
+    return header.join(',') + '\n' + rows.map(row => row.map(value => {
+        const s = String(value);
+        if (s.includes(',') || s.includes('"') || s.includes('\n')) {
+            return `"${s.replace(/"/g, '""').replace(/\n/g, ' ')}"`;
         }
-    }
-};
-
-// ─── Trial loader ─────────────────────────────────────────────────────────────
-async function loadTrials(list_num) {
-    try {
-        const response = await fetch(`trial_lists/file${list_num}.csv`);
-        console.log('Trial List:', response);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-        const csvText = await response.text();
-        // dynamicTyping off so responses like "true" or "1" stay strings; counts are parsed in getResponses
-        const results = Papa.parse(csvText, {
-            header: true,
-            skipEmptyLines: true,
-            dynamicTyping: false
-        });
-
-        console.log(`Loaded ${results.data.length} trials`);
-        return jsPsych.randomization.shuffle([...results.data]);
-    } catch (error) {
-        console.error('Error loading trials:', error);
-        return [];
-    }
+        return s;
+    }).join(',')).join('\n');
 }
 
-// ─── Final screen ─────────────────────────────────────────────────────────────
-var final_screen = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: `
-        <div style="text-align:center; max-width:600px; margin:0 auto;">
-            <h2>Thank you!</h2>
-            <p>You have completed the experiment! You may now close this window.</p>
-        </div>
-    `,
-    choices: [],
-    data: { trial_type: 'final' }
-    // on_finish: function() {
-    //     setTimeout(function() {
-    //         let qualtricsUrl = `https://uwmadison.co1.qualtrics.com/jfe/form/SV_XXXXXXXXXXXXXXX`;
-    //         if (sonaId) qualtricsUrl += `?sona_id=${sonaId}`;
-    //         window.location.href = qualtricsUrl;
-    //     }, 100);
-    // }
-};
+function downloadResults() {
+    // bank time on the current target without closing it
+    if (currentStart !== null) {
+        annotations[itemKey(unit.items[currentIndex])].timeSpent += (Date.now() - currentStart) / 1000;
+        currentStart = Date.now();
+    }
+
+    const csv = getResultsCSV();
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `${coder}_unit${unit.listNum}_results.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(a.href);
+
+    unsavedChanges = false;
+    restoreNote = '';
+    lastDownload = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    autosave();
+    renderSidebar();
+}
 
 // ─── Run ──────────────────────────────────────────────────────────────────────
-async function runExperiment() {
-    try {
-        console.log('Participant ID:', participant_id);
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('start-btn').addEventListener('click', startAnnotating);
+    document.getElementById('download-btn').addEventListener('click', downloadResults);
+    document.getElementById('prev-btn').addEventListener('click', () => openTarget(currentIndex - 1));
+    document.getElementById('next-btn').addEventListener('click', () => openTarget(currentIndex + 1));
 
-        if (listOverride) {
-            assignedList = parseInt(listOverride, 10);
-            console.log('Using list from URL:', assignedList);
-        } else {
-            const datapipe_condition = await jsPsychPipe.getCondition('REPLACE_WITH_DATAPIPE_ID');   // TODO: DataPipe experiment ID
-            console.log('Assigned condition:', datapipe_condition);
-            assignedList = datapipe_condition + 1;
+    // warn before closing the tab with work that hasn't been downloaded
+    window.addEventListener('beforeunload', (e) => {
+        if (unsavedChanges) {
+            e.preventDefault();
+            e.returnValue = '';
         }
-
-        const trialsData = await loadTrials(assignedList);
-        if (trialsData.length === 0) throw new Error('No trials loaded');
-
-        const sortTrials = createTrials(trialsData);
-        console.log(`Created ${sortTrials.length} sort-and-label trials`);
-
-        timeline = [
-            consent,
-            instructions,
-            practiceTrial,
-            beginMainStudy,
-            ...sortTrials,
-            save_data,
-            final_screen
-        ];
-
-        jsPsych.run(timeline);
-
-    } catch (error) {
-        console.error('Error running experiment:', error);
-        document.body.innerHTML = `
-            <div style="max-width:800px; margin:50px auto; padding:20px; background:#f8f8f8;
-                        border-radius:5px; text-align:center;">
-                <h2>Error Starting Experiment</h2>
-                <p>There was a problem starting the experiment. Please try refreshing the page.</p>
-                <p>If the problem persists, please contact the researcher.</p>
-                <p>Technical details: ${error.message}</p>
-            </div>
-        `;
-    }
-}
-
-document.addEventListener('DOMContentLoaded', runExperiment);
+    });
+});
