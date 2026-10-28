@@ -29,6 +29,44 @@ const TAGS = [
 
 const TAG_OPTIONS = TAGS.map(t => `<option value="${t.key}">${t.label}</option>`).join('');
 
+// ─── Follow-up questions ──────────────────────────────────────────────────────
+// A yes/no that appears on the chip for some tags (and, optionally, only for some target parts of speech).
+// Required once it appears; reset if the tag changes. `column` is the results column it's saved in.
+const FOLLOWUPS = {
+    counterpart: {
+        column:   'undoes',
+        short:    'Undoes?',
+        question: 'Does one undo the other? (make → break, find → lose, open → close). ' +
+                  'Opposite direction (give → take) or ending it (carry → drop) is no.',
+        pos:      ['verb']
+    }
+};
+
+// Group-level: only available when every answer in the group is tagged Sibling
+const SEQUENCE_LABEL = 'These form a fixed sequence';
+const SEQUENCE_HELP  = 'A sequence people would list in order: days, meals, coins, first/second, baby/child/adult. ' +
+                       'Colors don\'t count. Only available when every answer in the group is a Sibling.';
+
+function groupAllSiblings(state, groupId) {
+    const idx = state.chipZone.map((z, i) => z === groupId ? i : -1).filter(i => i >= 0);
+    return idx.length > 0 && idx.every(i => state.chipTag[i] === 'sibling');
+}
+
+// the follow-up for this tag on this target, or null
+function followupFor(tag, pos) {
+    const f = FOLLOWUPS[tag];
+    if (!f || (f.pos && !f.pos.includes(pos))) return null;
+    return f;
+}
+
+function followupHTML(f) {
+    if (!f) return '';
+    return `
+        <option value="">${f.short}</option>
+        <option value="yes">${f.short} yes</option>
+        <option value="no">${f.short} no</option>`;
+}
+
 // ─── Exclusion bins ───────────────────────────────────────────────────────────
 // Answers that aren't contrasts with the target. They get no group or tag; `key` is saved in `excluded`.
 const BINS = [
@@ -134,6 +172,7 @@ function chipHTML(r, idx) {
                 <option value="">Relationship&hellip;</option>
                 ${TAG_OPTIONS}
             </select>
+            <select class="chip-followup"></select>
         </div>`;
 }
 
@@ -141,9 +180,10 @@ function chipHTML(r, idx) {
 // display:   responses in the order shown in the bank (fixed per coder, so revisits look the same)
 // chipZone:  display idx -> 'bank' | a BINS key | 'g1', 'g2', ...
 // chipTag:   display idx -> relationship tag key ('' if not tagged yet); kept if the chip moves groups
-// groups:    group id -> { label, defaultTag, otherSense }
+// chipFollowup: display idx -> '' | 'yes' | 'no' for the tag's follow-up question (see FOLLOWUPS)
+// groups:    group id -> { label, defaultTag, sequence }
 //            defaultTag = last "Set all to" choice, given to answers dropped in later
-//            otherSense = the group relies on a different sense of the target
+//            sequence   = the (all-Sibling) group forms a fixed sequence
 // notes:     free-text notes on this target
 function newAnnotation(item) {
     const display = shuffle(getResponses(item));
@@ -151,6 +191,7 @@ function newAnnotation(item) {
         display:        display,
         chipZone:       display.map(() => 'bank'),
         chipTag:        display.map(() => ''),
+        chipFollowup:   display.map(() => ''),
         groups:         {},
         groupOrder:     [],
         nextGroup:      1,
@@ -164,9 +205,9 @@ function newAnnotation(item) {
     };
 }
 
-function getProblems(state) {
+function getProblems(state, pos) {
     const nUnsorted = state.chipZone.filter(z => z === 'bank').length;
-    let nUnnamed = 0, nUntagged = 0;
+    let nUnnamed = 0, nUntagged = 0, nFollowup = 0;
     state.groupOrder.forEach(g => {
         if (!state.chipZone.includes(g)) return;   // empty groups are ignored
         if (state.groups[g].label.trim() === '') nUnnamed++;
@@ -174,13 +215,14 @@ function getProblems(state) {
     // only answers in a group need a tag (not ones in the bank or an exclusion bin)
     state.chipZone.forEach((z, i) => {
         if (isGroupZone(z) && !state.chipTag[i]) nUntagged++;
+        if (isGroupZone(z) && followupFor(state.chipTag[i], pos) && !state.chipFollowup[i]) nFollowup++;
     });
-    return { nUnsorted, nUnnamed, nUntagged };
+    return { nUnsorted, nUnnamed, nUntagged, nFollowup };
 }
 
-function isComplete(state) {
-    const p = getProblems(state);
-    return p.nUnsorted === 0 && p.nUnnamed === 0 && p.nUntagged === 0;
+function isComplete(state, pos) {
+    const p = getProblems(state, pos);
+    return p.nUnsorted === 0 && p.nUnnamed === 0 && p.nUntagged === 0 && p.nFollowup === 0;
 }
 
 function isTouched(state) {
@@ -283,12 +325,19 @@ function restoreFromResults(resultRows) {
             return r ? (r.response_tag || '') : '';
         });
 
+        state.chipFollowup = display.map((x, i) => {
+            const r = rows.find(row => row.response === x.response);
+            const f = followupFor(state.chipTag[i], item.target_pos);
+            if (!r || !f) return '';
+            return r[f.column] === '1' ? 'yes' : r[f.column] === '0' ? 'no' : '';
+        });
+
         rows.forEach(r => {
             if (r.group_num === '' || state.groups[`g${r.group_num}`]) return;
             state.groups[`g${r.group_num}`] = {
                 label:      r.group_label || '',
                 defaultTag: '',
-                otherSense: r.group_other_sense === '1'
+                sequence:   r.group_sequence === '1'
             };
         });
         state.groupOrder = Object.keys(state.groups).sort((a, b) => parseInt(a.slice(1)) - parseInt(b.slice(1)));
@@ -301,7 +350,7 @@ function restoreFromResults(resultRows) {
         state.timeSpent      = parseFloat(first.time_on_target_s) || 0;
         state.notes          = first.notes || '';
         state.lastSaved      = first.last_saved || '';
-        state.completed      = isComplete(state);
+        state.completed      = isComplete(state, item.target_pos);
 
         annotations[key] = state;
     });
@@ -330,8 +379,10 @@ function restoreFromLocal() {
             if (!s) return;
             // autosaves from earlier versions of the page
             if (!s.chipTag) s.chipTag = s.display.map(() => '');
+            if (!s.chipFollowup) s.chipFollowup = s.display.map(() => '');
             if (s.notes === undefined) s.notes = '';
             s.chipZone = s.chipZone.map(z => z === 'nofit' ? 'doesnt_fit' : z);
+            s.completed = isComplete(s, item.target_pos);
             annotations[itemKey(item)] = s;
         });
         return Object.keys(annotations).length > 0;
@@ -449,8 +500,8 @@ function buildGroupHTML(groupId, target) {
                         <option value="">Set all answers to&hellip;</option>
                         ${TAG_OPTIONS}
                     </select>
-                    <label class="group-sense">
-                        <input type="checkbox" class="group-other-sense"> Uses a different sense of <strong>${escapeHTML(target)}</strong>
+                    <label class="group-sequence" title="${escapeHTML(SEQUENCE_HELP)}">
+                        <input type="checkbox" class="group-sequence-box"> ${SEQUENCE_LABEL}
                     </label>
                 </div>
                 <button class="group-remove" title="Remove group">&times;</button>
@@ -472,9 +523,20 @@ function setupSortLogic(item, state) {
         return task.querySelector(`[data-zone="${zoneId}"]`);
     }
 
+    // show the follow-up question for the chip's current tag (or hide it)
+    function renderFollowup(chip) {
+        const i = chip.dataset.idx;
+        const sel = chip.querySelector('.chip-followup');
+        const f = followupFor(state.chipTag[i], item.target_pos);
+        sel.innerHTML = followupHTML(f);
+        sel.classList.toggle('active', !!f);
+        sel.title = f ? f.question : '';
+        sel.value = state.chipFollowup[i];
+    }
+
     // anything changed: re-check completion, autosave, refresh sidebar/status
     function markChanged() {
-        state.completed = isComplete(state);
+        state.completed = isComplete(state, item.target_pos);
         state.lastSaved = new Date().toISOString();
         unsavedChanges = true;
         restoreNote = '';
@@ -490,12 +552,12 @@ function setupSortLogic(item, state) {
 
         const labelInput = box.querySelector('.group-label');
         const setAll     = box.querySelector('.group-setall');
-        const otherSense = box.querySelector('.group-other-sense');
-        labelInput.value   = state.groups[groupId].label;
-        otherSense.checked = !!state.groups[groupId].otherSense;
+        const sequence   = box.querySelector('.group-sequence-box');
+        labelInput.value = state.groups[groupId].label;
+        sequence.checked = !!state.groups[groupId].sequence;
 
-        otherSense.addEventListener('change', (e) => {
-            state.groups[groupId].otherSense = e.target.checked;
+        sequence.addEventListener('change', (e) => {
+            state.groups[groupId].sequence = e.target.checked;
             markChanged();
         });
 
@@ -510,8 +572,10 @@ function setupSortLogic(item, state) {
             if (!tag) return;
             state.groups[groupId].defaultTag = tag;
             box.querySelectorAll('.chip').forEach(chip => {
+                if (state.chipTag[chip.dataset.idx] !== tag) state.chipFollowup[chip.dataset.idx] = '';
                 state.chipTag[chip.dataset.idx] = tag;
                 chip.querySelector('.chip-tag').value = tag;
+                renderFollowup(chip);
             });
             e.target.value = '';
             markChanged();
@@ -536,7 +600,7 @@ function setupSortLogic(item, state) {
 
     function createGroup() {
         const groupId = `g${state.nextGroup++}`;
-        state.groups[groupId] = { label: '', defaultTag: '', otherSense: false };
+        state.groups[groupId] = { label: '', defaultTag: '', sequence: false };
         state.groupOrder.push(groupId);
         state.nGroupsCreated++;
         return addGroupBox(groupId);
@@ -547,7 +611,9 @@ function setupSortLogic(item, state) {
     state.display.forEach((r, i) => {
         const zone = zoneEl(state.chipZone[i]) || zoneEl('bank');
         zone.querySelector('.chip-holder').insertAdjacentHTML('beforeend', chipHTML(r, i));
-        zone.querySelector(`.chip[data-idx="${i}"] .chip-tag`).value = state.chipTag[i];
+        const chip = zone.querySelector(`.chip[data-idx="${i}"]`);
+        chip.querySelector('.chip-tag').value = state.chipTag[i];
+        renderFollowup(chip);
     });
 
     // notes
@@ -560,9 +626,18 @@ function setupSortLogic(item, state) {
 
     // per-answer relationship tags
     task.addEventListener('change', (e) => {
-        if (!e.target.classList.contains('chip-tag')) return;
-        state.chipTag[e.target.closest('.chip').dataset.idx] = e.target.value;
-        markChanged();
+        const chip = e.target.closest('.chip');
+        if (!chip) return;
+        const i = chip.dataset.idx;
+        if (e.target.classList.contains('chip-tag')) {
+            state.chipTag[i] = e.target.value;
+            state.chipFollowup[i] = '';
+            renderFollowup(chip);
+            markChanged();
+        } else if (e.target.classList.contains('chip-followup')) {
+            state.chipFollowup[i] = e.target.value;
+            markChanged();
+        }
     });
 
     newZone.addEventListener('click', () => {
@@ -593,6 +668,7 @@ function setupSortLogic(item, state) {
         if (group && group.defaultTag && !state.chipTag[chip.dataset.idx]) {
             state.chipTag[chip.dataset.idx] = group.defaultTag;
             chip.querySelector('.chip-tag').value = group.defaultTag;
+            renderFollowup(chip);
         }
 
         if (focusLabel) zone.querySelector('.group-label').focus();
@@ -605,21 +681,28 @@ function setupSortLogic(item, state) {
             const g = box.dataset.zone;
             const hasChips = state.chipZone.includes(g);
             box.classList.toggle('needs-label', hasChips && state.groups[g].label.trim() === '');
+
+            // sequence checkbox only applies when the whole group is Siblings (its value is kept, just inactive)
+            const allSiblings = groupAllSiblings(state, g);
+            box.querySelector('.group-sequence-box').disabled = !allSiblings;
+            box.querySelector('.group-sequence').classList.toggle('inactive', !allSiblings);
         });
         task.querySelectorAll('.chip').forEach(chip => {
             const i = chip.dataset.idx;
             chip.classList.toggle('needs-tag', isGroupZone(state.chipZone[i]) && !state.chipTag[i]);
+            chip.classList.toggle('needs-followup', isGroupZone(state.chipZone[i]) && !!followupFor(state.chipTag[i], item.target_pos) && !state.chipFollowup[i]);
         });
 
-        const p = getProblems(state);
+        const p = getProblems(state, item.target_pos);
         const status = document.getElementById('sort-status');
-        if (p.nUnsorted === 0 && p.nUnnamed === 0 && p.nUntagged === 0) {
+        if (isComplete(state, item.target_pos)) {
             status.innerHTML = '<span style="color:#27ae60;">&#10003; Done</span>';
         } else {
             const parts = [];
             if (p.nUnsorted > 0) parts.push(`Answers left to sort: ${p.nUnsorted}`);
             if (p.nUnnamed > 0)  parts.push(`Groups without a name: ${p.nUnnamed}`);
             if (p.nUntagged > 0) parts.push(`Answers without a relationship type: ${p.nUntagged}`);
+            if (p.nFollowup > 0) parts.push(`Follow-up questions unanswered: ${p.nFollowup}`);
             status.textContent = parts.join(' · ');
         }
     }
@@ -701,11 +784,16 @@ function setupSortLogic(item, state) {
 // ─── Data export ──────────────────────────────────────────────────────────────
 // Long format: one row per response per target. Targets the RA hasn't touched are left out.
 // Groups that ended up empty are dropped and the rest are renumbered 1..k in the order they were created.
+function followupValue(state, i, inGroup, tag, pos) {
+    if (!inGroup || state.chipTag[i] !== tag || !followupFor(tag, pos) || !state.chipFollowup[i]) return '';
+    return state.chipFollowup[i] === 'yes' ? 1 : 0;
+}
+
 function getResultsCSV() {
     const header = [
         'coder', 'list_num', 'target_word', 'target_pos', 'target_cat',
         'response', 'response_count', 'response_rank', 'display_order',
-        'excluded', 'group_num', 'group_label', 'response_tag', 'group_other_sense', 'group_size',
+        'excluded', 'group_num', 'group_label', 'response_tag', 'undoes', 'group_sequence', 'group_size',
         'n_responses', 'n_groups', 'n_excluded', 'n_moves', 'n_groups_created', 'n_groups_removed',
         'time_on_target_s', 'completed', 'notes', 'last_saved'
     ];
@@ -741,7 +829,8 @@ function getResultsCSV() {
                 inGroup ? groupNum[zone] : '',
                 inGroup ? state.groups[zone].label.trim() : '',
                 inGroup ? state.chipTag[i] : '',
-                inGroup ? (state.groups[zone].otherSense ? 1 : 0) : '',
+                followupValue(state, i, inGroup, 'counterpart', item.target_pos),
+                inGroup && groupAllSiblings(state, zone) ? (state.groups[zone].sequence ? 1 : 0) : '',
                 inGroup ? groupSize[zone] : '',
                 state.display.length,
                 usedGroups.length,

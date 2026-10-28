@@ -286,12 +286,16 @@
             font-size: 13px;
             color: #666;
         }
-        .group-sense {
+        .group-sequence {
             display: block;
             font-size: 12px;
             color: #666;
             margin-top: 6px;
             cursor: pointer;
+        }
+        .group-sequence.inactive {
+            color: #bbb;
+            cursor: not-allowed;
         }
 
         /* notes */
@@ -377,6 +381,25 @@
         }
         .group-box .chip-tag {
             display: inline-block;
+        }
+        .group-box .chip {
+            flex-wrap: wrap;
+        }
+        .chip-followup {
+            display: none;
+            font-size: 12px;
+            padding: 2px 4px;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+            background: #f7fbff;
+            margin-left: auto;
+        }
+        .group-box .chip-followup.active {
+            display: inline-block;
+        }
+        .chip.needs-followup .chip-followup {
+            border-color: #e67e22;
+            color: #e67e22;
         }
         .chip.needs-tag .chip-tag {
             border-color: #e67e22;
