@@ -1,20 +1,20 @@
-list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
-11,clean,adj,descriptive_words,To be , is not to be ,,188,11,2,dirty,173,messy,6,,,,,,,,,,,,,,,,,,,,
-11,hard,adj,descriptive_words,To be , is not to be ,,189,8,2,soft,147,easy,36,,,,,,,,,,,,,,,,,,,,
-11,quiet,adj,descriptive_words,To be , is not to be ,,182,8,2,loud,173,noisy,3,,,,,,,,,,,,,,,,,,,,
-11,cloud,noun,outside,A , is not a ,,187,65,12,sun,44,star,16,sky,15,rain,14,pillow,5,raindrop,5,solid,5,storm,5,tree,4,water,4,cotton ball,3,food,3
-11,People,noun,people,, are not ,,126,36,10,animal,41,dog,13,alien,11,object,9,person,5,place,4,thing,4,fish,3,pet,3,toy,3,,,,
-11,knee,noun,body_parts,A , is not a ,,187,30,7,elbow,88,leg,26,ankle,16,foot,11,toe,9,arm,8,hand,4,,,,,,,,,,
-11,trash,noun,household,A piece of , is not a ,,149,57,12,treasure,34,food,13,gift,7,person,6,toy,6,recyclable,5,luxury,4,recycling,4,waste,4,flower,3,garbage,3,human,3
-11,lion,noun,animals,A , is not a ,,179,48,11,tiger,78,bear,13,dog,11,mouse,7,cheetah,5,cat,4,cow,4,cub,3,fish,3,lioness,3,pet,3,,
-11,moon,noun,outside,A , is not a ,,181,16,3,sun,123,star,38,planet,6,,,,,,,,,,,,,,,,,,
-11,snack,noun,games_routines,A , is not a ,,175,27,4,meal,133,dinner,9,food,5,lunch,3,,,,,,,,,,,,,,,,
-11,ladder,noun,outside,A , is not a ,,618,129,12,stair,79,staircase,51,stool,47,chair,43,toy,31,slide,28,stairs,27,elevator,21,step stool,21,tool,18,house,12,step,12
-11,pillow,noun,household,A , is not a ,,182,33,7,blanket,83,bed,45,rock,9,sheet,6,mattress,4,weapon,4,couch,3,,,,,,,,,,
-11,orange,noun,food_drink,An , is not a ,(food) ,174,32,9,apple,87,banana,21,vegetable,15,lemon,9,grape,4,pear,4,color,3,meat,3,strawberry,3,,,,,,
-11,banana,noun,food_drink,A , is not a ,,184,30,6,apple,86,vegetable,45,orange,11,fruit,6,strawberry,4,grape,3,,,,,,,,,,,,
-11,cat,noun,animals,A , is not a ,,640,42,6,dog,583,hat,4,fish,3,human,3,lion,3,toy,3,,,,,,,,,,,,
-11,cheek,noun,body_parts,A , is not a ,,187,47,12,nose,30,mouth,21,lip,18,tongue,15,forehead,11,eye,8,hand,7,face,6,bone,5,chin,5,foot,4,tooth,4
-11,Sliding,verb,action_words,, is not ,,147,42,12,slip,21,walk,17,run,15,stand,14,glide,7,fall,6,swim,6,sit,5,climb,4,skip,4,swing,4,dive,3
-11,Drinking,verb,action_words,, is not ,,155,22,4,eat,120,sip,6,chew,4,drive,3,,,,,,,,,,,,,,,,
-11,Waking,verb,action_words,, is not ,,177,14,2,sleep,84,run,79,,,,,,,,,,,,,,,,,,,,
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,lexeme1,response2,count2,lexeme2,response3,count3,lexeme3,response4,count4,lexeme4,response5,count5,lexeme5,response6,count6,lexeme6,response7,count7,lexeme7,response8,count8,lexeme8,response9,count9,lexeme9,response10,count10,lexeme10,response11,count11,lexeme11,response12,count12,lexeme12
+11,clean,adj,descriptive_words,To be , is not to be ,,188,11,2,dirty,173,dirty,messy,6,messy,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+11,hard,adj,descriptive_words,To be , is not to be ,,189,8,2,soft,147,soft,easy,36,easy,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+11,quiet,adj,descriptive_words,To be , is not to be ,,182,8,2,loud,173,loud,noisy,3,noisy,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+11,cloud,noun,outside,A , is not a ,,187,65,12,sun,44,sun,star,16,star,sky,15,sky,rain,14,rain,pillow,5,pillow,raindrop,5,raindrop,solid,5,solid,storm,5,storm,tree,4,tree,water,4,water,cotton ball,3,cotton ball,food,3,food
+11,People,noun,people,, are not ,,126,36,10,animal,41,animal,dog,13,dog,alien,11,alien,object,9,object,person,5,person,place,4,place,thing,4,thing,fish,3,fish,pet,3,pet,toy,3,toy,,,,,,
+11,knee,noun,body_parts,A , is not a ,,187,30,7,elbow,88,elbow,leg,26,leg,ankle,16,ankle,foot,11,foot,toe,9,toe,arm,8,arm,hand,4,hand,,,,,,,,,,,,,,,
+11,trash,noun,household,A piece of , is not a ,,149,57,12,treasure,34,treasure,food,13,food,gift,7,gift,person,6,person,toy,6,toy,recyclable,5,recyclable,luxury,4,luxury,recycling,4,recycling,waste,4,waste,flower,3,flower,garbage,3,garbage,human,3,human
+11,lion,noun,animals,A , is not a ,,179,48,11,tiger,78,tiger,bear,13,bear,dog,11,dog,mouse,7,mouse,cheetah,5,cheetah,cat,4,cat,cow,4,cow,cub,3,cub,fish,3,fish,lioness,3,lioness,pet,3,pet,,,
+11,moon,noun,outside,A , is not a ,,181,16,3,sun,123,sun,star,38,star,planet,6,planet,,,,,,,,,,,,,,,,,,,,,,,,,,,
+11,snack,noun,games_routines,A , is not a ,,175,27,4,meal,133,meal,dinner,9,dinner,food,5,food,lunch,3,lunch,,,,,,,,,,,,,,,,,,,,,,,,
+11,ladder,noun,outside,A , is not a ,,618,129,12,stair,79,stair,staircase,51,staircase,stool,47,stool,chair,43,chair,toy,31,toy,slide,28,slide,stairs,27,stairs,elevator,21,elevator,step stool,21,step stool,tool,18,tool,house,12,house,step,12,step
+11,pillow,noun,household,A , is not a ,,182,33,7,blanket,83,blanket,bed,45,bed,rock,9,rock,sheet,6,sheet,mattress,4,mattress,weapon,4,weapon,couch,3,couch,,,,,,,,,,,,,,,
+11,orange,noun,food_drink,An , is not a ,(food) ,174,32,9,apple,87,apple,banana,21,banana,vegetable,15,vegetable,lemon,9,lemon,grape,4,grape,pear,4,pear,color,3,color,meat,3,meat,strawberry,3,strawberry,,,,,,,,,
+11,banana,noun,food_drink,A , is not a ,,184,30,6,apple,86,apple,vegetable,45,vegetable,orange,11,orange,fruit,6,fruit,strawberry,4,strawberry,grape,3,grape,,,,,,,,,,,,,,,,,,
+11,cat,noun,animals,A , is not a ,,640,42,6,dog,583,dog,hat,4,hat,fish,3,fish,human,3,human,lion,3,lion,toy,3,toy,,,,,,,,,,,,,,,,,,
+11,cheek,noun,body_parts,A , is not a ,,187,47,12,nose,30,nose,mouth,21,mouth,lip,18,lip,tongue,15,tongue,forehead,11,forehead,eye,8,eye,hand,7,hand,face,6,face,bone,5,bone,chin,5,chin,foot,4,foot,tooth,4,tooth
+11,Sliding,verb,action_words,, is not ,,147,42,12,slipping,21,slip,walking,17,walk,running,15,run,standing,14,stand,gliding,7,glide,falling,6,fall,swimming,6,swim,sitting,5,sit,climbing,4,climb,skipping,4,skip,swinging,4,swing,diving,3,dive
+11,Drinking,verb,action_words,, is not ,,155,22,4,eating,120,eat,sipping,6,sip,chewing,4,chew,driving,3,drive,,,,,,,,,,,,,,,,,,,,,,,,
+11,Waking,verb,action_words,, is not ,,177,14,2,sleeping,84,sleep,running,79,run,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

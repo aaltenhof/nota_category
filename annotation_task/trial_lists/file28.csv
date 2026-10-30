@@ -1,20 +1,20 @@
-list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
-28,stuck,adj,descriptive_words,To be , is not to be ,,169,22,5,free,97,moving,20,unstuck,18,loose,11,open,3,,,,,,,,,,,,,,
-28,tired,adj,descriptive_words,To be , is not to be ,,179,26,6,awake,93,energized,23,energetic,20,alert,7,lively,6,rested,6,,,,,,,,,,,,
-28,windy,adj,descriptive_words,To be , is not to be ,,184,36,11,calm,46,still,45,sunny,19,hot,9,warm,9,cold,8,dry,6,stagnant,5,cloudy,3,rainy,3,slow,3,,
-28,toe,noun,body_parts,A , is not a ,,185,24,6,finger,113,foot,37,hand,5,leg,4,nail,3,shoe,3,,,,,,,,,,,,
-28,Salt,noun,food_drink,, is not ,,174,11,3,pepper,115,sugar,36,sweet,14,,,,,,,,,,,,,,,,,,
-28,kitchen,noun,furniture_rooms,A , is not a ,,626,99,12,bathroom,145,living room,138,bedroom,91,house,15,playground,15,bed,14,dining room,12,home,12,room,11,basement,9,couch,7,garage,7
-28,potato,noun,food_drink,A , is not a ,,182,61,9,fruit,52,tomato,25,carrot,11,vegetable,8,apple,7,fry,7,corn,6,chip,4,rock,3,,,,,,
-28,boy,noun,people,A , is not a ,,192,10,2,girl,169,man,15,,,,,,,,,,,,,,,,,,,,
-28,grass,noun,outside,A , is not a ,,182,73,12,tree,27,flower,21,sky,13,weed,9,dirt,7,field,7,bed,4,blade,4,plant,4,animal,3,bush,3,food,3
-28,friend,noun,people,A , is not a ,,177,35,6,enemy,69,foe,57,family,6,pet,4,stranger,4,family member,3,,,,,,,,,,,,
-28,tissue,noun,household,A , is not a ,,183,56,12,towel,32,napkin,25,paper towel,23,paper,15,blanket,8,rag,6,nose,5,wipe,5,booger,3,box,3,cloth,3,handkerchief,3
-28,ant,noun,animals,An , is not a ,,186,61,12,bee,16,bird,15,butterfly,13,spider,13,bug,9,animal,8,dog,8,elephant,8,mammal,7,fish,6,aunt,5,fly,5
-28,foot,noun,body_parts,A , is not a ,,182,30,8,hand,105,toe,18,leg,9,shoe,9,arm,4,inch,4,finger,3,nose,3,,,,,,,,
-28,present,noun,toys,A , is not a ,,174,79,12,gift,37,punishment,16,past,10,loan,5,bribe,4,burden,4,chore,4,trash,4,box,3,cake,3,car,3,coal,3
-28,Popcorn,noun,food_drink,, is not ,,149,52,12,candy,19,chip,14,corn,14,cold,7,butter,6,fruit,6,dinner,5,food,5,movie,5,water,5,cheese,4,sweet,4
-28,Pushing,verb,action_words,, is not ,,176,26,4,pull,110,shove,28,hug,9,help,3,,,,,,,,,,,,,,,,
-28,Looking,verb,action_words,, is not ,,164,40,12,see,36,watch,17,hear,12,listen,11,stare,9,touch,9,hide,8,sleep,8,ignore,7,do,6,feel,5,find,3
-28,Wiping,verb,action_words,, is not ,,161,75,12,clean,31,scrub,9,wash,7,dry,6,smear,6,dirty,5,spread,5,flush,4,rub,4,leave,3,pat,3,spill,3
-28,Tickling,verb,action_words,, is not ,,99,43,12,laugh,9,hug,8,hurt,8,cuddle,7,scratch,5,touch,5,fight,4,massage,3,punch,3,rub,3,run,3,slap,3
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,lexeme1,response2,count2,lexeme2,response3,count3,lexeme3,response4,count4,lexeme4,response5,count5,lexeme5,response6,count6,lexeme6,response7,count7,lexeme7,response8,count8,lexeme8,response9,count9,lexeme9,response10,count10,lexeme10,response11,count11,lexeme11,response12,count12,lexeme12
+28,stuck,adj,descriptive_words,To be , is not to be ,,169,22,5,free,97,free,moving,20,moving,unstuck,18,unstuck,loose,11,loose,open,3,open,,,,,,,,,,,,,,,,,,,,,
+28,tired,adj,descriptive_words,To be , is not to be ,,179,26,6,awake,93,awake,energized,23,energized,energetic,20,energetic,alert,7,alert,lively,6,lively,rested,6,rested,,,,,,,,,,,,,,,,,,
+28,windy,adj,descriptive_words,To be , is not to be ,,184,36,11,calm,46,calm,still,45,still,sunny,19,sunny,hot,9,hot,warm,9,warm,cold,8,cold,dry,6,dry,stagnant,5,stagnant,cloudy,3,cloudy,rainy,3,rainy,slow,3,slow,,,
+28,toe,noun,body_parts,A , is not a ,,185,24,6,finger,113,finger,foot,37,foot,hand,5,hand,leg,4,leg,nail,3,nail,shoe,3,shoe,,,,,,,,,,,,,,,,,,
+28,Salt,noun,food_drink,, is not ,,174,11,3,pepper,115,pepper,sugar,36,sugar,sweet,14,sweet,,,,,,,,,,,,,,,,,,,,,,,,,,,
+28,kitchen,noun,furniture_rooms,A , is not a ,,626,99,12,bathroom,145,bathroom,living room,138,living room,bedroom,91,bedroom,house,15,house,playground,15,playground,bed,14,bed,dining room,12,dining room,home,12,home,room,11,room,basement,9,basement,couch,7,couch,garage,7,garage
+28,potato,noun,food_drink,A , is not a ,,182,61,9,fruit,52,fruit,tomato,25,tomato,carrot,11,carrot,vegetable,8,vegetable,apple,7,apple,fry,7,fry,corn,6,corn,chip,4,chip,rock,3,rock,,,,,,,,,
+28,boy,noun,people,A , is not a ,,192,10,2,girl,169,girl,man,15,man,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+28,grass,noun,outside,A , is not a ,,182,73,12,tree,27,tree,flower,21,flower,sky,13,sky,weed,9,weed,dirt,7,dirt,field,7,field,bed,4,bed,blade,4,blade,plant,4,plant,animal,3,animal,bush,3,bush,food,3,food
+28,friend,noun,people,A , is not a ,,177,35,6,enemy,69,enemy,foe,57,foe,family,6,family,pet,4,pet,stranger,4,stranger,family member,3,family member,,,,,,,,,,,,,,,,,,
+28,tissue,noun,household,A , is not a ,,183,56,12,towel,32,towel,napkin,25,napkin,paper towel,23,paper towel,paper,15,paper,blanket,8,blanket,rag,6,rag,nose,5,nose,wipe,5,wipe,booger,3,booger,box,3,box,cloth,3,cloth,handkerchief,3,handkerchief
+28,ant,noun,animals,An , is not a ,,186,61,12,bee,16,bee,bird,15,bird,butterfly,13,butterfly,spider,13,spider,bug,9,bug,animal,8,animal,dog,8,dog,elephant,8,elephant,mammal,7,mammal,fish,6,fish,aunt,5,aunt,fly,5,fly
+28,foot,noun,body_parts,A , is not a ,,182,30,8,hand,105,hand,toe,18,toe,leg,9,leg,shoe,9,shoe,arm,4,arm,inch,4,inch,finger,3,finger,nose,3,nose,,,,,,,,,,,,
+28,present,noun,toys,A , is not a ,,174,79,12,gift,37,gift,punishment,16,punishment,past,10,past,loan,5,loan,bribe,4,bribe,burden,4,burden,chore,4,chore,trash,4,trash,box,3,box,cake,3,cake,car,3,car,coal,3,coal
+28,Popcorn,noun,food_drink,, is not ,,149,52,12,candy,19,candy,chip,14,chip,corn,14,corn,cold,7,cold,butter,6,butter,fruit,6,fruit,dinner,5,dinner,food,5,food,movie,5,movie,water,5,water,cheese,4,cheese,sweet,4,sweet
+28,Pushing,verb,action_words,, is not ,,176,26,4,pulling,110,pull,shoving,28,shove,hugging,9,hug,helping,3,help,,,,,,,,,,,,,,,,,,,,,,,,
+28,Looking,verb,action_words,, is not ,,164,40,12,seeing,36,see,watching,17,watch,hearing,12,hear,listening,11,listen,staring,9,stare,touching,9,touch,hiding,8,hide,sleeping,8,sleep,ignoring,7,ignore,doing,6,do,feeling,5,feel,finding,3,find
+28,Wiping,verb,action_words,, is not ,,161,75,12,cleaning,31,clean,scrubbing,9,scrub,washing,7,wash,drying,6,dry,smearing,6,smear,dirtying,5,dirty,spreading,5,spread,flushing,4,flush,rubbing,4,rub,leaving,3,leave,patting,3,pat,spilling,3,spill
+28,Tickling,verb,action_words,, is not ,,99,43,12,laughing,9,laugh,hugging,8,hug,hurting,8,hurt,cuddling,7,cuddle,scratching,5,scratch,touching,5,touch,fighting,4,fight,massaging,3,massage,punching,3,punch,rubbing,3,rub,running,3,run,slapping,3,slap

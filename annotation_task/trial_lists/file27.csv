@@ -1,20 +1,20 @@
-list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
-27,fast,adj,descriptive_words,To be , is not to be ,,184,5,1,slow,180,,,,,,,,,,,,,,,,,,,,,,
-27,there,adj,locations,To be , is not to be ,,179,14,4,here,138,away,12,gone,12,present,3,,,,,,,,,,,,,,,,
-27,pretty,adj,descriptive_words,To be , is not to be ,,190,14,1,ugly,174,,,,,,,,,,,,,,,,,,,,,,
-27,Vanilla,noun,food_drink,, is not ,,179,15,1,chocolate,164,,,,,,,,,,,,,,,,,,,,,,
-27,penguin,noun,animals,A , is not a ,,174,67,12,bird,28,polar bear,16,bear,11,fish,10,dog,8,seal,8,duck,5,reptile,4,cow,3,elephant,3,giraffe,3,horse,3
-27,dish,noun,household,A , is not a ,,182,63,12,plate,29,bowl,19,cup,18,fork,12,food,7,spoon,6,paper,5,glass,4,meal,4,napkin,4,pan,4,tray,4
-27,tray,noun,household,A , is not a ,,188,58,9,plate,54,table,26,bowl,20,cup,10,dish,9,pan,5,food,4,sled,3,weapon,3,,,,,,
-27,animal,noun,animals,An , is not a ,,186,50,12,human,46,plant,22,person,16,object,14,insect,8,rock,7,food,5,mammal,5,fish,4,fruit,4,toy,4,bug,3
-27,baby,noun,people,A , is not a ,,178,38,9,adult,92,toy,12,child,9,man,7,toddler,6,grown-up,5,teenager,5,kid,4,pet,4,,,,,,
-27,coat,noun,clothing,A , is not a ,,185,53,12,jacket,36,shirt,32,sweatshirt,11,hat,10,pants,8,shoe,8,pant,6,sweater,6,t-shirt,6,dress,5,hoodie,4,glove,3
-27,chair,noun,furniture_rooms,A , is not a ,,179,36,9,table,57,bed,27,couch,25,desk,14,stool,10,bench,6,sofa,4,floor,3,toy,3,,,,,,
-27,mailman,noun,people,A , is not a ,,184,83,12,mailwoman,13,fireman,12,dog,11,doctor,10,milkman,10,firefighter,7,garbage man,7,driver,4,lawyer,4,teacher,4,chef,3,chew toy,3
-27,uncle,noun,people,A , is not a ,,187,18,3,aunt,163,dad,4,brother,3,,,,,,,,,,,,,,,,,,
-27,garage,noun,furniture_rooms,A , is not a ,,183,51,12,house,35,car,21,bedroom,15,home,13,driveway,11,kitchen,8,door,7,living room,7,room,6,porch,5,basement,3,pool,3
-27,Soap,noun,household,, is not a ,,166,67,10,food,28,water,18,shampoo,15,dirt,9,towel,6,toy,6,conditioner,5,tool,4,soup,3,toothpaste,3,,,,
-27,Finishing,verb,action_words,, is not ,,161,22,6,start,119,begin,7,hunt,4,stop,4,leave,3,quit,3,,,,,,,,,,,,
-27,Splashing,verb,action_words,, is not ,,126,49,12,swim,38,drown,9,dry,5,soak,5,spray,5,allow,4,float,3,jump,3,run,3,squirt,3,throw,3,wade,3
-27,Talking,verb,action_words,, is not ,,122,25,10,listen,58,yell,18,hear,5,whisper,5,laugh,4,walk,4,shout,3,sing,3,speak,3,think,3,,,,
-27,Fixing,verb,action_words,, is not ,,184,30,4,break,124,destroy,19,help,4,ruin,3,,,,,,,,,,,,,,,,
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,lexeme1,response2,count2,lexeme2,response3,count3,lexeme3,response4,count4,lexeme4,response5,count5,lexeme5,response6,count6,lexeme6,response7,count7,lexeme7,response8,count8,lexeme8,response9,count9,lexeme9,response10,count10,lexeme10,response11,count11,lexeme11,response12,count12,lexeme12
+27,fast,adj,descriptive_words,To be , is not to be ,,184,5,1,slow,180,slow,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+27,there,adj,locations,To be , is not to be ,,179,14,4,here,138,here,away,12,away,gone,12,gone,present,3,present,,,,,,,,,,,,,,,,,,,,,,,,
+27,pretty,adj,descriptive_words,To be , is not to be ,,190,14,1,ugly,174,ugly,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+27,Vanilla,noun,food_drink,, is not ,,179,15,1,chocolate,164,chocolate,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+27,penguin,noun,animals,A , is not a ,,174,67,12,bird,28,bird,polar bear,16,polar bear,bear,11,bear,fish,10,fish,dog,8,dog,seal,8,seal,duck,5,duck,reptile,4,reptile,cow,3,cow,elephant,3,elephant,giraffe,3,giraffe,horse,3,horse
+27,dish,noun,household,A , is not a ,,182,63,12,plate,29,plate,bowl,19,bowl,cup,18,cup,fork,12,fork,food,7,food,spoon,6,spoon,paper,5,paper,glass,4,glass,meal,4,meal,napkin,4,napkin,pan,4,pan,tray,4,tray
+27,tray,noun,household,A , is not a ,,188,58,9,plate,54,plate,table,26,table,bowl,20,bowl,cup,10,cup,dish,9,dish,pan,5,pan,food,4,food,sled,3,sled,weapon,3,weapon,,,,,,,,,
+27,animal,noun,animals,An , is not a ,,186,50,12,human,46,human,plant,22,plant,person,16,person,object,14,object,insect,8,insect,rock,7,rock,food,5,food,mammal,5,mammal,fish,4,fish,fruit,4,fruit,toy,4,toy,bug,3,bug
+27,baby,noun,people,A , is not a ,,178,38,9,adult,92,adult,toy,12,toy,child,9,child,man,7,man,toddler,6,toddler,grown-up,5,grown-up,teenager,5,teenager,kid,4,kid,pet,4,pet,,,,,,,,,
+27,coat,noun,clothing,A , is not a ,,185,53,12,jacket,36,jacket,shirt,32,shirt,sweatshirt,11,sweatshirt,hat,10,hat,pants,8,pants,shoe,8,shoe,pant,6,pant,sweater,6,sweater,t-shirt,6,t-shirt,dress,5,dress,hoodie,4,hoodie,glove,3,glove
+27,chair,noun,furniture_rooms,A , is not a ,,179,36,9,table,57,table,bed,27,bed,couch,25,couch,desk,14,desk,stool,10,stool,bench,6,bench,sofa,4,sofa,floor,3,floor,toy,3,toy,,,,,,,,,
+27,mailman,noun,people,A , is not a ,,184,83,12,mailwoman,13,mailwoman,fireman,12,fireman,dog,11,dog,doctor,10,doctor,milkman,10,milkman,firefighter,7,firefighter,garbage man,7,garbage man,driver,4,driver,lawyer,4,lawyer,teacher,4,teacher,chef,3,chef,chew toy,3,chew toy
+27,uncle,noun,people,A , is not a ,,187,18,3,aunt,163,aunt,dad,4,dad,brother,3,brother,,,,,,,,,,,,,,,,,,,,,,,,,,,
+27,garage,noun,furniture_rooms,A , is not a ,,183,51,12,house,35,house,car,21,car,bedroom,15,bedroom,home,13,home,driveway,11,driveway,kitchen,8,kitchen,door,7,door,living room,7,living room,room,6,room,porch,5,porch,basement,3,basement,pool,3,pool
+27,Soap,noun,household,, is not a ,,166,67,10,food,28,food,water,18,water,shampoo,15,shampoo,dirt,9,dirt,towel,6,towel,toy,6,toy,conditioner,5,conditioner,tool,4,tool,soup,3,soup,toothpaste,3,toothpaste,,,,,,
+27,Finishing,verb,action_words,, is not ,,161,22,6,starting,119,start,beginning,7,begin,hunting,4,hunt,stopping,4,stop,leaving,3,leave,quitting,3,quit,,,,,,,,,,,,,,,,,,
+27,Splashing,verb,action_words,, is not ,,126,49,12,swimming,38,swim,drowning,9,drown,drying,5,dry,soaking,5,soak,spraying,5,spray,allowing,4,allow,floating,3,float,jumping,3,jump,running,3,run,squirting,3,squirt,throwing,3,throw,wading,3,wade
+27,Talking,verb,action_words,, is not ,,122,25,10,listening,58,listen,yelling,18,yell,hearing,5,hear,whispering,5,whisper,laughing,4,laugh,walking,4,walk,shouting,3,shout,singing,3,sing,speaking,3,speak,thinking,3,think,,,,,,
+27,Fixing,verb,action_words,, is not ,,184,30,4,breaking,124,break,destroying,19,destroy,helping,4,help,ruining,3,ruin,,,,,,,,,,,,,,,,,,,,,,,,

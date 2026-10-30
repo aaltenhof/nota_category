@@ -1,21 +1,21 @@
-list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
-5,good,adj,descriptive_words,To be , is not to be ,,183,7,1,bad,176,,,,,,,,,,,,,,,,,,,,,,
-5,After,adj,time_words,, is not ,,190,6,2,before,173,now,13,,,,,,,,,,,,,,,,,,,,
-5,dry,adj,descriptive_words,To be , is not to be ,,187,6,1,wet,182,,,,,,,,,,,,,,,,,,,,,,
-5,Beans,noun,food_drink,, are not ,,140,55,10,fruit,29,rice,21,toast,6,vegetable,6,corn,5,apple,4,candy,4,meat,4,pea,4,nut,3,,,,
-5,dog,noun,animals,A , is not a ,,193,14,1,cat,179,,,,,,,,,,,,,,,,,,,,,,
-5,crayon,noun,toys,A , is not ,,173,21,5,marker,104,pencil,29,pen,10,colored pencil,6,food,6,,,,,,,,,,,,,,
-5,rock,noun,outside,A , is not a ,,182,77,12,stone,25,pebble,14,tree,9,boulder,7,food,7,paper,7,pillow,6,flower,5,leaf,5,stick,5,sand,4,toy,4
-5,Grapes,noun,food_drink,, are not ,,150,41,12,vegetable,34,apple,31,orange,9,berry,8,strawberry,5,banana,4,blueberry,4,yellow,4,blue,3,cherry,3,fruit,3,raisin,3
-5,lawn mower,noun,outside,A , is not a ,,174,80,12,snow blower,18,car,12,rake,12,grass,7,toy,7,vacuum,7,shovel,6,broom,5,leaf blower,5,weed wacker,5,snow plow,4,tractor,4
-5,scarf,noun,clothing,A , is not a ,,180,35,8,hat,103,jacket,12,glove,11,coat,9,mitten,4,shirt,4,accessory,3,shoe,3,,,,,,,,
-5,sidewalk,noun,outside,A , is not a ,,186,26,5,road,93,street,57,driveway,5,highway,3,path,3,,,,,,,,,,,,,,
-5,strawberry,noun,food_drink,A , is not a ,,191,35,12,blueberry,60,vegetable,37,apple,13,raspberry,13,grape,12,banana,8,berry,5,melon,5,fruit,3,kiwi,3,mango,3,orange,3
-5,sweater,noun,clothing,A , is not a ,,190,42,12,shirt,42,jacket,16,hoodie,15,sweatshirt,15,t-shirt,15,coat,9,pants,8,pant,7,shoe,7,tank top,6,hat,5,scarf,4
-5,street,noun,outside,A , is not a ,,187,43,12,sidewalk,61,road,33,highway,11,avenue,7,house,6,car,5,path,4,sign,4,trail,4,walkway,4,alley,3,home,3
-5,horse,noun,animals,A , is not a ,,180,48,9,donkey,42,cow,39,dog,30,pony,5,bear,4,cowboy,3,fish,3,human,3,zebra,3,,,,,,
-5,apple,noun,food_drink,An , is not ,,612,64,12,orange,161,banana,142,vegetable,134,pear,53,blue,22,purple,10,brown,5,grape,4,meat,4,pair,4,square,4,drink,3
-5,Opening,verb,action_words,, is not ,,623,9,1,close,613,,,,,,,,,,,,,,,,,,,,,,
-5,Washing,verb,action_words,, is not ,,150,26,4,dry,90,dirty,20,clean,12,cook,4,,,,,,,,,,,,,,,,
-5,Carrying,verb,action_words,, is not ,,178,38,12,drop,69,hold,19,throw,15,drag,14,put down,6,leave,5,set down,5,lift,3,pull,3,push,3,release,3,sit,3
-5,Stopping,verb,action_words,, is not ,,184,18,5,go,113,start,40,move,7,run,4,continue,3,,,,,,,,,,,,,,
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,lexeme1,response2,count2,lexeme2,response3,count3,lexeme3,response4,count4,lexeme4,response5,count5,lexeme5,response6,count6,lexeme6,response7,count7,lexeme7,response8,count8,lexeme8,response9,count9,lexeme9,response10,count10,lexeme10,response11,count11,lexeme11,response12,count12,lexeme12
+5,good,adj,descriptive_words,To be , is not to be ,,183,7,1,bad,176,bad,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+5,After,adj,time_words,, is not ,,190,6,2,before,173,before,now,13,now,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+5,dry,adj,descriptive_words,To be , is not to be ,,187,6,1,wet,182,wet,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+5,Beans,noun,food_drink,, are not ,,140,55,10,fruit,29,fruit,rice,21,rice,toast,6,toast,vegetable,6,vegetable,corn,5,corn,apple,4,apple,candy,4,candy,meat,4,meat,pea,4,pea,nut,3,nut,,,,,,
+5,dog,noun,animals,A , is not a ,,193,14,1,cat,179,cat,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+5,crayon,noun,toys,A , is not ,,173,21,5,marker,104,marker,pencil,29,pencil,pen,10,pen,colored pencil,6,colored pencil,food,6,food,,,,,,,,,,,,,,,,,,,,,
+5,rock,noun,outside,A , is not a ,,182,77,12,stone,25,stone,pebble,14,pebble,tree,9,tree,boulder,7,boulder,food,7,food,paper,7,paper,pillow,6,pillow,flower,5,flower,leaf,5,leaf,stick,5,stick,sand,4,sand,toy,4,toy
+5,Grapes,noun,food_drink,, are not ,,150,41,12,vegetable,34,vegetable,apple,31,apple,orange,9,orange,berry,8,berry,strawberry,5,strawberry,banana,4,banana,blueberry,4,blueberry,yellow,4,yellow,blue,3,blue,cherry,3,cherry,fruit,3,fruit,raisin,3,raisin
+5,lawn mower,noun,outside,A , is not a ,,174,80,12,snow blower,18,snow blower,car,12,car,rake,12,rake,grass,7,grass,toy,7,toy,vacuum,7,vacuum,shovel,6,shovel,broom,5,broom,leaf blower,5,leaf blower,weed wacker,5,weed wacker,snow plow,4,snow plow,tractor,4,tractor
+5,scarf,noun,clothing,A , is not a ,,180,35,8,hat,103,hat,jacket,12,jacket,glove,11,glove,coat,9,coat,mitten,4,mitten,shirt,4,shirt,accessory,3,accessory,shoe,3,shoe,,,,,,,,,,,,
+5,sidewalk,noun,outside,A , is not a ,,186,26,5,road,93,road,street,57,street,driveway,5,driveway,highway,3,highway,path,3,path,,,,,,,,,,,,,,,,,,,,,
+5,strawberry,noun,food_drink,A , is not a ,,191,35,12,blueberry,60,blueberry,vegetable,37,vegetable,apple,13,apple,raspberry,13,raspberry,grape,12,grape,banana,8,banana,berry,5,berry,melon,5,melon,fruit,3,fruit,kiwi,3,kiwi,mango,3,mango,orange,3,orange
+5,sweater,noun,clothing,A , is not a ,,190,42,12,shirt,42,shirt,jacket,16,jacket,hoodie,15,hoodie,sweatshirt,15,sweatshirt,t-shirt,15,t-shirt,coat,9,coat,pants,8,pants,pant,7,pant,shoe,7,shoe,tank top,6,tank top,hat,5,hat,scarf,4,scarf
+5,street,noun,outside,A , is not a ,,187,43,12,sidewalk,61,sidewalk,road,33,road,highway,11,highway,avenue,7,avenue,house,6,house,car,5,car,path,4,path,sign,4,sign,trail,4,trail,walkway,4,walkway,alley,3,alley,home,3,home
+5,horse,noun,animals,A , is not a ,,180,48,9,donkey,42,donkey,cow,39,cow,dog,30,dog,pony,5,pony,bear,4,bear,cowboy,3,cowboy,fish,3,fish,human,3,human,zebra,3,zebra,,,,,,,,,
+5,apple,noun,food_drink,An , is not ,,612,64,12,orange,161,orange,banana,142,banana,vegetable,134,vegetable,pear,53,pear,blue,22,blue,purple,10,purple,brown,5,brown,grape,4,grape,meat,4,meat,pair,4,pair,square,4,square,drink,3,drink
+5,Opening,verb,action_words,, is not ,,623,9,1,closing,613,close,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+5,Washing,verb,action_words,, is not ,,150,26,4,drying,90,dry,dirtying,20,dirty,cleaning,12,clean,cooking,4,cook,,,,,,,,,,,,,,,,,,,,,,,,
+5,Carrying,verb,action_words,, is not ,,178,38,12,dropping,69,drop,holding,19,hold,throwing,15,throw,dragging,14,drag,putting down,6,put down,leaving,5,leave,setting down,5,set down,lifting,3,lift,pulling,3,pull,pushing,3,push,releasing,3,release,sitting,3,sit
+5,Stopping,verb,action_words,, is not ,,184,18,5,going,113,go,starting,40,start,moving,7,move,running,4,run,continuing,3,continue,,,,,,,,,,,,,,,,,,,,,

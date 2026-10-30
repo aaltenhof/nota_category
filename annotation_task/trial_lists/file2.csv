@@ -1,21 +1,21 @@
-list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
-2,black,adj,descriptive_words,To be , is not to be ,,178,17,9,white,125,brown,16,green,5,red,5,colorful,4,blue,3,gray,3,orange,3,yellow,3,,,,,,
-2,Later,adj,time_words,, is not ,,186,10,5,now,145,early,18,soon,8,before,5,right now,5,,,,,,,,,,,,,,
-2,tiny,adj,descriptive_words,To be , is not to be ,,183,14,4,big,105,large,47,huge,18,tall,3,,,,,,,,,,,,,,,,
-2,beach,noun,places,A , is not a ,,187,57,11,mountain,37,pool,32,forest,18,lake,12,ocean,8,desert,7,field,4,park,4,pond,4,farm,3,house,3,,
-2,hat,noun,clothing,A , is not a ,,190,48,12,scarf,31,shoe,23,shirt,19,glove,18,cap,10,coat,8,beanie,7,hood,7,sock,7,headband,5,show,4,cat,3
-2,window,noun,furniture_rooms,A , is not a ,,177,32,4,door,120,wall,15,opening,4,table,3,,,,,,,,,,,,,,,,
-2,sofa,noun,furniture_rooms,A , is not a ,,192,35,5,chair,57,bed,38,couch,38,table,22,stool,3,,,,,,,,,,,,,,
-2,stick,noun,outside,A , is not a ,,187,64,12,tree,40,stone,15,branch,10,leaf,9,ball,8,rock,8,log,7,toy,7,pole,5,weapon,5,trunk,4,bat,3
-2,bed,noun,furniture_rooms,A , is not a ,,181,49,12,couch,46,chair,23,pillow,12,table,11,desk,8,sofa,8,floor,7,crib,4,home,4,house,4,shower,4,bench,3
-2,muffin,noun,food_drink,A , is not a  ,,180,47,12,cupcake,64,cake,15,bread,10,scone,8,bagel,6,cookie,6,pancake,6,donut,5,fruit,5,croissant,4,pie,4,top,4
-2,snowsuit,noun,clothing,A , is not a ,,180,53,12,swimsuit,47,bikini,16,bathing suit,15,jacket,13,coat,8,wetsuit,8,dress,5,shirt,4,boot,3,jumpsuit,3,snow,3,t-shirt,3
-2,clown,noun,people,A , is not a ,,159,82,12,animal,13,person,10,friend,9,circus,5,dog,5,acrobat,4,doctor,4,ghost,4,joke,4,princess,4,teacher,4,toy,4
-2,Milk,noun,food_drink,, is not ,,139,31,9,water,70,juice,18,orange juice,5,yogurt,5,cheese,4,bread,3,brown,3,green,3,meat,3,,,,,,
-2,mouth,noun,body_parts,A , is not a ,,184,48,11,nose,47,ear,17,eye,17,tooth,17,foot,12,tongue,11,leg,7,butt,4,face,4,hand,4,toe,3,,
-2,ankle,noun,body_parts,An , is not a ,,187,33,10,wrist,50,foot,44,knee,28,elbow,9,leg,8,toe,7,arm,6,bone,4,calf,4,hand,3,,,,
-2,school,noun,places,A , is not a ,,188,47,12,home,43,house,29,prison,15,jail,14,playground,8,office,6,church,5,hospital,5,job,5,daycare,4,building,3,circus,3
-2,Pretending,verb,action_words,, is not ,,76,27,8,be,14,know,10,believe,9,lie,6,live,6,act,4,play,3,show,3,,,,,,,,
-2,Taking,verb,action_words,, is not ,,150,31,5,give,100,leave,8,steal,4,scream,3,walk,3,,,,,,,,,,,,,,
-2,Driving,verb,action_words,, is not ,,129,22,7,walk,75,bike,9,run,7,fly,6,swim,6,ride,4,sit,3,,,,,,,,,,
-2,Tasting,verb,action_words,, is not ,,173,33,11,smell,47,eat,24,see,14,feel,13,lick,10,spit,10,touch,8,drink,6,hear,5,enjoy,4,swallow,4,,
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,lexeme1,response2,count2,lexeme2,response3,count3,lexeme3,response4,count4,lexeme4,response5,count5,lexeme5,response6,count6,lexeme6,response7,count7,lexeme7,response8,count8,lexeme8,response9,count9,lexeme9,response10,count10,lexeme10,response11,count11,lexeme11,response12,count12,lexeme12
+2,black,adj,descriptive_words,To be , is not to be ,,178,17,9,white,125,white,brown,16,brown,green,5,green,red,5,red,colorful,4,colorful,blue,3,blue,gray,3,gray,orange,3,orange,yellow,3,yellow,,,,,,,,,
+2,Later,adj,time_words,, is not ,,186,10,5,now,145,now,early,18,early,soon,8,soon,before,5,before,right now,5,right now,,,,,,,,,,,,,,,,,,,,,
+2,tiny,adj,descriptive_words,To be , is not to be ,,183,14,4,big,105,big,large,47,large,huge,18,huge,tall,3,tall,,,,,,,,,,,,,,,,,,,,,,,,
+2,beach,noun,places,A , is not a ,,187,57,11,mountain,37,mountain,pool,32,pool,forest,18,forest,lake,12,lake,ocean,8,ocean,desert,7,desert,field,4,field,park,4,park,pond,4,pond,farm,3,farm,house,3,house,,,
+2,hat,noun,clothing,A , is not a ,,190,48,12,scarf,31,scarf,shoe,23,shoe,shirt,19,shirt,glove,18,glove,cap,10,cap,coat,8,coat,beanie,7,beanie,hood,7,hood,sock,7,sock,headband,5,headband,show,4,show,cat,3,cat
+2,window,noun,furniture_rooms,A , is not a ,,177,32,4,door,120,door,wall,15,wall,opening,4,opening,table,3,table,,,,,,,,,,,,,,,,,,,,,,,,
+2,sofa,noun,furniture_rooms,A , is not a ,,192,35,5,chair,57,chair,bed,38,bed,couch,38,couch,table,22,table,stool,3,stool,,,,,,,,,,,,,,,,,,,,,
+2,stick,noun,outside,A , is not a ,,187,64,12,tree,40,tree,stone,15,stone,branch,10,branch,leaf,9,leaf,ball,8,ball,rock,8,rock,log,7,log,toy,7,toy,pole,5,pole,weapon,5,weapon,trunk,4,trunk,bat,3,bat
+2,bed,noun,furniture_rooms,A , is not a ,,181,49,12,couch,46,couch,chair,23,chair,pillow,12,pillow,table,11,table,desk,8,desk,sofa,8,sofa,floor,7,floor,crib,4,crib,home,4,home,house,4,house,shower,4,shower,bench,3,bench
+2,muffin,noun,food_drink,A , is not a  ,,180,47,12,cupcake,64,cupcake,cake,15,cake,bread,10,bread,scone,8,scone,bagel,6,bagel,cookie,6,cookie,pancake,6,pancake,donut,5,donut,fruit,5,fruit,croissant,4,croissant,pie,4,pie,top,4,top
+2,snowsuit,noun,clothing,A , is not a ,,180,53,12,swimsuit,47,swimsuit,bikini,16,bikini,bathing suit,15,bathing suit,jacket,13,jacket,coat,8,coat,wetsuit,8,wetsuit,dress,5,dress,shirt,4,shirt,boot,3,boot,jumpsuit,3,jumpsuit,snow,3,snow,t-shirt,3,t-shirt
+2,clown,noun,people,A , is not a ,,159,82,12,animal,13,animal,person,10,person,friend,9,friend,circus,5,circus,dog,5,dog,acrobat,4,acrobat,doctor,4,doctor,ghost,4,ghost,joke,4,joke,princess,4,princess,teacher,4,teacher,toy,4,toy
+2,Milk,noun,food_drink,, is not ,,139,31,9,water,70,water,juice,18,juice,orange juice,5,orange juice,yogurt,5,yogurt,cheese,4,cheese,bread,3,bread,brown,3,brown,green,3,green,meat,3,meat,,,,,,,,,
+2,mouth,noun,body_parts,A , is not a ,,184,48,11,nose,47,nose,ear,17,ear,eye,17,eye,tooth,17,tooth,foot,12,foot,tongue,11,tongue,leg,7,leg,butt,4,butt,face,4,face,hand,4,hand,toe,3,toe,,,
+2,ankle,noun,body_parts,An , is not a ,,187,33,10,wrist,50,wrist,foot,44,foot,knee,28,knee,elbow,9,elbow,leg,8,leg,toe,7,toe,arm,6,arm,bone,4,bone,calf,4,calf,hand,3,hand,,,,,,
+2,school,noun,places,A , is not a ,,188,47,12,home,43,home,house,29,house,prison,15,prison,jail,14,jail,playground,8,playground,office,6,office,church,5,church,hospital,5,hospital,job,5,job,daycare,4,daycare,building,3,building,circus,3,circus
+2,Pretending,verb,action_words,, is not ,,76,27,8,being,14,be,knowing,10,know,believing,9,believe,lying,6,lie,living,6,live,acting,4,act,playing,3,play,showing,3,show,,,,,,,,,,,,
+2,Taking,verb,action_words,, is not ,,150,31,5,giving,100,give,leaving,8,leave,stealing,4,steal,screaming,3,scream,walking,3,walk,,,,,,,,,,,,,,,,,,,,,
+2,Driving,verb,action_words,, is not ,,129,22,7,walking,75,walk,biking,9,bike,running,7,run,flying,6,fly,swimming,6,swim,riding,4,ride,sitting,3,sit,,,,,,,,,,,,,,,
+2,Tasting,verb,action_words,, is not ,,173,33,11,smelling,47,smell,eating,24,eat,seeing,14,see,feeling,13,feel,licking,10,lick,spitting,10,spit,touching,8,touch,drinking,6,drink,hearing,5,hear,enjoying,4,enjoy,swallowing,4,swallow,,,

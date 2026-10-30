@@ -1,20 +1,20 @@
-list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
-12,full,adj,descriptive_words,To be , is not to be ,,192,13,3,empty,98,hungry,81,starving,3,,,,,,,,,,,,,,,,,,
-12,out,adj,locations,To be , is not to be ,,182,9,2,in,167,inside,8,,,,,,,,,,,,,,,,,,,,
-12,loud,adj,descriptive_words,To be , is not to be ,,186,4,2,quiet,180,silent,4,,,,,,,,,,,,,,,,,,,,
-12,person,noun,people,A , is not a ,,176,55,12,animal,38,dog,32,alien,8,object,8,thing,8,place,6,plant,5,group,4,human,4,pet,4,cat,3,fish,3
-12,ear,noun,body_parts,An , is not a ,,179,32,11,nose,67,mouth,29,eye,23,face,6,hand,6,toe,6,leg,5,arm,4,finger,4,foot,3,tongue,3,,
-12,Bubbles,noun,toys,, are not ,,81,35,6,water,14,soap,11,solid,10,air,4,square,4,foam,3,,,,,,,,,,,,
-12,brush,noun,household,A , is not a ,,183,80,11,comb,67,pen,6,floss,5,shoe,4,tooth,4,toy,4,hair,3,hair tie,3,paint,3,toothbrush,3,towel,3,,
-12,nose,noun,body_parts,A , is not a ,,182,31,10,mouth,71,ear,39,eye,18,hand,7,face,6,foot,4,toe,4,chin,3,finger,3,head,3,,,,
-12,motorcycle,noun,vehicles,A , is not a ,,184,22,4,car,127,bike,25,bicycle,7,truck,5,,,,,,,,,,,,,,,,
-12,finger,noun,body_parts,A , is not a ,,637,65,12,toe,338,hand,109,foot,39,thumb,30,food,10,leg,10,toy,7,arm,5,nail,5,nose,4,object,4,weapon,4
-12,towel,noun,household,A , is not a ,,187,71,12,blanket,35,robe,17,rag,12,washcloth,10,rug,8,shower,8,shirt,6,mat,5,sheet,5,dryer,4,bath,3,cloth,3
-12,spoon,noun,household,A , is not a ,,186,13,2,fork,167,knife,7,,,,,,,,,,,,,,,,,,,,
-12,country,noun,places,A , is not a ,,186,21,8,state,71,city,56,continent,23,county,6,town,5,flag,3,nation,3,place,3,,,,,,,,
-12,door,noun,furniture_rooms,A , is not a ,,183,59,8,window,86,wall,10,handle,6,floor,5,room,5,lock,4,wheel,4,knob,3,,,,,,,,
-12,camera,noun,household,A , is not a ,,175,63,12,phone,41,television,11,toy,11,computer,10,picture,10,lens,6,photograph,5,radio,5,video,4,animal,3,microphone,3,mirror,3
-12,telephone,noun,household,A , is not a ,,191,61,12,computer,31,ipad,17,cellphone,14,book,11,television,11,iphone,9,toy,9,laptop,7,telephone,7,letter,5,camera,4,radio,4
-12,Covering,verb,action_words,, is not ,,168,31,8,show,45,open,26,uncover,25,reveal,18,expose,16,hide,7,hold,3,leave,3,,,,,,,,
-12,Saying,verb,action_words,, is not ,,155,40,10,do,42,listen,19,speak,13,tell,13,yell,10,think,8,go,4,believe,3,hear,3,leave,3,,,,
-12,Chasing,verb,action_words,, is not ,,175,52,12,run,27,attract,15,catch,11,run away,10,hide,9,being chased,7,walk,7,follow,6,find,5,sit,5,stay,5,escape,4
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,lexeme1,response2,count2,lexeme2,response3,count3,lexeme3,response4,count4,lexeme4,response5,count5,lexeme5,response6,count6,lexeme6,response7,count7,lexeme7,response8,count8,lexeme8,response9,count9,lexeme9,response10,count10,lexeme10,response11,count11,lexeme11,response12,count12,lexeme12
+12,full,adj,descriptive_words,To be , is not to be ,,192,13,3,empty,98,empty,hungry,81,hungry,starving,3,starving,,,,,,,,,,,,,,,,,,,,,,,,,,,
+12,out,adj,locations,To be , is not to be ,,182,9,2,in,167,in,inside,8,inside,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+12,loud,adj,descriptive_words,To be , is not to be ,,186,4,2,quiet,180,quiet,silent,4,silent,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+12,person,noun,people,A , is not a ,,176,55,12,animal,38,animal,dog,32,dog,alien,8,alien,object,8,object,thing,8,thing,place,6,place,plant,5,plant,group,4,group,human,4,human,pet,4,pet,cat,3,cat,fish,3,fish
+12,ear,noun,body_parts,An , is not a ,,179,32,11,nose,67,nose,mouth,29,mouth,eye,23,eye,face,6,face,hand,6,hand,toe,6,toe,leg,5,leg,arm,4,arm,finger,4,finger,foot,3,foot,tongue,3,tongue,,,
+12,Bubbles,noun,toys,, are not ,,81,35,6,water,14,water,soap,11,soap,solid,10,solid,air,4,air,square,4,square,foam,3,foam,,,,,,,,,,,,,,,,,,
+12,brush,noun,household,A , is not a ,,183,80,11,comb,67,comb,pen,6,pen,floss,5,floss,shoe,4,shoe,tooth,4,tooth,toy,4,toy,hair,3,hair,hair tie,3,hair tie,paint,3,paint,toothbrush,3,toothbrush,towel,3,towel,,,
+12,nose,noun,body_parts,A , is not a ,,182,31,10,mouth,71,mouth,ear,39,ear,eye,18,eye,hand,7,hand,face,6,face,foot,4,foot,toe,4,toe,chin,3,chin,finger,3,finger,head,3,head,,,,,,
+12,motorcycle,noun,vehicles,A , is not a ,,184,22,4,car,127,car,bike,25,bike,bicycle,7,bicycle,truck,5,truck,,,,,,,,,,,,,,,,,,,,,,,,
+12,finger,noun,body_parts,A , is not a ,,637,65,12,toe,338,toe,hand,109,hand,foot,39,foot,thumb,30,thumb,food,10,food,leg,10,leg,toy,7,toy,arm,5,arm,nail,5,nail,nose,4,nose,object,4,object,weapon,4,weapon
+12,towel,noun,household,A , is not a ,,187,71,12,blanket,35,blanket,robe,17,robe,rag,12,rag,washcloth,10,washcloth,rug,8,rug,shower,8,shower,shirt,6,shirt,mat,5,mat,sheet,5,sheet,dryer,4,dryer,bath,3,bath,cloth,3,cloth
+12,spoon,noun,household,A , is not a ,,186,13,2,fork,167,fork,knife,7,knife,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+12,country,noun,places,A , is not a ,,186,21,8,state,71,state,city,56,city,continent,23,continent,county,6,county,town,5,town,flag,3,flag,nation,3,nation,place,3,place,,,,,,,,,,,,
+12,door,noun,furniture_rooms,A , is not a ,,183,59,8,window,86,window,wall,10,wall,handle,6,handle,floor,5,floor,room,5,room,lock,4,lock,wheel,4,wheel,knob,3,knob,,,,,,,,,,,,
+12,camera,noun,household,A , is not a ,,175,63,12,phone,41,phone,television,11,television,toy,11,toy,computer,10,computer,picture,10,picture,lens,6,lens,photograph,5,photograph,radio,5,radio,video,4,video,animal,3,animal,microphone,3,microphone,mirror,3,mirror
+12,telephone,noun,household,A , is not a ,,191,61,12,computer,31,computer,ipad,17,ipad,cellphone,14,cellphone,book,11,book,television,11,television,iphone,9,iphone,toy,9,toy,laptop,7,laptop,telephone,7,telephone,letter,5,letter,camera,4,camera,radio,4,radio
+12,Covering,verb,action_words,, is not ,,168,31,8,showing,45,show,opening,26,open,uncovering,25,uncover,revealing,18,reveal,exposing,16,expose,hiding,7,hide,holding,3,hold,leaving,3,leave,,,,,,,,,,,,
+12,Saying,verb,action_words,, is not ,,155,40,10,doing,42,do,listening,19,listen,speaking,13,speak,telling,13,tell,yelling,10,yell,thinking,8,think,going,4,go,believing,3,believe,hearing,3,hear,leaving,3,leave,,,,,,
+12,Chasing,verb,action_words,, is not ,,175,52,12,running,27,run,attracting,15,attract,catching,11,catch,running away,10,run away,hiding,9,hide,being chased,7,being chased,walking,7,walk,following,6,follow,finding,5,find,sitting,5,sit,staying,5,stay,escaping,4,escape

@@ -1,20 +1,20 @@
-list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
-24,away,adj,locations,To be , is not to be ,,183,11,6,here,97,close,38,near,20,home,9,there,8,present,4,,,,,,,,,,,,
-24,bad,adj,descriptive_words,To be , is not to be ,,643,27,5,good,593,evil,12,nice,5,kind,4,mean,4,,,,,,,,,,,,,,
-24,nice,adj,descriptive_words,To be , is not to be ,,188,10,4,mean,163,rude,11,bad,4,kind,3,,,,,,,,,,,,,,,,
-24,Night,noun,time_words,, is not ,,187,6,2,day,165,morning,17,,,,,,,,,,,,,,,,,,,,
-24,box,noun,household,A , is not a ,,177,68,12,circle,38,bag,14,container,8,shoe,7,ball,6,bin,5,bowl,5,home,5,sphere,5,envelope,4,crate,3,drawer,3
-24,Soup,noun,food_drink,, is not ,,135,44,12,cereal,20,salad,16,solid,16,hot,11,bread,6,water,6,drink,5,sandwich,5,pasta,4,cracker,3,food,3,stew,3
-24,Cheese,noun,food_drink,, is not ,,153,53,12,milk,30,meat,19,fruit,13,bread,12,cracker,7,butter,5,ham,5,food,4,water,4,dairy,3,green,3,vegetable,3
-24,cookie,noun,food_drink,A , is not a ,,178,46,12,cake,70,brownie,22,fruit,13,cupcake,7,vegetable,5,carrot,4,milk,4,salad,4,chip,3,food,3,meal,3,monster,3
-24,flag,noun,outside,A , is not a ,,177,77,11,pole,29,blanket,15,sign,11,banner,9,poster,5,shirt,5,toy,5,chair,4,paper,4,book,3,nation,3,,
-24,mouse,noun,animals,A , is not a ,,181,34,8,rat,90,cat,26,dog,9,elephant,6,horse,5,house,3,lion,3,mouse,3,,,,,,,,
-24,leg,noun,body_parts,A , is not a ,,186,21,4,arm,136,foot,18,hand,11,toe,4,,,,,,,,,,,,,,,,
-24,Green beans,noun,food_drink,, are not ,,141,50,12,fruit,35,black bean,13,pea,8,broccoli,7,candy,5,carrot,5,asparagus,4,potato,4,bean,3,blue,3,corn,3,meat,3
-24,aunt,noun,people,An , is not a ,,191,15,3,uncle,168,mom,4,grandma,3,,,,,,,,,,,,,,,,,,
-24,knife,noun,household,A , is not a ,,177,27,4,fork,74,spoon,55,toy,16,gun,5,,,,,,,,,,,,,,,,
-24,Sauce,noun,food_drink,, is not ,,96,49,8,solid,15,dressing,7,food,6,drink,5,soup,4,water,4,meal,3,syrup,3,,,,,,,,
-24,Playing,verb,action_words,, is not ,,133,54,7,sleep,22,work,17,fight,14,sit,13,study,5,hurt,4,run,3,,,,,,,,,,
-24,Going,verb,action_words,, is not ,,182,19,6,stay,76,come,53,leave,26,stop,6,be,4,go,3,,,,,,,,,,,,
-24,Hiding,verb,action_words,, is not ,,158,25,8,seek,79,find,20,show,18,run,8,appear,4,see,4,being seen,3,jump,3,,,,,,,,
-24,Giving,verb,action_words,, is not ,,180,17,4,take,109,receive,35,get,16,keep,4,,,,,,,,,,,,,,,,
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,lexeme1,response2,count2,lexeme2,response3,count3,lexeme3,response4,count4,lexeme4,response5,count5,lexeme5,response6,count6,lexeme6,response7,count7,lexeme7,response8,count8,lexeme8,response9,count9,lexeme9,response10,count10,lexeme10,response11,count11,lexeme11,response12,count12,lexeme12
+24,away,adj,locations,To be , is not to be ,,183,11,6,here,97,here,close,38,close,near,20,near,home,9,home,there,8,there,present,4,present,,,,,,,,,,,,,,,,,,
+24,bad,adj,descriptive_words,To be , is not to be ,,643,27,5,good,593,good,evil,12,evil,nice,5,nice,kind,4,kind,mean,4,mean,,,,,,,,,,,,,,,,,,,,,
+24,nice,adj,descriptive_words,To be , is not to be ,,188,10,4,mean,163,mean,rude,11,rude,bad,4,bad,kind,3,kind,,,,,,,,,,,,,,,,,,,,,,,,
+24,Night,noun,time_words,, is not ,,187,6,2,day,165,day,morning,17,morning,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+24,box,noun,household,A , is not a ,,177,68,12,circle,38,circle,bag,14,bag,container,8,container,shoe,7,shoe,ball,6,ball,bin,5,bin,bowl,5,bowl,home,5,home,sphere,5,sphere,envelope,4,envelope,crate,3,crate,drawer,3,drawer
+24,Soup,noun,food_drink,, is not ,,135,44,12,cereal,20,cereal,salad,16,salad,solid,16,solid,hot,11,hot,bread,6,bread,water,6,water,drink,5,drink,sandwich,5,sandwich,pasta,4,pasta,cracker,3,cracker,food,3,food,stew,3,stew
+24,Cheese,noun,food_drink,, is not ,,153,53,12,milk,30,milk,meat,19,meat,fruit,13,fruit,bread,12,bread,cracker,7,cracker,butter,5,butter,ham,5,ham,food,4,food,water,4,water,dairy,3,dairy,green,3,green,vegetable,3,vegetable
+24,cookie,noun,food_drink,A , is not a ,,178,46,12,cake,70,cake,brownie,22,brownie,fruit,13,fruit,cupcake,7,cupcake,vegetable,5,vegetable,carrot,4,carrot,milk,4,milk,salad,4,salad,chip,3,chip,food,3,food,meal,3,meal,monster,3,monster
+24,flag,noun,outside,A , is not a ,,177,77,11,pole,29,pole,blanket,15,blanket,sign,11,sign,banner,9,banner,poster,5,poster,shirt,5,shirt,toy,5,toy,chair,4,chair,paper,4,paper,book,3,book,nation,3,nation,,,
+24,mouse,noun,animals,A , is not a ,,181,34,8,rat,90,rat,cat,26,cat,dog,9,dog,elephant,6,elephant,horse,5,horse,house,3,house,lion,3,lion,mouse,3,mouse,,,,,,,,,,,,
+24,leg,noun,body_parts,A , is not a ,,186,21,4,arm,136,arm,foot,18,foot,hand,11,hand,toe,4,toe,,,,,,,,,,,,,,,,,,,,,,,,
+24,Green beans,noun,food_drink,, are not ,,141,50,12,fruit,35,fruit,black bean,13,black bean,pea,8,pea,broccoli,7,broccoli,candy,5,candy,carrot,5,carrot,asparagus,4,asparagus,potato,4,potato,bean,3,bean,blue,3,blue,corn,3,corn,meat,3,meat
+24,aunt,noun,people,An , is not a ,,191,15,3,uncle,168,uncle,mom,4,mom,grandma,3,grandma,,,,,,,,,,,,,,,,,,,,,,,,,,,
+24,knife,noun,household,A , is not a ,,177,27,4,fork,74,fork,spoon,55,spoon,toy,16,toy,gun,5,gun,,,,,,,,,,,,,,,,,,,,,,,,
+24,Sauce,noun,food_drink,, is not ,,96,49,8,solid,15,solid,dressing,7,dressing,food,6,food,drink,5,drink,soup,4,soup,water,4,water,meal,3,meal,syrup,3,syrup,,,,,,,,,,,,
+24,Playing,verb,action_words,, is not ,,133,54,7,sleeping,22,sleep,working,17,work,fighting,14,fight,sitting,13,sit,studying,5,study,hurting,4,hurt,running,3,run,,,,,,,,,,,,,,,
+24,Going,verb,action_words,, is not ,,182,19,6,staying,76,stay,coming,53,come,leaving,26,leave,stopping,6,stop,being,4,be,going,3,go,,,,,,,,,,,,,,,,,,
+24,Hiding,verb,action_words,, is not ,,158,25,8,seeking,79,seek,finding,20,find,showing,18,show,running,8,run,appearing,4,appear,seeing,4,see,being seen,3,being seen,jumping,3,jump,,,,,,,,,,,,
+24,Giving,verb,action_words,, is not ,,180,17,4,taking,109,take,receiving,35,receive,getting,16,get,keeping,4,keep,,,,,,,,,,,,,,,,,,,,,,,,

@@ -1,21 +1,21 @@
-list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
-6,gentle,adj,descriptive_words,To be , is not to be ,,181,20,7,rough,81,harsh,45,hard,14,aggressive,10,mean,8,rude,5,angry,3,,,,,,,,,,
-6,under,adj,locations,To be , is not to be ,,179,14,4,over,118,above,37,on top,8,up,4,,,,,,,,,,,,,,,,
-6,asleep,adj,descriptive_words,To be , is not to be ,,636,21,5,awake,602,dead,4,up,4,wake,4,sleeping,3,,,,,,,,,,,,,,
-6,drawer,noun,furniture_rooms,A , is not a ,,178,56,9,closet,40,shelf,18,cabinet,17,dresser,13,desk,11,bed,9,table,7,door,6,cupboard,3,,,,,,
-6,shower,noun,furniture_rooms,A , is not a ,,180,32,6,bath,120,sink,9,tub,8,toilet,6,bathtub,4,bed,3,,,,,,,,,,,,
-6,dress,noun,clothing,A , is not a ,,183,29,7,shirt,67,skirt,47,suit,17,pants,10,shoe,9,gown,3,jacket,3,,,,,,,,,,
-6,bicycle,noun,vehicles,A , is not a ,,187,32,9,car,80,scooter,23,tricycle,19,unicycle,16,motorcycle,6,skateboard,6,house,4,bus,3,plane,3,,,,,,
-6,Police,noun,people,, are not ,,112,42,7,firefighter,27,criminal,13,fireman,9,doctor,6,prisoner,6,teacher,5,friend,3,,,,,,,,,,
-6,face,noun,body_parts,A , is not a ,,173,59,12,foot,23,body,22,hand,15,butt,10,arm,9,head,9,mask,8,leg,7,back,5,person,4,stomach,4,toe,3
-6,teacher,noun,people,A , is not a ,,186,49,11,student,77,doctor,16,friend,7,pet,7,principal,7,professor,7,parent,5,babysitter,4,lawyer,4,kid,3,mother,3,,
-6,child,noun,people,A , is not a ,,180,33,9,adult,117,parent,9,baby,7,grown-up,5,man,5,toy,4,dog,3,mom,3,teenager,3,,,,,,
-6,nail,noun,household,A , is not a ,,178,38,12,hammer,71,finger,22,screw,16,hair,6,tooth,6,foot,5,tool,5,snail,4,toenail,4,toy,4,hand,3,toe,3
-6,bunny,noun,animals,A , is not a ,,191,51,12,rabbit,59,dog,17,cat,14,fox,6,horse,6,squirrel,6,lion,5,hamster,4,reptile,4,turtle,4,wolf,4,bird,3
-6,purse,noun,household,A , is not a ,,625,127,12,backpack,141,bag,104,wallet,82,shoe,38,suitcase,16,hat,13,pocket,12,toy,10,satchel,9,weapon,9,belt,8,food,7
-6,Shirts,noun,clothing,, are not ,,573,55,12,pants,357,shorts,67,shoe,20,skirt,19,dress,13,sweatshirt,10,food,8,pant,7,jacket,5,sweater,5,cool,4,t-shirt,4
-6,mop,noun,household,A , is not a ,,182,42,5,broom,114,vacuum,15,bucket,4,toy,4,swiffer,3,,,,,,,,,,,,,,
-6,Liking,verb,action_words,, is not ,,176,8,3,hate,80,love,51,dislike,38,,,,,,,,,,,,,,,,,,
-6,Swinging,verb,action_words,, is not ,,141,57,11,sit,17,slide,15,run,11,stand,9,walk,9,hit,7,dance,5,fall,4,jump,4,sway,4,stay still,3,,
-6,Closing,verb,action_words,, is not ,,178,2,1,open,177,,,,,,,,,,,,,,,,,,,,,,
-6,Kicking,verb,action_words,, is not ,,165,43,12,punch,53,hit,16,push,11,run,8,shove,7,scream,6,throw,6,touch,5,bite,3,catch,3,hug,3,jump,3
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,lexeme1,response2,count2,lexeme2,response3,count3,lexeme3,response4,count4,lexeme4,response5,count5,lexeme5,response6,count6,lexeme6,response7,count7,lexeme7,response8,count8,lexeme8,response9,count9,lexeme9,response10,count10,lexeme10,response11,count11,lexeme11,response12,count12,lexeme12
+6,gentle,adj,descriptive_words,To be , is not to be ,,181,20,7,rough,81,rough,harsh,45,harsh,hard,14,hard,aggressive,10,aggressive,mean,8,mean,rude,5,rude,angry,3,angry,,,,,,,,,,,,,,,
+6,under,adj,locations,To be , is not to be ,,179,14,4,over,118,over,above,37,above,on top,8,on top,up,4,up,,,,,,,,,,,,,,,,,,,,,,,,
+6,asleep,adj,descriptive_words,To be , is not to be ,,636,21,5,awake,602,awake,dead,4,dead,up,4,up,wake,4,wake,sleeping,3,sleeping,,,,,,,,,,,,,,,,,,,,,
+6,drawer,noun,furniture_rooms,A , is not a ,,178,56,9,closet,40,closet,shelf,18,shelf,cabinet,17,cabinet,dresser,13,dresser,desk,11,desk,bed,9,bed,table,7,table,door,6,door,cupboard,3,cupboard,,,,,,,,,
+6,shower,noun,furniture_rooms,A , is not a ,,180,32,6,bath,120,bath,sink,9,sink,tub,8,tub,toilet,6,toilet,bathtub,4,bathtub,bed,3,bed,,,,,,,,,,,,,,,,,,
+6,dress,noun,clothing,A , is not a ,,183,29,7,shirt,67,shirt,skirt,47,skirt,suit,17,suit,pants,10,pants,shoe,9,shoe,gown,3,gown,jacket,3,jacket,,,,,,,,,,,,,,,
+6,bicycle,noun,vehicles,A , is not a ,,187,32,9,car,80,car,scooter,23,scooter,tricycle,19,tricycle,unicycle,16,unicycle,motorcycle,6,motorcycle,skateboard,6,skateboard,house,4,house,bus,3,bus,plane,3,plane,,,,,,,,,
+6,Police,noun,people,, are not ,,112,42,7,firefighter,27,firefighter,criminal,13,criminal,fireman,9,fireman,doctor,6,doctor,prisoner,6,prisoner,teacher,5,teacher,friend,3,friend,,,,,,,,,,,,,,,
+6,face,noun,body_parts,A , is not a ,,173,59,12,foot,23,foot,body,22,body,hand,15,hand,butt,10,butt,arm,9,arm,head,9,head,mask,8,mask,leg,7,leg,back,5,back,person,4,person,stomach,4,stomach,toe,3,toe
+6,teacher,noun,people,A , is not a ,,186,49,11,student,77,student,doctor,16,doctor,friend,7,friend,pet,7,pet,principal,7,principal,professor,7,professor,parent,5,parent,babysitter,4,babysitter,lawyer,4,lawyer,kid,3,kid,mother,3,mother,,,
+6,child,noun,people,A , is not a ,,180,33,9,adult,117,adult,parent,9,parent,baby,7,baby,grown-up,5,grown-up,man,5,man,toy,4,toy,dog,3,dog,mom,3,mom,teenager,3,teenager,,,,,,,,,
+6,nail,noun,household,A , is not a ,,178,38,12,hammer,71,hammer,finger,22,finger,screw,16,screw,hair,6,hair,tooth,6,tooth,foot,5,foot,tool,5,tool,snail,4,snail,toenail,4,toenail,toy,4,toy,hand,3,hand,toe,3,toe
+6,bunny,noun,animals,A , is not a ,,191,51,12,rabbit,59,rabbit,dog,17,dog,cat,14,cat,fox,6,fox,horse,6,horse,squirrel,6,squirrel,lion,5,lion,hamster,4,hamster,reptile,4,reptile,turtle,4,turtle,wolf,4,wolf,bird,3,bird
+6,purse,noun,household,A , is not a ,,625,127,12,backpack,141,backpack,bag,104,bag,wallet,82,wallet,shoe,38,shoe,suitcase,16,suitcase,hat,13,hat,pocket,12,pocket,toy,10,toy,satchel,9,satchel,weapon,9,weapon,belt,8,belt,food,7,food
+6,Shirts,noun,clothing,, are not ,,573,55,12,pants,357,pants,shorts,67,shorts,shoe,20,shoe,skirt,19,skirt,dress,13,dress,sweatshirt,10,sweatshirt,food,8,food,pant,7,pant,jacket,5,jacket,sweater,5,sweater,cool,4,cool,t-shirt,4,t-shirt
+6,mop,noun,household,A , is not a ,,182,42,5,broom,114,broom,vacuum,15,vacuum,bucket,4,bucket,toy,4,toy,swiffer,3,swiffer,,,,,,,,,,,,,,,,,,,,,
+6,Liking,verb,action_words,, is not ,,176,8,3,hating,80,hate,loving,51,love,disliking,38,dislike,,,,,,,,,,,,,,,,,,,,,,,,,,,
+6,Swinging,verb,action_words,, is not ,,141,57,11,sitting,17,sit,sliding,15,slide,running,11,run,standing,9,stand,walking,9,walk,hitting,7,hit,dancing,5,dance,falling,4,fall,jumping,4,jump,swaying,4,sway,staying still,3,stay still,,,
+6,Closing,verb,action_words,, is not ,,178,2,1,opening,177,open,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+6,Kicking,verb,action_words,, is not ,,165,43,12,punching,53,punch,hitting,16,hit,pushing,11,push,running,8,run,shoving,7,shove,screaming,6,scream,throwing,6,throw,touching,5,touch,biting,3,bite,catching,3,catch,hugging,3,hug,jumping,3,jump

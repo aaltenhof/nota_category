@@ -1,20 +1,20 @@
-list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
-16,white,adj,descriptive_words,To be , is not to be ,,183,20,7,black,129,brown,12,blue,8,green,6,colorful,5,dark,4,yellow,4,,,,,,,,,,
-16,dark,adj,descriptive_words,To be , is not to be ,,189,9,3,light,169,bright,9,sunny,4,,,,,,,,,,,,,,,,,,
-16,happy,adj,descriptive_words,To be , is not to be ,,186,10,2,sad,175,unhappy,3,,,,,,,,,,,,,,,,,,,,
-16,Ice,noun,food_drink,, is not ,,75,19,5,water,30,fire,9,snow,9,liquid,6,lava,3,,,,,,,,,,,,,,
-16,porch,noun,furniture_rooms,A , is not a ,,187,67,12,deck,22,house,16,balcony,15,swing,10,backyard,8,patio,7,room,7,yard,6,bed,5,home,5,pool,5,bedroom,4
-16,toothbrush,noun,household,A , is not a ,,189,68,11,hairbrush,52,toothpaste,24,floss,10,toy,10,tooth,8,brush,4,broom,3,cup,3,mouth,3,pencil,3,toilet brush,3,,
-16,drink ,noun,food_drink,A , is not a ,,176,47,5,food,93,meal,24,snack,6,beverage,5,solid,3,,,,,,,,,,,,,,
-16,Medicine,noun,household,, is not ,,76,41,7,food,14,candy,5,drug,4,fake,4,alcohol,3,cure,3,disease,3,,,,,,,,,,
-16,babysitter,noun,people,A , is not a ,,190,48,10,parent,52,mom,33,baby,14,mother,14,child,11,friend,6,nanny,5,maid,3,teacher,3,vampire,3,,,,
-16,boat,noun,vehicles,A , is not a ,,190,39,12,car,83,plane,19,ship,11,house,8,jet ski,7,canoe,6,yacht,6,airplane,3,bicycle,3,paddleboard,3,raft,3,train,3
-16,sprinkler,noun,outside,A , is not a ,,176,65,10,hose,69,shower,12,dryer,5,fountain,5,pool,5,waterfall,5,fire,4,toy,4,fan,3,fire hydrant,3,,,,
-16,Grandpa,noun,people,A , is not a ,,190,22,2,grandma,165,mom,3,,,,,,,,,,,,,,,,,,,,
-16,Juice,noun,food_drink,, is not ,,155,23,10,water,50,milk,33,soda,20,coffee,8,food,8,alcohol,6,smoothie,4,fruit,3,pop,3,solid,3,,,,
-16,Mom,noun,people,A , is not a ,,635,63,12,dad,528,father,8,dog,6,enemy,6,maid,4,male,4,sibling,4,child,3,friend,3,man,3,parent,3,robot,3
-16,duck,noun,animals,A , is not a ,,185,43,12,goose,56,chicken,38,fish,12,swan,9,cow,6,horse,5,dog,4,penguin,4,bird,3,cat,3,frog,3,mammal,3
-16,Tuna,noun,food_drink,, is not ,,138,40,11,salmon,44,chicken,17,fish,16,fruit,5,shrimp,5,cod,3,food,3,mammal,3,meat,3,salad,3,vegetable,3,,
-16,Bumping,verb,action_words,, is not ,,169,73,10,hit,23,push,17,avoid,14,shove,13,jump,8,stand,5,run,4,break,3,crash,3,hug,3,,,,
-16,Tearing,verb,action_words,, is not ,,171,44,12,fix,30,rip,18,glue,11,cry,10,mend,9,put together,9,build,8,repair,7,smile,7,sew,6,cut,5,tape,5
-16,Getting,verb,action_words,, is not ,,185,28,10,give,75,receive,19,go,14,have,14,lose,12,leave,11,take,10,do,4,forget,3,get,3,,,,
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,lexeme1,response2,count2,lexeme2,response3,count3,lexeme3,response4,count4,lexeme4,response5,count5,lexeme5,response6,count6,lexeme6,response7,count7,lexeme7,response8,count8,lexeme8,response9,count9,lexeme9,response10,count10,lexeme10,response11,count11,lexeme11,response12,count12,lexeme12
+16,white,adj,descriptive_words,To be , is not to be ,,183,20,7,black,129,black,brown,12,brown,blue,8,blue,green,6,green,colorful,5,colorful,dark,4,dark,yellow,4,yellow,,,,,,,,,,,,,,,
+16,dark,adj,descriptive_words,To be , is not to be ,,189,9,3,light,169,light,bright,9,bright,sunny,4,sunny,,,,,,,,,,,,,,,,,,,,,,,,,,,
+16,happy,adj,descriptive_words,To be , is not to be ,,186,10,2,sad,175,sad,unhappy,3,unhappy,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+16,Ice,noun,food_drink,, is not ,,75,19,5,water,30,water,fire,9,fire,snow,9,snow,liquid,6,liquid,lava,3,lava,,,,,,,,,,,,,,,,,,,,,
+16,porch,noun,furniture_rooms,A , is not a ,,187,67,12,deck,22,deck,house,16,house,balcony,15,balcony,swing,10,swing,backyard,8,backyard,patio,7,patio,room,7,room,yard,6,yard,bed,5,bed,home,5,home,pool,5,pool,bedroom,4,bedroom
+16,toothbrush,noun,household,A , is not a ,,189,68,11,hairbrush,52,hairbrush,toothpaste,24,toothpaste,floss,10,floss,toy,10,toy,tooth,8,tooth,brush,4,brush,broom,3,broom,cup,3,cup,mouth,3,mouth,pencil,3,pencil,toilet brush,3,toilet brush,,,
+16,drink ,noun,food_drink,A , is not a ,,176,47,5,food,93,food,meal,24,meal,snack,6,snack,beverage,5,beverage,solid,3,solid,,,,,,,,,,,,,,,,,,,,,
+16,Medicine,noun,household,, is not ,,76,41,7,food,14,food,candy,5,candy,drug,4,drug,fake,4,fake,alcohol,3,alcohol,cure,3,cure,disease,3,disease,,,,,,,,,,,,,,,
+16,babysitter,noun,people,A , is not a ,,190,48,10,parent,52,parent,mom,33,mom,baby,14,baby,mother,14,mother,child,11,child,friend,6,friend,nanny,5,nanny,maid,3,maid,teacher,3,teacher,vampire,3,vampire,,,,,,
+16,boat,noun,vehicles,A , is not a ,,190,39,12,car,83,car,plane,19,plane,ship,11,ship,house,8,house,jet ski,7,jet ski,canoe,6,canoe,yacht,6,yacht,airplane,3,airplane,bicycle,3,bicycle,paddleboard,3,paddleboard,raft,3,raft,train,3,train
+16,sprinkler,noun,outside,A , is not a ,,176,65,10,hose,69,hose,shower,12,shower,dryer,5,dryer,fountain,5,fountain,pool,5,pool,waterfall,5,waterfall,fire,4,fire,toy,4,toy,fan,3,fan,fire hydrant,3,fire hydrant,,,,,,
+16,Grandpa,noun,people,A , is not a ,,190,22,2,grandma,165,grandma,mom,3,mom,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+16,Juice,noun,food_drink,, is not ,,155,23,10,water,50,water,milk,33,milk,soda,20,soda,coffee,8,coffee,food,8,food,alcohol,6,alcohol,smoothie,4,smoothie,fruit,3,fruit,pop,3,pop,solid,3,solid,,,,,,
+16,Mom,noun,people,A , is not a ,,635,63,12,dad,528,dad,father,8,father,dog,6,dog,enemy,6,enemy,maid,4,maid,male,4,male,sibling,4,sibling,child,3,child,friend,3,friend,man,3,man,parent,3,parent,robot,3,robot
+16,duck,noun,animals,A , is not a ,,185,43,12,goose,56,goose,chicken,38,chicken,fish,12,fish,swan,9,swan,cow,6,cow,horse,5,horse,dog,4,dog,penguin,4,penguin,bird,3,bird,cat,3,cat,frog,3,frog,mammal,3,mammal
+16,Tuna,noun,food_drink,, is not ,,138,40,11,salmon,44,salmon,chicken,17,chicken,fish,16,fish,fruit,5,fruit,shrimp,5,shrimp,cod,3,cod,food,3,food,mammal,3,mammal,meat,3,meat,salad,3,salad,vegetable,3,vegetable,,,
+16,Bumping,verb,action_words,, is not ,,169,73,10,hitting,23,hit,pushing,17,push,avoiding,14,avoid,shoving,13,shove,jumping,8,jump,standing,5,stand,running,4,run,breaking,3,break,crashing,3,crash,hugging,3,hug,,,,,,
+16,Tearing,verb,action_words,, is not ,,171,44,12,fixing,30,fix,ripping,18,rip,gluing,11,glue,crying,10,cry,mending,9,mend,putting together,9,put together,building,8,build,repairing,7,repair,smiling,7,smile,sewing,6,sew,cutting,5,cut,taping,5,tape
+16,Getting,verb,action_words,, is not ,,185,28,10,giving,75,give,receiving,19,receive,going,14,go,having,14,have,losing,12,lose,leaving,11,leave,taking,10,take,doing,4,do,forgetting,3,forget,getting,3,get,,,,,,

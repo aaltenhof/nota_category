@@ -1,20 +1,20 @@
-list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
-17,beside,adj,locations,To be , is not to be ,,635,77,12,away,68,above,54,far,54,inside,41,in front,37,aside,27,behind,27,on top,27,under,24,apart,21,on top of,20,in front of,19
-17,blue,adj,descriptive_words,To be , is not to be ,,181,14,10,red,77,green,27,yellow,25,happy,16,pink,9,purple,7,orange,5,black,4,brown,3,white,3,,,,
-17,broken,adj,descriptive_words,To be , is not to be ,,177,33,7,fixed,107,whole,13,together,12,healed,6,repaired,4,complete,3,perfect,3,,,,,,,,,,
-17,squirrel,noun,animals,A , is not a ,,182,51,12,chipmunk,38,dog,14,rat,13,bird,11,rabbit,11,cat,9,fish,7,fox,6,pet,5,raccoon,5,bear,4,horse,4
-17,napkin,noun,household,A , is not a ,,192,52,12,towel,39,plate,26,tissue,18,paper towel,16,fork,13,blanket,7,paper,7,spoon,6,shirt,5,utensil,4,cup,3,food,3
-17,light,noun,household,A , is not a ,,177,55,11,dark,68,darkness,16,shadow,12,lamp,9,bulb,4,candle,3,dark room,3,door,3,match,3,shade,3,window,3,,
-17,fireman,noun,people,A , is not a ,,176,36,8,policeman,58,police officer,34,police,19,cop,9,nurse,8,doctor,6,firewoman,5,dog,3,,,,,,,,
-17,lamp,noun,household,A , is not a ,,179,79,12,light,21,fan,10,flashlight,10,table,10,shade,9,candle,6,sun,6,overhead light,5,desk,4,dresser,4,toy,4,bed,3
-17,blanket,noun,household,A , is not a ,,182,49,10,pillow,72,towel,18,bed,10,sheet,9,coat,6,comforter,6,quilt,4,rug,4,shirt,4,fan,3,,,,
-17,bathtub,noun,furniture_rooms,A , is not a ,,181,42,5,shower,85,sink,26,bed,12,toilet,8,hot tub,5,,,,,,,,,,,,,,
-17,slipper,noun,clothing,A , is not a ,,189,42,9,shoe,75,boot,21,sandal,10,shirt,10,sneaker,10,sock,9,hat,7,heel,4,tennis shoe,3,,,,,,
-17,slide,noun,outside,A , is not a ,,176,68,11,swing,39,ladder,20,stair,16,staircase,6,toy,6,park,4,step,4,bed,3,chair,3,shoe,3,stairs,3,,
-17,sock,noun,clothing,A , is not a ,,191,28,7,shoe,136,glove,10,hat,6,bra,5,shirt,5,foot,3,toy,3,,,,,,,,,,
-17,tongue,noun,body_parts,A , is not a ,,186,40,12,tooth,66,mouth,28,eye,13,lip,12,nose,8,finger,5,bone,4,hand,4,tool,4,eyeball,3,foot,3,leg,3
-17,Peanut butter,noun,food_drink,, is not ,,154,32,7,jelly,81,almond butter,10,jam,10,nutella,9,chocolate,6,butter,3,solid,3,,,,,,,,,,
-17,pony,noun,animals,A , is not a ,,188,33,4,horse,118,cow,12,donkey,12,dog,11,,,,,,,,,,,,,,,,
-17,Dumping,verb,action_words,, is not ,,158,47,12,pick up,18,keep,17,pour,17,grab,10,pick,7,take,7,clean,6,lift,6,collect,5,throw,5,stay,4,hold,3
-17,Eating,verb,action_words,, is not ,,434,62,12,drink,202,starve,62,sleep,49,chew,8,poop,7,fast,6,throw up,6,run,5,swallow,5,smell,4,taste,4,barf,3
-17,Helping,verb,action_words,, is not ,,146,36,9,hurt,75,hate,8,ignore,8,hinder,6,leave,5,take,5,harm,4,avoid,3,watch,3,,,,,,
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,lexeme1,response2,count2,lexeme2,response3,count3,lexeme3,response4,count4,lexeme4,response5,count5,lexeme5,response6,count6,lexeme6,response7,count7,lexeme7,response8,count8,lexeme8,response9,count9,lexeme9,response10,count10,lexeme10,response11,count11,lexeme11,response12,count12,lexeme12
+17,beside,adj,locations,To be , is not to be ,,635,77,12,away,68,away,above,54,above,far,54,far,inside,41,inside,in front,37,in front,aside,27,aside,behind,27,behind,on top,27,on top,under,24,under,apart,21,apart,on top of,20,on top of,in front of,19,in front of
+17,blue,adj,descriptive_words,To be , is not to be ,,181,14,10,red,77,red,green,27,green,yellow,25,yellow,happy,16,happy,pink,9,pink,purple,7,purple,orange,5,orange,black,4,black,brown,3,brown,white,3,white,,,,,,
+17,broken,adj,descriptive_words,To be , is not to be ,,177,33,7,fixed,107,fixed,whole,13,whole,together,12,together,healed,6,healed,repaired,4,repaired,complete,3,complete,perfect,3,perfect,,,,,,,,,,,,,,,
+17,squirrel,noun,animals,A , is not a ,,182,51,12,chipmunk,38,chipmunk,dog,14,dog,rat,13,rat,bird,11,bird,rabbit,11,rabbit,cat,9,cat,fish,7,fish,fox,6,fox,pet,5,pet,raccoon,5,raccoon,bear,4,bear,horse,4,horse
+17,napkin,noun,household,A , is not a ,,192,52,12,towel,39,towel,plate,26,plate,tissue,18,tissue,paper towel,16,paper towel,fork,13,fork,blanket,7,blanket,paper,7,paper,spoon,6,spoon,shirt,5,shirt,utensil,4,utensil,cup,3,cup,food,3,food
+17,light,noun,household,A , is not a ,,177,55,11,dark,68,dark,darkness,16,darkness,shadow,12,shadow,lamp,9,lamp,bulb,4,bulb,candle,3,candle,dark room,3,dark room,door,3,door,match,3,match,shade,3,shade,window,3,window,,,
+17,fireman,noun,people,A , is not a ,,176,36,8,policeman,58,policeman,police officer,34,police officer,police,19,police,cop,9,cop,nurse,8,nurse,doctor,6,doctor,firewoman,5,firewoman,dog,3,dog,,,,,,,,,,,,
+17,lamp,noun,household,A , is not a ,,179,79,12,light,21,light,fan,10,fan,flashlight,10,flashlight,table,10,table,shade,9,shade,candle,6,candle,sun,6,sun,overhead light,5,overhead light,desk,4,desk,dresser,4,dresser,toy,4,toy,bed,3,bed
+17,blanket,noun,household,A , is not a ,,182,49,10,pillow,72,pillow,towel,18,towel,bed,10,bed,sheet,9,sheet,coat,6,coat,comforter,6,comforter,quilt,4,quilt,rug,4,rug,shirt,4,shirt,fan,3,fan,,,,,,
+17,bathtub,noun,furniture_rooms,A , is not a ,,181,42,5,shower,85,shower,sink,26,sink,bed,12,bed,toilet,8,toilet,hot tub,5,hot tub,,,,,,,,,,,,,,,,,,,,,
+17,slipper,noun,clothing,A , is not a ,,189,42,9,shoe,75,shoe,boot,21,boot,sandal,10,sandal,shirt,10,shirt,sneaker,10,sneaker,sock,9,sock,hat,7,hat,heel,4,heel,tennis shoe,3,tennis shoe,,,,,,,,,
+17,slide,noun,outside,A , is not a ,,176,68,11,swing,39,swing,ladder,20,ladder,stair,16,stair,staircase,6,staircase,toy,6,toy,park,4,park,step,4,step,bed,3,bed,chair,3,chair,shoe,3,shoe,stairs,3,stairs,,,
+17,sock,noun,clothing,A , is not a ,,191,28,7,shoe,136,shoe,glove,10,glove,hat,6,hat,bra,5,bra,shirt,5,shirt,foot,3,foot,toy,3,toy,,,,,,,,,,,,,,,
+17,tongue,noun,body_parts,A , is not a ,,186,40,12,tooth,66,tooth,mouth,28,mouth,eye,13,eye,lip,12,lip,nose,8,nose,finger,5,finger,bone,4,bone,hand,4,hand,tool,4,tool,eyeball,3,eyeball,foot,3,foot,leg,3,leg
+17,Peanut butter,noun,food_drink,, is not ,,154,32,7,jelly,81,jelly,almond butter,10,almond butter,jam,10,jam,nutella,9,nutella,chocolate,6,chocolate,butter,3,butter,solid,3,solid,,,,,,,,,,,,,,,
+17,pony,noun,animals,A , is not a ,,188,33,4,horse,118,horse,cow,12,cow,donkey,12,donkey,dog,11,dog,,,,,,,,,,,,,,,,,,,,,,,,
+17,Dumping,verb,action_words,, is not ,,158,47,12,picking up,18,pick up,keeping,17,keep,pouring,17,pour,grabbing,10,grab,picking,7,pick,taking,7,take,cleaning,6,clean,lifting,6,lift,collecting,5,collect,throwing,5,throw,staying,4,stay,holding,3,hold
+17,Eating,verb,action_words,, is not ,,434,62,12,drinking,202,drink,starving,62,starve,sleeping,49,sleep,chewing,8,chew,pooping,7,poop,fasting,6,fast,throwing up,6,throw up,running,5,run,swallowing,5,swallow,smelling,4,smell,tasting,4,taste,barfing,3,barf
+17,Helping,verb,action_words,, is not ,,146,36,9,hurting,75,hurt,hating,8,hate,ignoring,8,ignore,hindering,6,hinder,leaving,5,leave,taking,5,take,harming,4,harm,avoiding,3,avoid,watching,3,watch,,,,,,,,,

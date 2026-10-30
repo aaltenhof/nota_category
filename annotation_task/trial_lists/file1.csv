@@ -1,21 +1,21 @@
-list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
-1,sleepy,adj,descriptive_words,To be , is not to be ,,187,22,5,awake,131,tired,13,alert,9,energized,9,energetic,5,,,,,,,,,,,,,,
-1,careful,adj,descriptive_words,To be , is not to be ,,184,50,12,reckless,41,careless,33,dangerous,24,risky,14,clumsy,6,cautious,5,safe,4,crazy,3,harmful,3,impulsive,3,messy,3,unsafe,3
-1,little,adj,descriptive_words,To be , is not to be ,,186,13,4,big,154,large,15,tall,4,huge,3,,,,,,,,,,,,,,,,
-1,poor,adj,descriptive_words,To be , is not to be ,,192,10,2,rich,174,wealthy,10,,,,,,,,,,,,,,,,,,,,
-1,Spaghetti,noun,food_drink,, is not ,,153,55,12,meatball,25,pizza,16,pasta,10,penne,10,rigatoni,5,bread,4,breakfast,4,fruit,4,lasagna,4,salad,4,soup,4,noodle,3
-1,alligator,noun,animals,An , is not a ,,189,37,7,crocodile,122,fish,12,bird,5,dog,5,friend,4,mammal,3,shark,3,,,,,,,,,,
-1,stomach,noun,body_parts,A , is not a ,,179,58,12,heart,19,liver,18,brain,11,head,11,mouth,11,leg,8,lung,8,hand,7,foot,6,intestine,6,kidney,6,back,5
-1,cowboy,noun,people,A , is not a ,,630,148,12,cowgirl,209,horse,93,cow,26,girl,24,farmer,14,businessman,12,princess,12,mermaid,11,city boy,10,astronaut,9,dog,8,doctor,7
-1,pretzel,noun,food_drink,A , is not a ,,180,73,12,chip,31,meal,15,fruit,10,cracker,7,sandwich,7,cookie,6,bun,5,cheese,5,hotdog,5,vegetable,5,bread,4,donut,4
-1,car,noun,vehicles,A , is not a ,,183,38,12,bicycle,50,truck,43,bus,20,scooter,6,train,6,boat,5,motorcycle,5,plane,5,van,4,cat,3,home,3,toy,3
-1,balloon,noun,toys,A , is not a ,,179,92,12,ball,22,toy,19,streamer,6,car,5,food,5,bubble,4,cake,4,kite,4,party,4,animal,3,card,3,cloud,3
-1,bowl,noun,household,A , is not a ,,192,26,4,plate,110,cup,36,spoon,17,fork,6,,,,,,,,,,,,,,,,
-1,pancake,noun,food_drink,A , is not a ,,187,33,5,waffle,131,cake,12,egg,4,fruit,4,muffin,3,,,,,,,,,,,,,,
-1,Jeans,noun,clothing,, are not ,,158,31,8,shirt,29,leggings,28,shorts,27,pants,13,sweatpants,13,skirt,8,dress,6,khakis,3,,,,,,,,
-1,stove,noun,furniture_rooms,A , is not a ,,179,37,6,oven,79,microwave,29,refrigerator,19,sink,10,food,3,pot,3,,,,,,,,,,,,
-1,book,noun,toys,A , is not a ,,185,62,12,movie,42,computer,21,phone,11,magazine,6,page,6,paper,6,television,6,laptop,5,novel,5,shelf,4,tablet,4,ipad,3
-1,Having,verb,action_words,, is not ,,164,28,12,give,70,lose,21,take,10,want,8,hold,6,get,5,miss,5,need,5,lack,4,leave,4,be without,3,keep,3
-1,Wishing,verb,action_words,, is not ,,156,42,12,hope,24,want,15,have,13,do,12,dream,9,get,8,pray,7,believe,6,need,6,know,5,work,5,hate,4
-1,Cleaning,verb,action_words,, is not ,,94,33,4,dirty,35,mess,10,cook,8,make a mess,5,,,,,,,,,,,,,,,,
-1,Swimming,verb,action_words,, is not ,,504,38,12,run,183,walk,111,drown,52,dive,30,stand,17,fly,12,float,11,sink,10,dance,9,sleep,8,jump,7,allow,5
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,lexeme1,response2,count2,lexeme2,response3,count3,lexeme3,response4,count4,lexeme4,response5,count5,lexeme5,response6,count6,lexeme6,response7,count7,lexeme7,response8,count8,lexeme8,response9,count9,lexeme9,response10,count10,lexeme10,response11,count11,lexeme11,response12,count12,lexeme12
+1,sleepy,adj,descriptive_words,To be , is not to be ,,187,22,5,awake,131,awake,tired,13,tired,alert,9,alert,energized,9,energized,energetic,5,energetic,,,,,,,,,,,,,,,,,,,,,
+1,careful,adj,descriptive_words,To be , is not to be ,,184,50,12,reckless,41,reckless,careless,33,careless,dangerous,24,dangerous,risky,14,risky,clumsy,6,clumsy,cautious,5,cautious,safe,4,safe,crazy,3,crazy,harmful,3,harmful,impulsive,3,impulsive,messy,3,messy,unsafe,3,unsafe
+1,little,adj,descriptive_words,To be , is not to be ,,186,13,4,big,154,big,large,15,large,tall,4,tall,huge,3,huge,,,,,,,,,,,,,,,,,,,,,,,,
+1,poor,adj,descriptive_words,To be , is not to be ,,192,10,2,rich,174,rich,wealthy,10,wealthy,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+1,Spaghetti,noun,food_drink,, is not ,,153,55,12,meatball,25,meatball,pizza,16,pizza,pasta,10,pasta,penne,10,penne,rigatoni,5,rigatoni,bread,4,bread,breakfast,4,breakfast,fruit,4,fruit,lasagna,4,lasagna,salad,4,salad,soup,4,soup,noodle,3,noodle
+1,alligator,noun,animals,An , is not a ,,189,37,7,crocodile,122,crocodile,fish,12,fish,bird,5,bird,dog,5,dog,friend,4,friend,mammal,3,mammal,shark,3,shark,,,,,,,,,,,,,,,
+1,stomach,noun,body_parts,A , is not a ,,179,58,12,heart,19,heart,liver,18,liver,brain,11,brain,head,11,head,mouth,11,mouth,leg,8,leg,lung,8,lung,hand,7,hand,foot,6,foot,intestine,6,intestine,kidney,6,kidney,back,5,back
+1,cowboy,noun,people,A , is not a ,,630,148,12,cowgirl,209,cowgirl,horse,93,horse,cow,26,cow,girl,24,girl,farmer,14,farmer,businessman,12,businessman,princess,12,princess,mermaid,11,mermaid,city boy,10,city boy,astronaut,9,astronaut,dog,8,dog,doctor,7,doctor
+1,pretzel,noun,food_drink,A , is not a ,,180,73,12,chip,31,chip,meal,15,meal,fruit,10,fruit,cracker,7,cracker,sandwich,7,sandwich,cookie,6,cookie,bun,5,bun,cheese,5,cheese,hotdog,5,hotdog,vegetable,5,vegetable,bread,4,bread,donut,4,donut
+1,car,noun,vehicles,A , is not a ,,183,38,12,bicycle,50,bicycle,truck,43,truck,bus,20,bus,scooter,6,scooter,train,6,train,boat,5,boat,motorcycle,5,motorcycle,plane,5,plane,van,4,van,cat,3,cat,home,3,home,toy,3,toy
+1,balloon,noun,toys,A , is not a ,,179,92,12,ball,22,ball,toy,19,toy,streamer,6,streamer,car,5,car,food,5,food,bubble,4,bubble,cake,4,cake,kite,4,kite,party,4,party,animal,3,animal,card,3,card,cloud,3,cloud
+1,bowl,noun,household,A , is not a ,,192,26,4,plate,110,plate,cup,36,cup,spoon,17,spoon,fork,6,fork,,,,,,,,,,,,,,,,,,,,,,,,
+1,pancake,noun,food_drink,A , is not a ,,187,33,5,waffle,131,waffle,cake,12,cake,egg,4,egg,fruit,4,fruit,muffin,3,muffin,,,,,,,,,,,,,,,,,,,,,
+1,Jeans,noun,clothing,, are not ,,158,31,8,shirt,29,shirt,leggings,28,leggings,shorts,27,shorts,pants,13,pants,sweatpants,13,sweatpants,skirt,8,skirt,dress,6,dress,khakis,3,khakis,,,,,,,,,,,,
+1,stove,noun,furniture_rooms,A , is not a ,,179,37,6,oven,79,oven,microwave,29,microwave,refrigerator,19,refrigerator,sink,10,sink,food,3,food,pot,3,pot,,,,,,,,,,,,,,,,,,
+1,book,noun,toys,A , is not a ,,185,62,12,movie,42,movie,computer,21,computer,phone,11,phone,magazine,6,magazine,page,6,page,paper,6,paper,television,6,television,laptop,5,laptop,novel,5,novel,shelf,4,shelf,tablet,4,tablet,ipad,3,ipad
+1,Having,verb,action_words,, is not ,,164,28,12,giving,70,give,losing,21,lose,taking,10,take,wanting,8,want,holding,6,hold,getting,5,get,missing,5,miss,needing,5,need,lacking,4,lack,leaving,4,leave,being without,3,be without,keeping,3,keep
+1,Wishing,verb,action_words,, is not ,,156,42,12,hoping,24,hope,wanting,15,want,having,13,have,doing,12,do,dreaming,9,dream,getting,8,get,praying,7,pray,believing,6,believe,needing,6,need,knowing,5,know,working,5,work,hating,4,hate
+1,Cleaning,verb,action_words,, is not ,,94,33,4,dirtying,35,dirty,messing,10,mess,cooking,8,cook,making a mess,5,make a mess,,,,,,,,,,,,,,,,,,,,,,,,
+1,Swimming,verb,action_words,, is not ,,504,38,12,running,183,run,walking,111,walk,drowning,52,drown,diving,30,dive,standing,17,stand,flying,12,fly,floating,11,float,sinking,10,sink,dancing,9,dance,sleeping,8,sleep,jumping,7,jump,allowing,5,allow

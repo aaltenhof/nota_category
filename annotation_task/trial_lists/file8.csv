@@ -1,21 +1,21 @@
-list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
-8,thirsty,adj,descriptive_words,To be , is not to be ,,182,23,10,hungry,58,hydrated,34,quenched,26,full,13,satisfied,11,parched,9,satiated,6,fulfilled,4,dry,3,refreshed,3,,,,
-8,awake,adj,descriptive_words,To be , is not to be ,,161,5,1,asleep,157,,,,,,,,,,,,,,,,,,,,,,
-8,hurt,adj,descriptive_words,To be , is not to be ,,176,29,10,healthy,33,okay,32,healed,21,happy,20,well,12,fine,8,ok,8,safe,8,good,7,loved,4,,,,
-8,airplane,noun,vehicles,An , is not a ,,189,27,6,car,76,helicopter,45,train,17,boat,14,bus,7,jet,7,,,,,,,,,,,,
-8,French fries,noun,food_drink,, are not ,,124,40,11,burger,30,chip,13,potato,11,ketchup,9,hamburger,5,cold,4,pizza,4,carrot,3,cheese curd,3,onion ring,3,vegetable,3,,
-8,Fish,noun,food_drink,, is not ,(food) ,624,104,12,dog,103,mammal,102,bird,63,human,28,cow,22,shark,22,bear,16,cat,16,horse,16,person,15,reptile,15,whale,11
-8,Scissors,noun,household,, are not ,,175,42,12,knife,30,paper,25,safe,13,glue,12,pencil,11,rock,11,tape,11,toy,11,weapon,6,pen,5,stapler,5,sharp,3
-8,turtle,noun,animals,A , is not a ,,184,58,12,fish,28,tortoise,26,bird,9,frog,9,dog,8,mammal,8,rabbit,8,shell,7,bunny,4,cheetah,4,cow,4,snail,4
-8,Tonight,noun,time_words,, is not ,,176,15,8,tomorrow,95,morning,23,today,17,yesterday,11,this morning,8,last night,6,day,3,night,3,,,,,,,,
-8,Wind,noun,outside,, is not ,,109,20,12,rain,30,still,14,water,12,sun,9,snow,7,cold,6,calm,4,quiet,4,air,3,breeze,3,cloud,3,fire,3
-8,sneaker,noun,clothing,A , is not a ,,182,39,11,boot,38,heel,34,sandal,19,shoe,14,flip-flop,11,high heel,8,sock,8,foot,5,hat,5,shirt,5,slipper,4,,
-8,sink,noun,furniture_rooms,A , is not a ,,190,55,12,toilet,24,tub,15,bath,14,bathtub,14,refrigerator,13,shower,10,stove,9,hose,7,oven,6,washer,6,dishwasher,5,faucet,5
-8,doctor,noun,people,A , is not a ,,183,43,8,nurse,94,lawyer,13,patient,11,dentist,9,teacher,7,chef,3,child,3,mailman,3,,,,,,,,
-8,washing machine,noun,furniture_rooms,A , is not a ,,185,19,3,dryer,152,drying machine,8,dishwasher,7,,,,,,,,,,,,,,,,,,
-8,sandwich,noun,food_drink,A , is not a ,,173,57,12,hotdog,29,soup,13,salad,12,burger,8,meal,8,snack,7,taco,7,pizza,6,wrap,5,bread,4,chip,4,breakfast,3
-8,deer,noun,animals,A , is not a ,,178,60,12,moose,24,dog,14,horse,11,bird,9,cow,9,bear,8,pet,8,headlight,7,elk,6,fox,6,buck,4,fish,4
-8,Buying,verb,action_words,, is not ,,177,26,6,sell,107,steal,19,save,17,return,5,give,3,purchase,3,,,,,,,,,,,,
-8,Spilling,verb,action_words,, is not ,,118,45,10,clean,34,drink,11,hold,6,pick up,6,fill,5,sip,5,dry,3,keep,3,pour,3,save,3,,,,
-8,Touching,verb,action_words,, is not ,,432,85,12,feel,89,smell,38,see,33,look,32,allow,19,hear,13,hit,13,eat,12,avoid,10,hold,9,listen,8,distance,7
-8,Cooking,verb,action_words,, is not ,,164,31,5,clean,52,bake,50,eat,26,boil,3,burn,3,,,,,,,,,,,,,,
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,lexeme1,response2,count2,lexeme2,response3,count3,lexeme3,response4,count4,lexeme4,response5,count5,lexeme5,response6,count6,lexeme6,response7,count7,lexeme7,response8,count8,lexeme8,response9,count9,lexeme9,response10,count10,lexeme10,response11,count11,lexeme11,response12,count12,lexeme12
+8,thirsty,adj,descriptive_words,To be , is not to be ,,182,23,10,hungry,58,hungry,hydrated,34,hydrated,quenched,26,quenched,full,13,full,satisfied,11,satisfied,parched,9,parched,satiated,6,satiated,fulfilled,4,fulfilled,dry,3,dry,refreshed,3,refreshed,,,,,,
+8,awake,adj,descriptive_words,To be , is not to be ,,161,5,1,asleep,157,asleep,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+8,hurt,adj,descriptive_words,To be , is not to be ,,176,29,10,healthy,33,healthy,okay,32,okay,healed,21,healed,happy,20,happy,well,12,well,fine,8,fine,ok,8,ok,safe,8,safe,good,7,good,loved,4,loved,,,,,,
+8,airplane,noun,vehicles,An , is not a ,,189,27,6,car,76,car,helicopter,45,helicopter,train,17,train,boat,14,boat,bus,7,bus,jet,7,jet,,,,,,,,,,,,,,,,,,
+8,French fries,noun,food_drink,, are not ,,124,40,11,burger,30,burger,chip,13,chip,potato,11,potato,ketchup,9,ketchup,hamburger,5,hamburger,cold,4,cold,pizza,4,pizza,carrot,3,carrot,cheese curd,3,cheese curd,onion ring,3,onion ring,vegetable,3,vegetable,,,
+8,Fish,noun,food_drink,, is not ,(food) ,624,104,12,dog,103,dog,mammal,102,mammal,bird,63,bird,human,28,human,cow,22,cow,shark,22,shark,bear,16,bear,cat,16,cat,horse,16,horse,person,15,person,reptile,15,reptile,whale,11,whale
+8,Scissors,noun,household,, are not ,,175,42,12,knife,30,knife,paper,25,paper,safe,13,safe,glue,12,glue,pencil,11,pencil,rock,11,rock,tape,11,tape,toy,11,toy,weapon,6,weapon,pen,5,pen,stapler,5,stapler,sharp,3,sharp
+8,turtle,noun,animals,A , is not a ,,184,58,12,fish,28,fish,tortoise,26,tortoise,bird,9,bird,frog,9,frog,dog,8,dog,mammal,8,mammal,rabbit,8,rabbit,shell,7,shell,bunny,4,bunny,cheetah,4,cheetah,cow,4,cow,snail,4,snail
+8,Tonight,noun,time_words,, is not ,,176,15,8,tomorrow,95,tomorrow,morning,23,morning,today,17,today,yesterday,11,yesterday,this morning,8,this morning,last night,6,last night,day,3,day,night,3,night,,,,,,,,,,,,
+8,Wind,noun,outside,, is not ,,109,20,12,rain,30,rain,still,14,still,water,12,water,sun,9,sun,snow,7,snow,cold,6,cold,calm,4,calm,quiet,4,quiet,air,3,air,breeze,3,breeze,cloud,3,cloud,fire,3,fire
+8,sneaker,noun,clothing,A , is not a ,,182,39,11,boot,38,boot,heel,34,heel,sandal,19,sandal,shoe,14,shoe,flip-flop,11,flip-flop,high heel,8,high heel,sock,8,sock,foot,5,foot,hat,5,hat,shirt,5,shirt,slipper,4,slipper,,,
+8,sink,noun,furniture_rooms,A , is not a ,,190,55,12,toilet,24,toilet,tub,15,tub,bath,14,bath,bathtub,14,bathtub,refrigerator,13,refrigerator,shower,10,shower,stove,9,stove,hose,7,hose,oven,6,oven,washer,6,washer,dishwasher,5,dishwasher,faucet,5,faucet
+8,doctor,noun,people,A , is not a ,,183,43,8,nurse,94,nurse,lawyer,13,lawyer,patient,11,patient,dentist,9,dentist,teacher,7,teacher,chef,3,chef,child,3,child,mailman,3,mailman,,,,,,,,,,,,
+8,washing machine,noun,furniture_rooms,A , is not a ,,185,19,3,dryer,152,dryer,drying machine,8,drying machine,dishwasher,7,dishwasher,,,,,,,,,,,,,,,,,,,,,,,,,,,
+8,sandwich,noun,food_drink,A , is not a ,,173,57,12,hotdog,29,hotdog,soup,13,soup,salad,12,salad,burger,8,burger,meal,8,meal,snack,7,snack,taco,7,taco,pizza,6,pizza,wrap,5,wrap,bread,4,bread,chip,4,chip,breakfast,3,breakfast
+8,deer,noun,animals,A , is not a ,,178,60,12,moose,24,moose,dog,14,dog,horse,11,horse,bird,9,bird,cow,9,cow,bear,8,bear,pet,8,pet,headlight,7,headlight,elk,6,elk,fox,6,fox,buck,4,buck,fish,4,fish
+8,Buying,verb,action_words,, is not ,,177,26,6,selling,107,sell,stealing,19,steal,saving,17,save,returning,5,return,giving,3,give,purchasing,3,purchase,,,,,,,,,,,,,,,,,,
+8,Spilling,verb,action_words,, is not ,,118,45,10,cleaning,34,clean,drinking,11,drink,holding,6,hold,picking up,6,pick up,filling,5,fill,sipping,5,sip,drying,3,dry,keeping,3,keep,pouring,3,pour,saving,3,save,,,,,,
+8,Touching,verb,action_words,, is not ,,432,85,12,feeling,89,feel,smelling,38,smell,seeing,33,see,looking,32,look,allowing,19,allow,hearing,13,hear,hitting,13,hit,eating,12,eat,avoiding,10,avoid,holding,9,hold,listening,8,listen,distancing,7,distance
+8,Cooking,verb,action_words,, is not ,,164,31,5,cleaning,52,clean,baking,50,bake,eating,26,eat,boiling,3,boil,burning,3,burn,,,,,,,,,,,,,,,,,,,,,

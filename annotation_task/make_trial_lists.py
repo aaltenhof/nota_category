@@ -2,7 +2,7 @@
 """Build the trial lists for the contrast-annotation task.
 
 For each target word x part of speech, counts responses by `lexeme` (so veggie / vegetables / vegetable
-are one item), keeps the most frequent responses, attaches the sentence frame from master_word_list.csv,
+are one item), keeps the most frequent responses, shows verb responses in their -ing form (see ing_forms), attaches the sentence frame from master_word_list.csv,
 and splits the targets into lists of LIST_SIZE. Parts of speech are dealt round-robin so every list has
 roughly the same mix of nouns, verbs and adjectives.
 
@@ -28,7 +28,7 @@ POS = {'noun': 'noun', 'verb': 'verb', 'adjective': 'adj', 'adverb': 'adj'}
 KEEP_COLUMNS = ['target_word', 'target_pos', 'target_cat',
                 'sentence_frame_before', 'sentence_frame_after', 'clarification',
                 'n_total', 'n_unique', 'n_shown']
-RESPONSE_COLUMNS = [f'{c}{i}' for i in range(1, MAX_RESPONSES + 1) for c in ('response', 'count')]
+RESPONSE_COLUMNS = [f'{c}{i}' for i in range(1, MAX_RESPONSES + 1) for c in ('response', 'count', 'lexeme')]
 
 
 def load_frames():
@@ -41,7 +41,26 @@ def load_frames():
               'sentence_frame_before', 'sentence_frame_after', 'clarification']]
 
 
+def ing_forms(d):
+    # lexeme -> the -ing spelling participants typed most often, across all targets (stand still -> standing still)
+    has_ing = d[d.response.astype(str).str.split().str[0].str.endswith('ing')]
+    return has_ing.groupby('lexeme').response.agg(lambda s: s.value_counts().index[0]).to_dict()
+
+
+def display_form(lexeme, g, ing):
+    # Verb targets: counts stay by lexeme, but show the -ing form people actually typed. Prefer the form used
+    # for this target, then the most common one anywhere, then whatever was typed most for this target.
+    typed = g.loc[g.lexeme == lexeme, 'response'].astype(str)
+    typed_ing = typed[typed.str.split().str[0].str.endswith('ing')]
+    if len(typed_ing):
+        return typed_ing.value_counts().index[0]
+    if lexeme in ing:
+        return ing[lexeme]
+    return typed.value_counts().index[0] if len(typed) else lexeme
+
+
 def build_items(d, frames):
+    ing = ing_forms(d)
     items = []
     for (t, pos), g in d.groupby(['target', 'pos']):
         c = (g['lexeme'].value_counts().rename_axis('response').reset_index(name='count')
@@ -49,9 +68,10 @@ def build_items(d, frames):
         shown = c[c['count'] >= MIN_COUNT].head(MAX_RESPONSES)
 
         row = {'target': t, 'pos': pos, 'n_total': len(g), 'n_unique': len(c), 'n_shown': len(shown)}
-        for i, (resp, n) in enumerate(zip(shown.response, shown['count']), start=1):
-            row[f'response{i}'] = resp
+        for i, (lex, n) in enumerate(zip(shown.response, shown['count']), start=1):
+            row[f'response{i}'] = display_form(lex, g, ing) if pos == 'verb' else lex
             row[f'count{i}'] = int(n)
+            row[f'lexeme{i}'] = lex
         items.append(row)
 
     items = pd.DataFrame(items)

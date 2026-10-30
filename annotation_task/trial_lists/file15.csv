@@ -1,20 +1,20 @@
-list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
-15,Before,adj,time_words,, is not ,,189,10,3,after,170,now,8,later,4,,,,,,,,,,,,,,,,,,
-15,sticky,adj,descriptive_words,To be , is not to be ,,183,32,10,clean,56,smooth,50,dry,12,soft,12,slippery,7,slimy,5,wet,5,dull,4,stuck,4,slick,3,,,,
-15,yucky,adj,descriptive_words,To be , is not to be ,,188,23,8,yummy,75,clean,59,good,16,tasty,6,gross,5,delicious,4,lucky,3,nice,3,,,,,,,,
-15,home,noun,places,A , is not a ,,597,141,12,house,187,school,45,place,41,hotel,25,apartment,18,car,15,prison,15,store,9,food,8,street,8,vacation,8,box,7
-15,Time,noun,time_words,, is not ,,82,40,6,stop,8,money,7,still,7,forever,6,space,6,relative,4,,,,,,,,,,,,
-15,bus,noun,vehicles,A , is not a ,,190,25,9,car,106,train,28,plane,13,boat,6,bicycle,5,airplane,3,home,3,house,3,sedan,3,,,,,,
-15,doll,noun,toys,A , is not ,,101,51,11,human,9,person,9,toy,9,action figure,4,car,4,fun,4,baby,3,barbie,3,house,3,lego,3,truck,3,,
-15,zipper,noun,clothing,A , is not a ,,175,60,10,button,56,velcro,19,belt,7,coat,6,jacket,6,tie,6,clasp,5,shoe,5,shoelace,4,pant,3,,,,
-15,can,noun,household,A , is not a ,,177,52,12,bottle,38,jar,24,cup,19,bowl,17,glass,6,plate,6,cant,4,box,3,bucket,3,dish,3,food,3,jug,3
-15,Glasses,noun,household,, are not ,(for your eyes) ,119,43,8,contacts,40,eye,8,sunglasses,7,hat,4,hearing aid,4,socks,4,window,4,cup,3,,,,,,,,
-15,goose,noun,animals,A , is not a ,,181,45,12,duck,87,bird,8,moose,7,dog,6,swan,6,goose,5,chicken,4,fish,4,mouse,4,cat,3,egg,3,hen,3
-15,button,noun,clothing,A , is not a ,,182,69,9,zipper,72,lever,17,shirt,8,snap,4,switch,4,coat,3,food,3,pin,3,square,3,,,,,,
-15,morning,noun,time_words,A , is not a ,,182,10,3,night,150,evening,21,afternoon,4,,,,,,,,,,,,,,,,,,
-15,Gum,noun,food_drink,, is not ,,117,35,4,food,42,candy,23,mint,15,gun,4,,,,,,,,,,,,,,,,
-15,toliet,noun,furniture_rooms,A , is not a ,,179,49,11,sink,56,shower,32,bath,10,chair,8,bathtub,7,bed,6,bathroom,5,tub,4,bidet,3,seat,3,urinal,3,,
-15,tooth,noun,body_parts,A , is not a ,,621,123,12,tongue,100,mouth,55,bone,32,nail,32,lip,28,finger,20,muscle,20,toy,20,food,19,nose,15,foot,14,gum,14
-15,Seeing,verb,action_words,, is not ,,155,31,11,hear,44,believe,39,look,10,do,7,watch,6,listen,5,feel,4,smell,4,eat,3,sleep,3,touch,3,,
-15,Bringing,verb,action_words,, is not ,,186,26,9,take,67,leave,30,give,20,forget,15,receive,12,lose,6,get,5,bring,4,have,4,,,,,,
-15,Loving,verb,action_words,, is not ,,162,14,4,hate,130,like,13,leave,5,care,4,,,,,,,,,,,,,,,,
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,lexeme1,response2,count2,lexeme2,response3,count3,lexeme3,response4,count4,lexeme4,response5,count5,lexeme5,response6,count6,lexeme6,response7,count7,lexeme7,response8,count8,lexeme8,response9,count9,lexeme9,response10,count10,lexeme10,response11,count11,lexeme11,response12,count12,lexeme12
+15,Before,adj,time_words,, is not ,,189,10,3,after,170,after,now,8,now,later,4,later,,,,,,,,,,,,,,,,,,,,,,,,,,,
+15,sticky,adj,descriptive_words,To be , is not to be ,,183,32,10,clean,56,clean,smooth,50,smooth,dry,12,dry,soft,12,soft,slippery,7,slippery,slimy,5,slimy,wet,5,wet,dull,4,dull,stuck,4,stuck,slick,3,slick,,,,,,
+15,yucky,adj,descriptive_words,To be , is not to be ,,188,23,8,yummy,75,yummy,clean,59,clean,good,16,good,tasty,6,tasty,gross,5,gross,delicious,4,delicious,lucky,3,lucky,nice,3,nice,,,,,,,,,,,,
+15,home,noun,places,A , is not a ,,597,141,12,house,187,house,school,45,school,place,41,place,hotel,25,hotel,apartment,18,apartment,car,15,car,prison,15,prison,store,9,store,food,8,food,street,8,street,vacation,8,vacation,box,7,box
+15,Time,noun,time_words,, is not ,,82,40,6,stop,8,stop,money,7,money,still,7,still,forever,6,forever,space,6,space,relative,4,relative,,,,,,,,,,,,,,,,,,
+15,bus,noun,vehicles,A , is not a ,,190,25,9,car,106,car,train,28,train,plane,13,plane,boat,6,boat,bicycle,5,bicycle,airplane,3,airplane,home,3,home,house,3,house,sedan,3,sedan,,,,,,,,,
+15,doll,noun,toys,A , is not ,,101,51,11,human,9,human,person,9,person,toy,9,toy,action figure,4,action figure,car,4,car,fun,4,fun,baby,3,baby,barbie,3,barbie,house,3,house,lego,3,lego,truck,3,truck,,,
+15,zipper,noun,clothing,A , is not a ,,175,60,10,button,56,button,velcro,19,velcro,belt,7,belt,coat,6,coat,jacket,6,jacket,tie,6,tie,clasp,5,clasp,shoe,5,shoe,shoelace,4,shoelace,pant,3,pant,,,,,,
+15,can,noun,household,A , is not a ,,177,52,12,bottle,38,bottle,jar,24,jar,cup,19,cup,bowl,17,bowl,glass,6,glass,plate,6,plate,cant,4,cant,box,3,box,bucket,3,bucket,dish,3,dish,food,3,food,jug,3,jug
+15,Glasses,noun,household,, are not ,(for your eyes) ,119,43,8,contacts,40,contacts,eye,8,eye,sunglasses,7,sunglasses,hat,4,hat,hearing aid,4,hearing aid,socks,4,socks,window,4,window,cup,3,cup,,,,,,,,,,,,
+15,goose,noun,animals,A , is not a ,,181,45,12,duck,87,duck,bird,8,bird,moose,7,moose,dog,6,dog,swan,6,swan,goose,5,goose,chicken,4,chicken,fish,4,fish,mouse,4,mouse,cat,3,cat,egg,3,egg,hen,3,hen
+15,button,noun,clothing,A , is not a ,,182,69,9,zipper,72,zipper,lever,17,lever,shirt,8,shirt,snap,4,snap,switch,4,switch,coat,3,coat,food,3,food,pin,3,pin,square,3,square,,,,,,,,,
+15,morning,noun,time_words,A , is not a ,,182,10,3,night,150,night,evening,21,evening,afternoon,4,afternoon,,,,,,,,,,,,,,,,,,,,,,,,,,,
+15,Gum,noun,food_drink,, is not ,,117,35,4,food,42,food,candy,23,candy,mint,15,mint,gun,4,gun,,,,,,,,,,,,,,,,,,,,,,,,
+15,toliet,noun,furniture_rooms,A , is not a ,,179,49,11,sink,56,sink,shower,32,shower,bath,10,bath,chair,8,chair,bathtub,7,bathtub,bed,6,bed,bathroom,5,bathroom,tub,4,tub,bidet,3,bidet,seat,3,seat,urinal,3,urinal,,,
+15,tooth,noun,body_parts,A , is not a ,,621,123,12,tongue,100,tongue,mouth,55,mouth,bone,32,bone,nail,32,nail,lip,28,lip,finger,20,finger,muscle,20,muscle,toy,20,toy,food,19,food,nose,15,nose,foot,14,foot,gum,14,gum
+15,Seeing,verb,action_words,, is not ,,155,31,11,hearing,44,hear,believing,39,believe,looking,10,look,doing,7,do,watching,6,watch,listening,5,listen,feeling,4,feel,smelling,4,smell,eating,3,eat,sleeping,3,sleep,touching,3,touch,,,
+15,Bringing,verb,action_words,, is not ,,186,26,9,taking,67,take,leaving,30,leave,giving,20,give,forgetting,15,forget,receiving,12,receive,losing,6,lose,getting,5,get,bringing,4,bring,having,4,have,,,,,,,,,
+15,Loving,verb,action_words,, is not ,,162,14,4,hating,130,hate,liking,13,like,leaving,5,leave,caring,4,care,,,,,,,,,,,,,,,,,,,,,,,,

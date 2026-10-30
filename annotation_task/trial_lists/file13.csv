@@ -1,20 +1,20 @@
-list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
-13,long,adj,descriptive_words,To be , is not to be ,,183,10,1,short,174,,,,,,,,,,,,,,,,,,,,,,
-13,outside,adj,places,To be , is not to be ,,189,5,1,inside,185,,,,,,,,,,,,,,,,,,,,,,
-13,back,adj,locations,To be , is not to be ,,178,19,7,front,65,gone,40,forward,23,away,15,there,13,forth,5,here,4,,,,,,,,,,
-13,farm,noun,places,A , is not a ,,185,60,12,city,40,house,21,home,11,zoo,11,barn,10,ranch,8,store,5,garden,4,park,4,field,3,lake,3,museum,3
-13,toy ,noun,toys,A , is not a ,,167,83,12,food,15,tool,15,game,10,knife,9,weapon,7,book,5,car,5,phone,5,person,4,animal,3,dog,3,gun,3
-13,picture,noun,household,A , is not a ,,174,46,11,video,48,frame,22,photograph,11,memory,9,painting,9,drawing,8,camera,6,phone,5,word,5,movie,4,thousand word,3,,
-13,hammer,noun,household,A , is not a ,,623,102,12,nail,166,wrench,68,screwdriver,63,toy,44,drill,29,screw,29,weapon,20,saw,16,tool,12,shovel,11,food,10,knife,8
-13,Cereal,noun,food_drink,, is not ,,154,42,12,milk,33,soup,30,dinner,10,oatmeal,9,egg,8,breakfast,5,fruit,5,pancake,4,dessert,3,food,3,meal,3,meat,3
-13,sister,noun,people,A , is not a ,,182,17,5,brother,157,friend,4,boy,3,enemy,3,mom,3,,,,,,,,,,,,,,
-13,Nuts,noun,food_drink,, are not ,,117,48,8,fruit,39,bolt,12,bean,4,seed,4,sweet,4,vegetable,4,ball,3,berry,3,,,,,,,,
-13,pool,noun,outside,A , is not a ,,186,53,11,lake,45,ocean,31,beach,21,hot tub,15,bath,5,pond,5,bathtub,4,playground,4,house,3,sea,3,tub,3,,
-13,moose,noun,animals,A , is not a ,,188,42,12,deer,63,mouse,18,cow,17,bear,10,goose,9,dog,8,horse,8,cat,7,bird,3,camel,3,donkey,3,elk,3
-13,living room,noun,furniture_rooms,A , is not a ,,189,34,6,kitchen,77,bedroom,49,bathroom,21,dining room,5,house,4,family room,3,,,,,,,,,,,,
-13,fork,noun,household,A , is not a ,,193,9,2,spoon,159,knife,26,,,,,,,,,,,,,,,,,,,,
-13,flower,noun,outside,A , is not a ,,181,59,12,tree,30,weed,25,grass,9,animal,8,food,8,plant,7,rock,7,fruit,6,bee,5,pot,5,vegetable,4,bush,3
-13,Toast,noun,food_drink,, is not ,,133,48,8,bread,41,cold,12,butter,8,bagel,6,egg,5,fruit,5,dinner,4,sandwich,3,,,,,,,,
-13,Staying,verb,action_words,, is not ,,186,11,2,leave,90,go,86,,,,,,,,,,,,,,,,,,,,
-13,Cutting,verb,action_words,, is not ,,161,70,12,sew,16,slice,16,glue,11,chop,7,mend,6,bulk,5,fix,5,peel,5,tape,5,tear,4,break,3,cook,3
-13,Skating,verb,action_words,, is not ,,145,34,12,ski,35,walk,25,run,17,rollerblade,7,sled,7,swim,7,slide,5,skateboard,4,stand,4,surf,4,fall,3,snowboard,3
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,lexeme1,response2,count2,lexeme2,response3,count3,lexeme3,response4,count4,lexeme4,response5,count5,lexeme5,response6,count6,lexeme6,response7,count7,lexeme7,response8,count8,lexeme8,response9,count9,lexeme9,response10,count10,lexeme10,response11,count11,lexeme11,response12,count12,lexeme12
+13,long,adj,descriptive_words,To be , is not to be ,,183,10,1,short,174,short,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+13,outside,adj,places,To be , is not to be ,,189,5,1,inside,185,inside,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+13,back,adj,locations,To be , is not to be ,,178,19,7,front,65,front,gone,40,gone,forward,23,forward,away,15,away,there,13,there,forth,5,forth,here,4,here,,,,,,,,,,,,,,,
+13,farm,noun,places,A , is not a ,,185,60,12,city,40,city,house,21,house,home,11,home,zoo,11,zoo,barn,10,barn,ranch,8,ranch,store,5,store,garden,4,garden,park,4,park,field,3,field,lake,3,lake,museum,3,museum
+13,toy ,noun,toys,A , is not a ,,167,83,12,food,15,food,tool,15,tool,game,10,game,knife,9,knife,weapon,7,weapon,book,5,book,car,5,car,phone,5,phone,person,4,person,animal,3,animal,dog,3,dog,gun,3,gun
+13,picture,noun,household,A , is not a ,,174,46,11,video,48,video,frame,22,frame,photograph,11,photograph,memory,9,memory,painting,9,painting,drawing,8,drawing,camera,6,camera,phone,5,phone,word,5,word,movie,4,movie,thousand word,3,thousand word,,,
+13,hammer,noun,household,A , is not a ,,623,102,12,nail,166,nail,wrench,68,wrench,screwdriver,63,screwdriver,toy,44,toy,drill,29,drill,screw,29,screw,weapon,20,weapon,saw,16,saw,tool,12,tool,shovel,11,shovel,food,10,food,knife,8,knife
+13,Cereal,noun,food_drink,, is not ,,154,42,12,milk,33,milk,soup,30,soup,dinner,10,dinner,oatmeal,9,oatmeal,egg,8,egg,breakfast,5,breakfast,fruit,5,fruit,pancake,4,pancake,dessert,3,dessert,food,3,food,meal,3,meal,meat,3,meat
+13,sister,noun,people,A , is not a ,,182,17,5,brother,157,brother,friend,4,friend,boy,3,boy,enemy,3,enemy,mom,3,mom,,,,,,,,,,,,,,,,,,,,,
+13,Nuts,noun,food_drink,, are not ,,117,48,8,fruit,39,fruit,bolt,12,bolt,bean,4,bean,seed,4,seed,sweet,4,sweet,vegetable,4,vegetable,ball,3,ball,berry,3,berry,,,,,,,,,,,,
+13,pool,noun,outside,A , is not a ,,186,53,11,lake,45,lake,ocean,31,ocean,beach,21,beach,hot tub,15,hot tub,bath,5,bath,pond,5,pond,bathtub,4,bathtub,playground,4,playground,house,3,house,sea,3,sea,tub,3,tub,,,
+13,moose,noun,animals,A , is not a ,,188,42,12,deer,63,deer,mouse,18,mouse,cow,17,cow,bear,10,bear,goose,9,goose,dog,8,dog,horse,8,horse,cat,7,cat,bird,3,bird,camel,3,camel,donkey,3,donkey,elk,3,elk
+13,living room,noun,furniture_rooms,A , is not a ,,189,34,6,kitchen,77,kitchen,bedroom,49,bedroom,bathroom,21,bathroom,dining room,5,dining room,house,4,house,family room,3,family room,,,,,,,,,,,,,,,,,,
+13,fork,noun,household,A , is not a ,,193,9,2,spoon,159,spoon,knife,26,knife,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+13,flower,noun,outside,A , is not a ,,181,59,12,tree,30,tree,weed,25,weed,grass,9,grass,animal,8,animal,food,8,food,plant,7,plant,rock,7,rock,fruit,6,fruit,bee,5,bee,pot,5,pot,vegetable,4,vegetable,bush,3,bush
+13,Toast,noun,food_drink,, is not ,,133,48,8,bread,41,bread,cold,12,cold,butter,8,butter,bagel,6,bagel,egg,5,egg,fruit,5,fruit,dinner,4,dinner,sandwich,3,sandwich,,,,,,,,,,,,
+13,Staying,verb,action_words,, is not ,,186,11,2,leaving,90,leave,going,86,go,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+13,Cutting,verb,action_words,, is not ,,161,70,12,sewing,16,sew,slicing,16,slice,gluing,11,glue,chopping,7,chop,mending,6,mend,bulking,5,bulk,fixing,5,fix,peeling,5,peel,taping,5,tape,tearing,4,tear,breaking,3,break,cooking,3,cook
+13,Skating,verb,action_words,, is not ,,145,34,12,skiing,35,ski,walking,25,walk,running,17,run,rollerblading,7,rollerblade,sledding,7,sled,swimming,7,swim,sliding,5,slide,skateboarding,4,skateboard,standing,4,stand,surfing,4,surf,falling,3,fall,snowboarding,3,snowboard

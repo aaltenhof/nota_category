@@ -129,6 +129,7 @@ function getResponses(item) {
         if (r === undefined || r === null || String(r).trim() === '') continue;
         responses.push({
             response: String(r),
+            lexeme:   item[`lexeme${i}`] ? String(item[`lexeme${i}`]) : String(r),
             count:    parseInt(item[`count${i}`], 10),
             rank:     i
         });
@@ -178,11 +179,13 @@ function chipHTML(r, idx) {
         <div class="chip" data-idx="${idx}" title="${r.count} people gave this response">
             <span class="chip-word">${escapeHTML(r.response)}</span>
             <span class="chip-count">${r.count}</span>
+            <button class="chip-note-btn" title="Add a comment on this answer">&#9998;</button>
             <select class="chip-tag">
                 <option value="">Relationship&hellip;</option>
                 ${TAG_OPTIONS}
             </select>
             <select class="chip-followup"></select>
+            <input class="chip-note" type="text" maxlength="200" placeholder="Comment on this answer" autocomplete="off">
         </div>`;
 }
 
@@ -191,6 +194,7 @@ function chipHTML(r, idx) {
 // chipZone:  display idx -> 'bank' | a BINS key | 'g1', 'g2', ...
 // chipTag:   display idx -> relationship tag key ('' if not tagged yet); kept if the chip moves groups
 // chipFollowup: display idx -> '' or an option key for the tag's follow-up question (see FOLLOWUPS)
+// chipNote:  display idx -> the RA's comment on that answer ('' if none)
 // groups:    group id -> { label, defaultTag }
 //            defaultTag = last "Set all to" choice, given to answers dropped in later
 // notes:     free-text notes on this target
@@ -201,6 +205,7 @@ function newAnnotation(item) {
         chipZone:       display.map(() => 'bank'),
         chipTag:        display.map(() => ''),
         chipFollowup:   display.map(() => ''),
+        chipNote:       display.map(() => ''),
         groups:         {},
         groupOrder:     [],
         nextGroup:      1,
@@ -235,7 +240,8 @@ function isComplete(state, pos) {
 }
 
 function isTouched(state) {
-    return state && (state.nMoves > 0 || state.groupOrder.length > 0 || state.notes.trim() !== '');
+    return state && (state.nMoves > 0 || state.groupOrder.length > 0 || state.notes.trim() !== '' ||
+                     (state.chipNote || []).some(n => n.trim() !== ''));
 }
 
 // ─── Start screen ─────────────────────────────────────────────────────────────
@@ -312,17 +318,20 @@ function restoreFromResults(resultRows) {
         const responses = getResponses(item);
         const state = newAnnotation(item);
 
-        // rebuild display order from the file; anything not in the file goes to the end
+        // rebuild display order from the file; anything not in the file goes to the end.
+        // Match on the response text, or on its rank if the text has changed since (verbs shown as -ing).
         const display = [];
+        const rowFor = new Map();
         rows.forEach(r => {
-            const match = responses.find(x => x.response === r.response && !display.includes(x));
-            if (match) display.push(match);
+            const match = responses.find(x => x.response === r.response && !display.includes(x)) ||
+                          responses.find(x => String(x.rank) === String(r.response_rank) && !display.includes(x));
+            if (match) { display.push(match); rowFor.set(match, r); }
         });
         responses.forEach(x => { if (!display.includes(x)) display.push(x); });
         state.display = display;
 
         state.chipZone = display.map(x => {
-            const r = rows.find(row => row.response === x.response);
+            const r = rowFor.get(x);
             if (!r) return 'bank';
             const excluded = OLD_ZONES[r.excluded] || r.excluded;
             if (BINS.some(b => b.key === excluded)) return excluded;
@@ -331,15 +340,20 @@ function restoreFromResults(resultRows) {
         });
 
         state.chipTag = display.map(x => {
-            const r = rows.find(row => row.response === x.response);
+            const r = rowFor.get(x);
             return r ? (r.response_tag || '') : '';
         });
 
         state.chipFollowup = display.map((x, i) => {
-            const r = rows.find(row => row.response === x.response);
+            const r = rowFor.get(x);
             const f = followupFor(state.chipTag[i], item.target_pos);
             if (!r || !f) return '';
             return f.options.some(o => o.key === r[f.column]) ? r[f.column] : '';
+        });
+
+        state.chipNote = display.map(x => {
+            const r = rowFor.get(x);
+            return r ? (r.response_note || '') : '';
         });
 
         rows.forEach(r => {
@@ -389,6 +403,10 @@ function restoreFromLocal() {
             // autosaves from earlier versions of the page
             if (!s.chipTag) s.chipTag = s.display.map(() => '');
             if (!s.chipFollowup) s.chipFollowup = s.display.map(() => '');
+            if (!s.chipNote) s.chipNote = s.display.map(() => '');
+            // refresh the answers' text from the work unit (e.g. verbs now shown as -ing), matched by rank
+            const current = getResponses(item);
+            s.display = s.display.map(x => current.find(y => y.rank === x.rank) || x);
             // drop follow-up answers that aren't valid options any more (e.g. the old yes/no)
             s.chipFollowup = s.chipFollowup.map((v, i) => {
                 const f = followupFor(s.chipTag[i], item.target_pos);
@@ -612,6 +630,9 @@ function setupSortLogic(item, state) {
         zone.querySelector('.chip-holder').insertAdjacentHTML('beforeend', chipHTML(r, i));
         const chip = zone.querySelector(`.chip[data-idx="${i}"]`);
         chip.querySelector('.chip-tag').value = state.chipTag[i];
+        chip.querySelector('.chip-note').value = state.chipNote[i];
+        chip.classList.toggle('has-note', state.chipNote[i].trim() !== '');
+        chip.classList.toggle('note-open', state.chipNote[i].trim() !== '');
         renderFollowup(chip);
     });
 
@@ -620,6 +641,23 @@ function setupSortLogic(item, state) {
     notesBox.value = state.notes;
     notesBox.addEventListener('input', (e) => {
         state.notes = e.target.value;
+        markChanged();
+    });
+
+    // per-answer comments: the pencil opens a comment field on the chip
+    task.addEventListener('click', (e) => {
+        const btn = e.target.closest('.chip-note-btn');
+        if (!btn) return;
+        const chip = btn.closest('.chip');
+        const open = !chip.classList.contains('note-open');
+        chip.classList.toggle('note-open', open || state.chipNote[chip.dataset.idx].trim() !== '');
+        if (open) chip.querySelector('.chip-note').focus();
+    });
+    task.addEventListener('input', (e) => {
+        if (!e.target.classList.contains('chip-note')) return;
+        const chip = e.target.closest('.chip');
+        state.chipNote[chip.dataset.idx] = e.target.value;
+        chip.classList.toggle('has-note', e.target.value.trim() !== '');
         markChanged();
     });
 
@@ -710,7 +748,7 @@ function setupSortLogic(item, state) {
 
     task.addEventListener('pointerdown', (e) => {
         const chip = e.target.closest('.chip');
-        if (!chip || e.target.closest('select')) return;
+        if (!chip || e.target.closest('select, input, button')) return;
         e.preventDefault();
         if (document.activeElement) document.activeElement.blur();
 
@@ -786,8 +824,8 @@ function followupValue(state, i, inGroup, tag, pos) {
 function getResultsCSV() {
     const header = [
         'coder', 'list_num', 'target_word', 'target_pos', 'target_cat',
-        'response', 'response_count', 'response_rank', 'display_order',
-        'excluded', 'group_num', 'group_label', 'response_tag', 'counterpart_type', 'group_size',
+        'response', 'response_lexeme', 'response_count', 'response_rank', 'display_order',
+        'excluded', 'group_num', 'group_label', 'response_tag', 'counterpart_type', 'response_note', 'group_size',
         'n_responses', 'n_groups', 'n_excluded', 'n_moves', 'n_groups_created', 'n_groups_removed',
         'time_on_target_s', 'completed', 'notes', 'last_saved'
     ];
@@ -816,6 +854,7 @@ function getResultsCSV() {
                 item.target_pos,
                 item.target_cat || '',
                 r.response,
+                r.lexeme,
                 r.count,
                 r.rank,
                 i + 1,
@@ -824,6 +863,7 @@ function getResultsCSV() {
                 inGroup ? state.groups[zone].label.trim() : '',
                 inGroup ? state.chipTag[i] : '',
                 followupValue(state, i, inGroup, 'counterpart', item.target_pos),
+                state.chipNote[i].trim(),
                 inGroup ? groupSize[zone] : '',
                 state.display.length,
                 usedGroups.length,

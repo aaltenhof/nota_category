@@ -1,21 +1,21 @@
-list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,response2,count2,response3,count3,response4,count4,response5,count5,response6,count6,response7,count7,response8,count8,response9,count9,response10,count10,response11,count11,response12,count12
-9,naughty,adj,descriptive_words,To be , is not to be ,,182,11,3,nice,141,good,29,bad,3,,,,,,,,,,,,,,,,,,
-9,brown,adj,descriptive_words,To be , is not to be ,,622,48,12,white,178,black,137,blue,52,yellow,48,red,41,green,31,pink,31,purple,19,gray,12,bad,6,colorful,6,orange,6
-9,first,adj,descriptive_words,To be , is not to be ,,183,5,2,last,159,second,20,,,,,,,,,,,,,,,,,,,,
-9,Corn,noun,food_drink,, is not ,,147,56,12,fruit,21,pea,10,bean,9,orange,8,potato,8,blue,7,carrot,6,purple,6,cob,5,wheat,5,rice,4,bread,3
-9,Coffee,noun,food_drink,, is not ,,159,21,5,tea,99,water,26,milk,6,cold,5,soda,3,,,,,,,,,,,,,,
-9,Grandma,noun,people,A , is not a ,,179,25,7,grandpa,131,child,7,dad,7,mom,5,baby,4,aunt,3,dog,3,,,,,,,,,,
-9,truck,noun,vehicles,A , is not a ,,177,45,8,car,101,bike,9,bus,7,plane,7,boat,3,motorcycle,3,toy,3,van,3,,,,,,,,
-9,Yesterday,noun,time_words,, is not ,,185,10,2,today,149,tomorrow,28,,,,,,,,,,,,,,,,,,,,
-9,Snow,noun,outside,, is not a ,,166,69,12,rain,44,sun,9,ice,8,liquid,7,beach,6,sand,6,fire,4,grass,4,raindrop,4,food,3,lake,3,rainfall,3
-9,popsicle,noun,food_drink,A , is not a ,,164,60,12,ice cream,41,ice cream cone,11,fruit,9,meal,9,sucker,6,dinner,5,lollipop,5,snack,5,cookie,4,treat,4,food,3,ice pop,3
-9,Cake,noun,food_drink,, is not ,,142,45,10,cookie,24,cupcake,19,ice cream,15,pie,13,brownie,11,bread,5,dinner,5,food,5,breakfast,3,candy,3,,,,
-9,bottle,noun,household,A , is not a ,,182,47,8,cup,59,can,32,bowl,15,glass,14,plate,8,mug,7,jar,3,water,3,,,,,,,,
-9,bat,noun,toys,A , is not a , (baseball) ,182,44,12,ball,61,glove,17,weapon,12,baseball,8,club,6,toy,6,animal,5,racket,5,stick,5,basketball,4,golf club,4,mitt,4
-9,bucket,noun,household,A , is not a ,,179,65,12,hat,20,bowl,17,mop,16,cup,14,pail,11,shovel,9,bag,6,plate,4,bathroom,3,bin,3,chair,3,lamp,3
-9,star,noun,outside,A , is not a ,,187,34,7,moon,70,planet,42,sun,24,cloud,6,circle,5,earth,3,sky,3,,,,,,,,,,
-9,Applesauce,noun,food_drink,, is not ,,119,54,11,apple,12,solid,12,yogurt,8,sauce,6,apple juice,5,orange,5,orange juice,5,fruit,4,jelly,3,juice,3,soup,3,,
-9,Pulling,verb,action_words,, is not ,,180,16,5,push,153,shove,5,put,4,hold,3,tug,3,,,,,,,,,,,,,,
-9,Licking,verb,action_words,, is not ,,143,36,12,eat,30,bite,18,suck,18,smell,8,taste,8,kiss,7,chew,6,spit,5,touch,5,sniff,4,kick,3,swallow,3
-9,Watching,verb,action_words,, is not ,,568,89,12,listen,138,sleep,54,see,51,do,39,look,25,ignore,21,read,17,hear,14,stare,14,learn,11,talk,11,touch,10
-9,Breaking,verb,action_words,, is not ,,152,33,8,fix,92,enter,5,heal,5,mend,5,repair,5,bend,4,build,4,buy,3,,,,,,,,
+list_num,target_word,target_pos,target_cat,sentence_frame_before,sentence_frame_after,clarification,n_total,n_unique,n_shown,response1,count1,lexeme1,response2,count2,lexeme2,response3,count3,lexeme3,response4,count4,lexeme4,response5,count5,lexeme5,response6,count6,lexeme6,response7,count7,lexeme7,response8,count8,lexeme8,response9,count9,lexeme9,response10,count10,lexeme10,response11,count11,lexeme11,response12,count12,lexeme12
+9,naughty,adj,descriptive_words,To be , is not to be ,,182,11,3,nice,141,nice,good,29,good,bad,3,bad,,,,,,,,,,,,,,,,,,,,,,,,,,,
+9,brown,adj,descriptive_words,To be , is not to be ,,622,48,12,white,178,white,black,137,black,blue,52,blue,yellow,48,yellow,red,41,red,green,31,green,pink,31,pink,purple,19,purple,gray,12,gray,bad,6,bad,colorful,6,colorful,orange,6,orange
+9,first,adj,descriptive_words,To be , is not to be ,,183,5,2,last,159,last,second,20,second,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+9,Corn,noun,food_drink,, is not ,,147,56,12,fruit,21,fruit,pea,10,pea,bean,9,bean,orange,8,orange,potato,8,potato,blue,7,blue,carrot,6,carrot,purple,6,purple,cob,5,cob,wheat,5,wheat,rice,4,rice,bread,3,bread
+9,Coffee,noun,food_drink,, is not ,,159,21,5,tea,99,tea,water,26,water,milk,6,milk,cold,5,cold,soda,3,soda,,,,,,,,,,,,,,,,,,,,,
+9,Grandma,noun,people,A , is not a ,,179,25,7,grandpa,131,grandpa,child,7,child,dad,7,dad,mom,5,mom,baby,4,baby,aunt,3,aunt,dog,3,dog,,,,,,,,,,,,,,,
+9,truck,noun,vehicles,A , is not a ,,177,45,8,car,101,car,bike,9,bike,bus,7,bus,plane,7,plane,boat,3,boat,motorcycle,3,motorcycle,toy,3,toy,van,3,van,,,,,,,,,,,,
+9,Yesterday,noun,time_words,, is not ,,185,10,2,today,149,today,tomorrow,28,tomorrow,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+9,Snow,noun,outside,, is not a ,,166,69,12,rain,44,rain,sun,9,sun,ice,8,ice,liquid,7,liquid,beach,6,beach,sand,6,sand,fire,4,fire,grass,4,grass,raindrop,4,raindrop,food,3,food,lake,3,lake,rainfall,3,rainfall
+9,popsicle,noun,food_drink,A , is not a ,,164,60,12,ice cream,41,ice cream,ice cream cone,11,ice cream cone,fruit,9,fruit,meal,9,meal,sucker,6,sucker,dinner,5,dinner,lollipop,5,lollipop,snack,5,snack,cookie,4,cookie,treat,4,treat,food,3,food,ice pop,3,ice pop
+9,Cake,noun,food_drink,, is not ,,142,45,10,cookie,24,cookie,cupcake,19,cupcake,ice cream,15,ice cream,pie,13,pie,brownie,11,brownie,bread,5,bread,dinner,5,dinner,food,5,food,breakfast,3,breakfast,candy,3,candy,,,,,,
+9,bottle,noun,household,A , is not a ,,182,47,8,cup,59,cup,can,32,can,bowl,15,bowl,glass,14,glass,plate,8,plate,mug,7,mug,jar,3,jar,water,3,water,,,,,,,,,,,,
+9,bat,noun,toys,A , is not a , (baseball) ,182,44,12,ball,61,ball,glove,17,glove,weapon,12,weapon,baseball,8,baseball,club,6,club,toy,6,toy,animal,5,animal,racket,5,racket,stick,5,stick,basketball,4,basketball,golf club,4,golf club,mitt,4,mitt
+9,bucket,noun,household,A , is not a ,,179,65,12,hat,20,hat,bowl,17,bowl,mop,16,mop,cup,14,cup,pail,11,pail,shovel,9,shovel,bag,6,bag,plate,4,plate,bathroom,3,bathroom,bin,3,bin,chair,3,chair,lamp,3,lamp
+9,star,noun,outside,A , is not a ,,187,34,7,moon,70,moon,planet,42,planet,sun,24,sun,cloud,6,cloud,circle,5,circle,earth,3,earth,sky,3,sky,,,,,,,,,,,,,,,
+9,Applesauce,noun,food_drink,, is not ,,119,54,11,apple,12,apple,solid,12,solid,yogurt,8,yogurt,sauce,6,sauce,apple juice,5,apple juice,orange,5,orange,orange juice,5,orange juice,fruit,4,fruit,jelly,3,jelly,juice,3,juice,soup,3,soup,,,
+9,Pulling,verb,action_words,, is not ,,180,16,5,pushing,153,push,shoving,5,shove,putting,4,put,holding,3,hold,tugging,3,tug,,,,,,,,,,,,,,,,,,,,,
+9,Licking,verb,action_words,, is not ,,143,36,12,eating,30,eat,biting,18,bite,sucking,18,suck,smelling,8,smell,tasting,8,taste,kissing,7,kiss,chewing,6,chew,spitting,5,spit,touching,5,touch,sniffing,4,sniff,kicking,3,kick,swallowing,3,swallow
+9,Watching,verb,action_words,, is not ,,568,89,12,listening,138,listen,sleeping,54,sleep,seeing,51,see,doing,39,do,looking,25,look,ignoring,21,ignore,reading,17,read,hearing,14,hear,staring,14,stare,learning,11,learn,talking,11,talk,touching,10,touch
+9,Breaking,verb,action_words,, is not ,,152,33,8,fixing,92,fix,entering,5,enter,healing,5,heal,mending,5,mend,repairing,5,repair,bending,4,bend,building,4,build,buying,3,buy,,,,,,,,,,,,

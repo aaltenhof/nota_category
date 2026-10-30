@@ -348,6 +348,38 @@
             font-weight: normal;
         }
 
+        /* per-answer comment */
+        .chip {
+            flex-wrap: wrap;
+        }
+        .chip-note-btn {
+            border: none;
+            background: none;
+            color: #bbb;
+            font-size: 13px;
+            padding: 0 2px;
+            cursor: pointer;
+        }
+        .chip-note-btn:hover {
+            color: #3498db;
+        }
+        .chip.has-note .chip-note-btn {
+            color: #3498db;
+        }
+        .chip-note {
+            display: none;
+            flex-basis: 100%;
+            box-sizing: border-box;
+            font-size: 12px;
+            font-weight: normal;
+            padding: 3px 6px;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+        }
+        .chip.note-open .chip-note {
+            display: block;
+        }
+
         /* per-answer relationship tag: only shown once the answer is in a group */
         .chip-tag {
             display: none;
