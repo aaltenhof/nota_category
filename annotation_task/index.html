@@ -255,6 +255,8 @@
         /* group boxes */
         .group-box {
             background: white;
+            background: color-mix(in srgb, var(--group-color, #cccccc) 12%, white);
+            border-top: 6px solid var(--group-color, #cccccc);
             min-height: 150px;
         }
         .group-box.needs-label {
@@ -271,8 +273,7 @@
             color: #666;
             margin-bottom: 4px;
         }
-        .group-label,
-        .group-setall {
+        .group-label {
             width: 100%;
             box-sizing: border-box;
             font-size: 14px;
@@ -280,11 +281,6 @@
             border: 1px solid #bbb;
             border-radius: 6px;
             background: white;
-        }
-        .group-setall {
-            margin-top: 6px;
-            font-size: 13px;
-            color: #666;
         }
 
         /* notes */

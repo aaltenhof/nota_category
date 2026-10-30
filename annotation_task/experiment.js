@@ -89,6 +89,17 @@ function isGroupZone(zone) {
     return /^g\d+$/.test(zone);
 }
 
+// ─── Group colours ────────────────────────────────────────────────────────────
+// From the Semantic Load decks. Each new group gets a random colour not already used on that target.
+const GROUP_COLORS = ['#8077DD', '#048A81', '#226CE0', '#3D3454', '#9F7A77', '#B6B1C6'];
+
+function pickGroupColor(state) {
+    const used = state.groupOrder.map(g => state.groups[g].color);
+    const free = GROUP_COLORS.filter(c => !used.includes(c));
+    const pool = free.length ? free : GROUP_COLORS;
+    return pool[Math.floor(Math.random() * pool.length)];
+}
+
 // ─── Global state ─────────────────────────────────────────────────────────────
 let coder = '';
 let unit = { listNum: null, items: [] };   // items are in this coder's sidebar order
@@ -195,8 +206,7 @@ function chipHTML(r, idx) {
 // chipTag:   display idx -> relationship tag key ('' if not tagged yet); kept if the chip moves groups
 // chipFollowup: display idx -> '' or an option key for the tag's follow-up question (see FOLLOWUPS)
 // chipNote:  display idx -> the RA's comment on that answer ('' if none)
-// groups:    group id -> { label, defaultTag }
-//            defaultTag = last "Set all to" choice, given to answers dropped in later
+// groups:    group id -> { label, color }
 // notes:     free-text notes on this target
 function newAnnotation(item) {
     const display = shuffle(getResponses(item));
@@ -358,10 +368,7 @@ function restoreFromResults(resultRows) {
 
         rows.forEach(r => {
             if (r.group_num === '' || state.groups[`g${r.group_num}`]) return;
-            state.groups[`g${r.group_num}`] = {
-                label:      r.group_label || '',
-                defaultTag: ''
-            };
+            state.groups[`g${r.group_num}`] = { label: r.group_label || '' };
         });
         state.groupOrder = Object.keys(state.groups).sort((a, b) => parseInt(a.slice(1)) - parseInt(b.slice(1)));
         state.nextGroup = state.groupOrder.length ? Math.max(...state.groupOrder.map(g => parseInt(g.slice(1)))) + 1 : 1;
@@ -523,10 +530,6 @@ function buildGroupHTML(groupId, target) {
                 <div style="flex:1;">
                     <div class="group-prompt">Dimension</div>
                     <input class="group-label" type="text" maxlength="100" placeholder="e.g. time, how welcome it is" autocomplete="off">
-                    <select class="group-setall" title="Give every answer in this group the same relationship type">
-                        <option value="">Set all answers to&hellip;</option>
-                        ${TAG_OPTIONS}
-                    </select>
                 </div>
                 <button class="group-remove" title="Remove group">&times;</button>
             </div>
@@ -575,26 +578,14 @@ function setupSortLogic(item, state) {
         const box = zoneEl(groupId);
 
         const labelInput = box.querySelector('.group-label');
-        const setAll     = box.querySelector('.group-setall');
         labelInput.value = state.groups[groupId].label;
+
+        // groups restored from a file or an older save get a colour the first time they're shown
+        if (!state.groups[groupId].color) state.groups[groupId].color = pickGroupColor(state);
+        box.style.setProperty('--group-color', state.groups[groupId].color);
 
         labelInput.addEventListener('input', (e) => {
             state.groups[groupId].label = e.target.value;
-            markChanged();
-        });
-
-        // tag every answer currently in the group; answers added later get it too if they're untagged
-        setAll.addEventListener('change', (e) => {
-            const tag = e.target.value;
-            if (!tag) return;
-            state.groups[groupId].defaultTag = tag;
-            box.querySelectorAll('.chip').forEach(chip => {
-                if (state.chipTag[chip.dataset.idx] !== tag) state.chipFollowup[chip.dataset.idx] = '';
-                state.chipTag[chip.dataset.idx] = tag;
-                chip.querySelector('.chip-tag').value = tag;
-                renderFollowup(chip);
-            });
-            e.target.value = '';
             markChanged();
         });
 
@@ -617,7 +608,7 @@ function setupSortLogic(item, state) {
 
     function createGroup() {
         const groupId = `g${state.nextGroup++}`;
-        state.groups[groupId] = { label: '', defaultTag: '' };
+        state.groups[groupId] = { label: '', color: pickGroupColor(state) };
         state.groupOrder.push(groupId);
         state.nGroupsCreated++;
         return addGroupBox(groupId);
@@ -699,14 +690,6 @@ function setupSortLogic(item, state) {
         zone.querySelector('.chip-holder').appendChild(chip);
         state.chipZone[chip.dataset.idx] = zoneId;
         state.nMoves++;
-
-        // an untagged answer dropped into a group picks up that group's "Set all" choice, if any
-        const group = state.groups[zoneId];
-        if (group && group.defaultTag && !state.chipTag[chip.dataset.idx]) {
-            state.chipTag[chip.dataset.idx] = group.defaultTag;
-            chip.querySelector('.chip-tag').value = group.defaultTag;
-            renderFollowup(chip);
-        }
 
         if (focusLabel) zone.querySelector('.group-label').focus();
         markChanged();
